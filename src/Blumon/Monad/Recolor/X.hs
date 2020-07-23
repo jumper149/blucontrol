@@ -6,8 +6,9 @@ module Blumon.Monad.Recolor.X (
 ) where
 
 import Control.Monad.Base
-import Control.Monad.Trans.Class
-import Control.Monad.Trans.Reader
+import Control.Monad.Trans
+import Control.Monad.Trans.Control
+import Control.Monad.Reader
 
 import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, rootWindow)
 import Graphics.X11.Xlib.Types (Display)
@@ -18,7 +19,12 @@ import Blumon.Monad.Recolor
 import Blumon.Monad.Recolor.X.Internal
 
 newtype RecolorXT m a = RecolorXT { unRecolorXT :: ReaderT Display m a }
-  deriving (Applicative, Functor, Monad, MonadBase b, MonadGamma, MonadTrans)
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadGamma, MonadTrans, MonadTransControl)
+
+instance MonadReader r m => MonadReader r (RecolorXT m) where
+  ask = lift ask
+  local f tma = liftWith $ \ run ->
+    local f $ run tma
 
 instance (MonadBase IO m, MonadGamma m) => MonadRecolor (RecolorXT m) where
   recolor = do display <- RecolorXT ask

@@ -2,8 +2,8 @@ module Blumon.Monad.Gamma (
   MonadGamma (..)
 ) where
 
-import Control.Monad.Trans.Class
-import Control.Monad.Trans.Reader
+import Control.Monad.Trans
+import Control.Monad.Reader
 
 import Blumon.RGB
 
