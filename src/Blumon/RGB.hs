@@ -1,6 +1,6 @@
 module Blumon.RGB (
   Chromaticity
-, Trichromaticity
+, Trichromaticity (..)
 ) where
 
 import Data.Word

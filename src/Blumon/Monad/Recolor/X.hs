@@ -2,7 +2,7 @@
 
 module Blumon.Monad.Recolor.X (
   RecolorXT
-  runRecolorXT
+, runRecolorXT
 ) where
 
 import Control.Monad.Base
