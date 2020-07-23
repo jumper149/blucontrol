@@ -11,7 +11,7 @@ bug-reports:         https://github.com/jumper149/blumon/issues
 category:            System
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
-cabal-version:       >=1.10
+cabal-version:       >= 1.10
 
 library
   exposed-modules:     Blumon
@@ -19,8 +19,8 @@ library
                        Blumon.Monad.Gamma.Const
                        Blumon.Monad.Recolor
                        Blumon.Monad.Recolor.X
-                       Blumon.Monad.Recolor.X.Internal
                        Blumon.RGB
+  other-modules:       Blumon.Monad.Recolor.X.Internal
   build-depends:       base              >= 4.11    && < 5
                      , time              >= 1.10    && < 1.11
                      , transformers      >= 0.5.2.0 && < 0.6
@@ -29,10 +29,11 @@ library
   hs-source-dirs:      src
   includes:            XrandrGamma.h
   install-includes:    XrandrGamma.h
+  extra-libraries:     X11, Xrandr
   include-dirs:        include
   c-sources:           include/XrandrGamma.c
   default-language:    Haskell2010
-  extensions:          DeriveGeneric
+  default-extensions:  DeriveGeneric
                        FlexibleContexts
                        GeneralizedNewtypeDeriving
                        TypeApplications
@@ -40,6 +41,7 @@ library
 
 executable blumon
   main-is:             Main.hs
-  build-depends:       base
-                     , blumon
+  build-depends:       blumon
+                     , base
+  default-language:    Haskell2010
   ghc-options:         -Wall
