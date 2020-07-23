@@ -11,7 +11,7 @@ import Blumon.Monad.Gamma
 import Blumon.RGB
 
 newtype GammaConstT m a = GammaConstT { unGammaConstT :: ReaderT Trichromaticity m a }
-  deriving (Applicative, Functor, Monad, MonadTrans, MonadBase b)
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadTrans)
 
 instance Monad m => MonadGamma (GammaConstT m) where
   gamma = GammaConstT ask
