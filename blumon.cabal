@@ -30,3 +30,9 @@ library
                        FlexibleContexts
                        GeneralizedNewtypeDeriving
   ghc-options:         -Wall
+
+executable blumon
+  main-is:             Main.hs
+  build-depends:       base
+                     , blumon
+  ghc-options:         -Wall
