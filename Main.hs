@@ -5,4 +5,4 @@ import Blumon.Monad.Gamma.Const
 import Blumon.Monad.Recolor.X
 
 main :: IO ()
-main = loopRecolor def $ runGammaConstT def . runRecolorXT
+main = loopRecolor def $ runGammaConstT def . runRecolorXTIO
