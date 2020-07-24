@@ -61,8 +61,8 @@ runRecolorXTIO_ tma = runExceptT $ bracket open close run
         run display = restoreT $ runRecolorXT display tma
 
 runRecolorXTIO :: MonadBaseControl IO m => RecolorXT m a -> m (Either T.Text a)
-runRecolorXTIO tma = mapEither (T.pack . show) <$> runRecolorXTIO_ tma
-  where mapEither f = either (Left . f) (Right . id)
+runRecolorXTIO tma = mapLeft (T.pack . show) <$> runRecolorXTIO_ tma
+  where mapLeft f = either (Left . f) (Right . id)
 
 translateRGB :: Trichromaticity -> XRRGamma
 translateRGB Trichromaticity {..} = XRRGamma {..}
