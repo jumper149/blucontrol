@@ -3,17 +3,24 @@
 module Blumon.Monad.Gamma.Linear (
   GammaLinearT
 , runGammaLinearT
+, Time (..)
+, Hour
+, Minute
+, (==>)
+, N.NonEmpty (..) -- TODO: keep here?
 ) where
 
 import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.Reader
 import Control.Monad.Trans.Control
+import qualified Data.Finite as F
 import qualified Data.List.NonEmpty as N
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
 import qualified Data.Ratio as R
 import Data.Time
+import GHC.Generics
 
 import Blumon.Monad.Gamma
 import Blumon.RGB
@@ -54,4 +61,22 @@ runGammaLinearT' :: M.Map TimeOfDay Trichromaticity -> GammaLinearT m a -> m a
 runGammaLinearT' rgbs tma = runReaderT (unGammaLinearT tma) rgbs
 
 runGammaLinearT :: N.NonEmpty (TimeOfDay,Trichromaticity) -> GammaLinearT m a -> m a
-runGammaLinearT rgbs = runGammaLinearT' (M.fromList $ N.toList rgbs)
+runGammaLinearT rgbs = runGammaLinearT' $ M.fromList . N.toList $ rgbs
+
+newtype Hour = Hour { unHour :: F.Finite 23 }
+  deriving (Bounded, Enum, Eq, Generic, Num, Ord, Read, Real, Show)
+
+newtype Minute = Minute { unMinute :: F.Finite 59 }
+  deriving (Bounded, Enum, Eq, Generic, Num, Ord, Read, Real, Show)
+
+infix 7 :.
+data Time = Hour :. Minute
+  deriving (Bounded, Eq, Generic, Ord, Read, Show)
+
+infix 6 ==>
+(==>) :: Time -> Trichromaticity -> (TimeOfDay,Trichromaticity)
+(==>) (h :. m) c = (time,c)
+  where time = TimeOfDay { todHour = fromIntegral $ unHour h
+                         , todMin = fromIntegral $ unMinute m
+                         , todSec = 0
+                         }
