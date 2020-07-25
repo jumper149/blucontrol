@@ -39,7 +39,7 @@ instance (MonadBaseControl IO m, MonadGamma m) => MonadRecolor (RecolorXT m) whe
                root <- liftXIO XErrorRead $
                  rootWindow display $ defaultScreen display
 
-               rgb <- translateRGB <$> lift gamma
+               rgb <- translateRGB <$> gamma
                liftXIO XErrorSetGamma $ xrrSetGamma rgb display root
 
 runRecolorXT :: Display -> RecolorXT m a -> m (Either XError a)
