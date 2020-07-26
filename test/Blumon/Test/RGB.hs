@@ -2,8 +2,8 @@
 
 module Blumon.Test.RGB (
   test
-, Arbitrary_Chromaticity
-, Arbitrary_Trichromaticity
+, Arbitrary_Chromaticity (..)
+, Arbitrary_Trichromaticity (..)
 ) where
 
 import Test.Hspec

@@ -8,6 +8,7 @@ module Blumon.Monad.Gamma.Linear (
 , Minute
 , (==>)
 , N.NonEmpty (..) -- TODO: keep here?
+, calculateGamma -- TODO: export for testing
 ) where
 
 import Control.DeepSeq

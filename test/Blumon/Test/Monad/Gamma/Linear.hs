@@ -8,11 +8,13 @@ import Test.Hspec
 import Test.QuickCheck
 
 import Control.DeepSeq
+import Control.Monad.Identity
 import Data.Time
 import GHC.Generics
 
 import Blumon.Monad.Gamma.Linear
-import Blumon.Test.RGB hiding (test)
+import Blumon.RGB
+import Blumon.Test.RGB (Arbitrary_Trichromaticity (..))
 
 test :: Spec
 test = describe "Blumon.Monad.Gamma.Linear" $ do
@@ -44,4 +46,27 @@ prop_calculateGamma :: Arbitrary_Time
                     -> (Arbitrary_Time,Arbitrary_Trichromaticity)
                     -> (Arbitrary_Time,Arbitrary_Trichromaticity)
                     -> Bool
-prop_calculateGamma = undefined 
+prop_calculateGamma (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_Trichromaticity xtc) (Arbitrary_Time yt , Arbitrary_Trichromaticity ytc) =
+  if xtod <= tod && tod <= ytod
+     then and [ smaller `prop_TrichromaticityLE` rgb
+              , rgb `prop_TrichromaticityLE` larger
+              ]
+     else True
+  where rgb = runIdentity . runGammaLinearT rgbMap $ calculateGamma tod
+        rgbMap = xt Blumon.Monad.Gamma.Linear.==> xtc
+            :| [ yt Blumon.Monad.Gamma.Linear.==> ytc
+               ]
+        tod = fst $ time Blumon.Monad.Gamma.Linear.==> undefined
+        (smaller,larger) = case xtc `prop_TrichromaticityLE` ytc of
+                             True -> (xtc , ytc)
+                             False -> (xtc , xtc)
+        xtod = fst $ xt Blumon.Monad.Gamma.Linear.==> undefined
+        ytod = fst $ yt Blumon.Monad.Gamma.Linear.==> undefined
+
+
+prop_TrichromaticityLE :: Trichromaticity -> Trichromaticity -> Bool
+prop_TrichromaticityLE x y = and
+  [ red x <= red y
+  , green x <= green y
+  , blue x <= blue y
+  ]
