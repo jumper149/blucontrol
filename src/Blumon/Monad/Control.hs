@@ -6,5 +6,7 @@ module Blumon.Monad.Control (
 
 import qualified Streamly as S
 
+import Blumon.Config
+
 class S.MonadAsync m => MonadControl m where
-  doInbetween :: a -> m ()
+  doInbetween :: Config -> a -> m ()

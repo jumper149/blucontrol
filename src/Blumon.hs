@@ -1,6 +1,6 @@
 module Blumon (
   module Blumon.Config
-, module Blumon.Control
+, module Blumon.Main
 , module Blumon.RGB
 , Default (..)
 ) where
@@ -8,5 +8,5 @@ module Blumon (
 import Data.Default
 
 import Blumon.Config
-import Blumon.Control
+import Blumon.Main
 import Blumon.RGB
