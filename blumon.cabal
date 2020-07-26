@@ -16,8 +16,8 @@ cabal-version:       >= 1.10
 library
   exposed-modules:     Blumon
                        Blumon.Config
-                       Blumon.Control
                        Blumon.Main
+                       Blumon.Main.Control
                        Blumon.Monad.Control
                        Blumon.Monad.Control.Wait
                        Blumon.Monad.Gamma

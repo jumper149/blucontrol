@@ -7,7 +7,7 @@ import Control.Monad (void)
 import Control.Monad.Trans.Control
 
 import Blumon.Config
-import Blumon.Control
+import Blumon.Main.Control
 import Blumon.Monad.Control
 import Blumon.Monad.Recolor
 

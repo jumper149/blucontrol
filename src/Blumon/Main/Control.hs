@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Control (
+module Blumon.Main.Control (
   ControlT
 , runControlT
 , loopRecolor
