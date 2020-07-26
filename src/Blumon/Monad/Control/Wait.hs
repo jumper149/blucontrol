@@ -8,6 +8,7 @@ module Blumon.Monad.Control.Wait (
 ) where
 
 import Control.Concurrent (threadDelay)
+import Control.DeepSeq
 import Control.Monad.Base
 import Control.Monad.Catch
 import Control.Monad.Trans.Control
@@ -30,6 +31,8 @@ runControlWaitT conf tma = runReaderT (unControlWaitT tma) conf
 data ConfigWait = ConfigWait { interval :: Microseconds
                              }
   deriving (Eq, Generic, Ord, Read, Show)
+
+instance NFData ConfigWait
 
 instance Default ConfigWait where
   def = ConfigWait { interval = 1000000

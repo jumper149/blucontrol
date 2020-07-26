@@ -3,13 +3,16 @@ module Blumon.RGB (
 , Trichromaticity (..)
 ) where
 
+import Control.DeepSeq
 import Data.Default
 import Data.Word
 import GHC.Generics
 
 -- | 8-bit value for color channel intensity
 newtype Chromaticity = Chromaticity Word8
-  deriving (Bounded, Enum, Eq, Integral, Num, Ord, Read, Real, Show)
+  deriving (Bounded, Enum, Eq, Generic, Integral, Num, Ord, Read, Real, Show)
+
+instance NFData Chromaticity
 
 instance Default Chromaticity where
   def = maxBound
@@ -20,6 +23,8 @@ data Trichromaticity = Trichromaticity { red :: Chromaticity
                                        , blue :: Chromaticity
                                        }
   deriving (Bounded, Eq, Generic, Ord, Read, Show)
+
+instance NFData Trichromaticity
 
 instance Enum Trichromaticity where
   fromEnum tc = sum [ fromEnum (red tc)

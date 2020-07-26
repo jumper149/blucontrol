@@ -5,6 +5,7 @@ module Blumon.Monad.Recolor.X.Internal (
 , xrrSetGamma
 ) where
 
+import Control.DeepSeq
 import Foreign.Ptr
 import GHC.Generics
 
@@ -16,6 +17,8 @@ data XRRGamma = XRRGamma { xrr_gamma_red :: Float
                          , xrr_gamma_blue :: Float
                          }
   deriving (Eq, Generic, Ord, Read, Show)
+
+instance NFData XRRGamma
 
 xrrSetGamma :: XRRGamma -> Display -> Window -> IO ()
 xrrSetGamma XRRGamma {..} (Display display) window = do

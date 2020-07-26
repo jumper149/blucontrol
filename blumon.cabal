@@ -31,6 +31,7 @@ library
   build-depends:       base              >= 4.11    && < 5
                      , containers        >= 0.6.2.1 && < 0.7
                      , data-default      >= 0.7.1   && < 0.7.2
+                     , deepseq           >= 1.4.4.0 && < 1.5
                      , exceptions        >= 0.10.0  && < 0.11
                      , finite-typelits   >= 0.1.4.0 && < 0.1.5
                      , lifted-base       >= 0.2.3.2 && < 0.2.4
@@ -79,7 +80,7 @@ test-suite test
   build-depends:       base
                      , blumon
                      , data-default
-                     , deepseq      >= 1.4.4.0 && < 1.5
+                     , deepseq
                      , hspec        >= 2.6.0   && < 2.8
                      , QuickCheck   >= 2.14    && < 2.15
                      , time

@@ -6,6 +6,7 @@ module Blumon.Monad.Recolor.X (
 , XError (..)
 ) where
 
+import Control.DeepSeq
 import Control.Exception.Lifted (SomeException (..), bracket, catch)
 import Control.Monad.Base
 import Control.Monad.Trans
@@ -49,6 +50,8 @@ data XError = XErrorCloseDisplay
             | XErrorRead
             | XErrorSetGamma
   deriving (Bounded, Enum, Eq, Generic, Ord, Read, Show)
+
+instance NFData XError
 
 liftXIO :: (MonadBaseControl IO m, MonadError XError m) => XError -> IO a -> m a
 liftXIO xError = (flip catch $ \ (SomeException _) -> throwError xError) . liftBase

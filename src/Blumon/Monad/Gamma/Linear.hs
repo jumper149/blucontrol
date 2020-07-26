@@ -10,6 +10,7 @@ module Blumon.Monad.Gamma.Linear (
 , N.NonEmpty (..) -- TODO: keep here?
 ) where
 
+import Control.DeepSeq
 import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.Reader
@@ -70,12 +71,18 @@ runGammaLinearT rgbs = runGammaLinearT' $ M.fromList . N.toList $ rgbs
 newtype Hour = Hour { unHour :: F.Finite 24 }
   deriving (Bounded, Enum, Eq, Generic, Integral, Num, Ord, Read, Real, Show)
 
+instance NFData Hour
+
 newtype Minute = Minute { unMinute :: F.Finite 60 }
   deriving (Bounded, Enum, Eq, Generic, Integral, Num, Ord, Read, Real, Show)
+
+instance NFData Minute
 
 infix 7 :.
 data Time = Hour :. Minute
   deriving (Bounded, Eq, Generic, Ord, Read, Show)
+
+instance NFData Time
 
 instance Enum Time where
   fromEnum (h :. m) = fromEnum h * succ (fromEnum $ maxBound @Minute) + fromEnum m

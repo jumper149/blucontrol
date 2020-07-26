@@ -1,5 +1,7 @@
 module Main where
 
+import Test.Hspec
+
 import qualified Blumon.Test.Monad.Gamma.Linear
 import qualified Blumon.Test.RGB
 
