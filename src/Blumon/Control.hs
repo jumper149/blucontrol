@@ -1,20 +1,46 @@
+{-# LANGUAGE UndecidableInstances #-}
+
 module Blumon.Control (
-  loopRecolor
+  ControlT
+, runControlT
+, loopRecolor
 ) where
 
-import Control.Concurrent
-import qualified Data.Text as T
+import Control.Monad.Base
+import Control.Monad.List
+import Control.Monad.Trans.Control
+import Control.Monad.Reader
+import Control.Monad.State
+import qualified Streamly as S
+import qualified Streamly.Prelude as S
+import qualified Streamly.Internal.Prelude as S (evalStateT)
 
 import Blumon.Config
 import Blumon.Monad.Recolor
 
-loopRecolor :: MonadRecolor m => Config -> (forall a. m a -> IO (Either T.Text a)) -> IO ()
-loopRecolor conf run = do
-  recolorSuccess <- run recolor
-  case recolorSuccess of
-    Right _ -> return ()
-    Left t -> putStrLn $ T.unpack t
-  putStrLn "1"
-  threadDelay $ interval conf
-  putStrLn "2"
-  loopRecolor conf run
+newtype ControlT m a = ControlT { unControlT :: S.SerialT (ReaderT Config m) a }
+  deriving (Applicative, Functor, Monad)
+
+instance MonadTrans ControlT where
+  lift = ControlT . lift . lift
+
+instance MonadBase b m => MonadBase b (ControlT m) where
+  liftBase = liftBaseDefault
+
+class S.MonadAsync m => MonadLoopControl m where
+  doInbetween :: a -> m ()
+
+runControlT :: Monad m
+            => Config
+            -> ControlT m a
+            -> m [a]
+runControlT conf tma = runReaderT (S.toList $ unControlT tma) conf
+
+loopRecolor :: (MonadLoopControl m, MonadBaseControl IO r, MonadRecolor r)
+            => (r () -> m (StM r ()))
+            -> ControlT m (StM r ())
+loopRecolor run = do a' <- lift $ run recolor
+                     ControlT $ (a' S..:) $ S.evalStateT a' $ do
+                       S.repeatM $ do a <- get
+                                      lift . lift $ doInbetween a
+                                      lift . lift $ run recolor
