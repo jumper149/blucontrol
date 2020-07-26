@@ -10,6 +10,7 @@ main = blumon def configControl
   where configControl = ConfigControl { runControl = runControlWaitT def
                                       , runRecolor = runGammaLinearT rgbMap . runRecolorPrintT
                                       }
-        rgbMap = 00:.00 ==> Trichromaticity { red = 255, green = 255, blue = 255 }
-            :| [ 12:.00 ==> Trichromaticity { red = 200, green = 250, blue = 150 }
+        rgbMap = 00:.00 ==> Trichromaticity { red = 255, green = 255, blue = 200 }
+            :| [ 08:.00 ==> Trichromaticity { red = 255, green = 200, blue = 255 }
+               , 16:.00 ==> Trichromaticity { red = 200, green = 255, blue = 255 }
                ]
