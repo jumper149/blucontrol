@@ -6,7 +6,7 @@ import Blumon.Monad.Gamma.Linear
 import Blumon.Monad.Recolor.Print
 
 main :: IO ()
-main = (=<<) print $ blumon def configControl
+main = blumon def configControl
   where configControl = ConfigControl { runControl = runControlWaitT def
                                       , runRecolor = runGammaLinearT rgbMap . runRecolorPrintT
                                       }

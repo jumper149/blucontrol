@@ -38,7 +38,7 @@ loopRecolor :: (MonadControl m, MonadBaseControl IO r, MonadRecolor r)
             => (r () -> m (StM r ()))
             -> ControlT m (StM r ())
 loopRecolor run = do a' <- lift $ run recolor
-                     ControlT $ (a' S..:) $ S.evalStateT a' $ do
+                     ControlT . (a' S..:) . S.evalStateT a' $ do
                        S.repeatM $ do a <- get
                                       conf <- ask
                                       lift . lift $ doInbetween conf a
