@@ -68,19 +68,24 @@ runGammaLinearT :: N.NonEmpty (TimeOfDay,Trichromaticity) -> GammaLinearT m a ->
 runGammaLinearT rgbs = runGammaLinearT' $ M.fromList . N.toList $ rgbs
 
 newtype Hour = Hour { unHour :: F.Finite 24 }
-  deriving (Bounded, Enum, Eq, Generic, Num, Ord, Read, Real, Show)
+  deriving (Bounded, Enum, Eq, Generic, Integral, Num, Ord, Read, Real, Show)
 
 newtype Minute = Minute { unMinute :: F.Finite 60 }
-  deriving (Bounded, Enum, Eq, Generic, Num, Ord, Read, Real, Show)
+  deriving (Bounded, Enum, Eq, Generic, Integral, Num, Ord, Read, Real, Show)
 
 infix 7 :.
 data Time = Hour :. Minute
   deriving (Bounded, Eq, Generic, Ord, Read, Show)
 
+instance Enum Time where
+  fromEnum (h :. m) = fromEnum h * succ (fromEnum $ maxBound @Minute) + fromEnum m
+  toEnum i = let (h , m) = i `divMod` succ (fromEnum $ maxBound @Minute)
+              in toEnum h :. toEnum m
+
 infix 6 ==>
 (==>) :: Time -> Trichromaticity -> (TimeOfDay,Trichromaticity)
 (==>) (h :. m) c = (time,c)
-  where time = TimeOfDay { todHour = fromIntegral $ unHour h
-                         , todMin = fromIntegral $ unMinute m
+  where time = TimeOfDay { todHour = fromIntegral h
+                         , todMin = fromIntegral m
                          , todSec = 0
                          }

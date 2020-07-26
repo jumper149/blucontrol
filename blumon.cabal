@@ -65,7 +65,35 @@ library
 
 executable blumon
   main-is:             Main.hs
-  build-depends:       blumon
-                     , base
+  build-depends:       base
+                     , blumon
   default-language:    Haskell2010
+  ghc-options:         -Wall
+
+test-suite test
+  main-is:             Blumon.hs
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  other-modules:       Blumon.Test.Monad.Gamma.Linear
+                       Blumon.Test.RGB
+  build-depends:       base
+                     , blumon
+                     , data-default
+                     , deepseq      >= 1.4.4.0 && < 1.5
+                     , hspec        >= 2.6.0   && < 2.8
+                     , QuickCheck   >= 2.14    && < 2.15
+                     , time
+  default-language:    Haskell2010
+  default-extensions:  DataKinds
+                       DeriveGeneric
+                       FlexibleContexts
+                       FlexibleInstances
+                       FunctionalDependencies
+                       GeneralizedNewtypeDeriving
+                       MultiParamTypeClasses
+                       OverloadedStrings
+                       RankNTypes
+                       StandaloneDeriving
+                       TypeApplications
+                       TypeFamilies
   ghc-options:         -Wall

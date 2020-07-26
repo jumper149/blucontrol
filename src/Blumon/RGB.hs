@@ -19,7 +19,21 @@ data Trichromaticity = Trichromaticity { red :: Chromaticity
                                        , green :: Chromaticity
                                        , blue :: Chromaticity
                                        }
-  deriving (Eq, Generic, Ord, Read, Show)
+  deriving (Bounded, Eq, Generic, Ord, Read, Show)
+
+instance Enum Trichromaticity where
+  fromEnum tc = sum [ fromEnum (red tc)
+                    , fromEnum (green tc) * range
+                    , fromEnum (blue tc) * range * range
+                    ]
+    where range = succ . fromEnum $ maxBound @Chromaticity
+  toEnum i = let (b , i') = i `divMod` (range * range)
+                 (g , r) = i' `divMod` range
+              in Trichromaticity { red = toEnum r
+                                 , green = toEnum g
+                                 , blue = toEnum b
+                                 }
+    where range = succ . fromEnum $ maxBound @Chromaticity
 
 instance Default Trichromaticity where
   def = Trichromaticity { red = def
