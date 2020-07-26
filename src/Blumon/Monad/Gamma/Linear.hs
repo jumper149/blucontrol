@@ -44,7 +44,7 @@ calculateGamma time = do
     return $ weightedAverage' timeFraction prevGamma nextGamma
 
 diffTimeOfDayToPicoseconds :: TimeOfDay -> TimeOfDay -> Integer
-diffTimeOfDayToPicoseconds t1 t2 = diffTimeToPicoseconds $ sinceMidnight t1 - sinceMidnight t2
+diffTimeOfDayToPicoseconds t1 t2 = diffTimeToPicoseconds $ timeOfDayToTime t1 - timeOfDayToTime t2
 
 weightedAverage :: R.Ratio Integer -> Chromaticity -> Chromaticity -> Chromaticity
 weightedAverage w c1 c2 = round c
