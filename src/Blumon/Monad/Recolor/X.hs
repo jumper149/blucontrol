@@ -3,7 +3,7 @@
 module Blumon.Monad.Recolor.X (
   RecolorXT
 , runRecolorXTIO
-, XError
+, XError (..)
 ) where
 
 import Control.Exception.Lifted (SomeException (..), bracket, catch)
@@ -12,7 +12,6 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Control.Monad.Except
-import qualified Data.Text as T
 import GHC.Generics
 
 import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, rootWindow)
@@ -54,15 +53,11 @@ data XError = XErrorCloseDisplay
 liftXIO :: (MonadBaseControl IO m, MonadError XError m) => XError -> IO a -> m a
 liftXIO xError = (flip catch $ \ (SomeException _) -> throwError xError) . liftBase
 
-runRecolorXTIO_ :: MonadBaseControl IO m => RecolorXT m a -> m (Either XError a)
-runRecolorXTIO_ tma = runExceptT $ bracket open close run
+runRecolorXTIO :: MonadBaseControl IO m => RecolorXT m a -> m (Either XError a)
+runRecolorXTIO tma = runExceptT $ bracket open close run
   where open = liftXIO XErrorOpenDisplay $ openDisplay ""
         close display = liftXIO XErrorCloseDisplay $ closeDisplay display
         run display = restoreT $ runRecolorXT display tma
-
-runRecolorXTIO :: MonadBaseControl IO m => RecolorXT m a -> m (Either T.Text a)
-runRecolorXTIO tma = mapLeft (T.pack . show) <$> runRecolorXTIO_ tma
-  where mapLeft f = either (Left . f) (Right . id)
 
 translateRGB :: Trichromaticity -> XRRGamma
 translateRGB Trichromaticity {..} = XRRGamma {..}
