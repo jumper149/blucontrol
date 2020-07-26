@@ -17,7 +17,7 @@ import Control.Monad.Trans.Control
 import qualified Data.Finite as F
 import qualified Data.List.NonEmpty as N
 import qualified Data.Map as M
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromJust)
 import qualified Data.Ratio as R
 import Data.Time
 import GHC.Generics
@@ -30,14 +30,18 @@ newtype GammaLinearT m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeO
 
 instance MonadBase IO m => MonadGamma (GammaLinearT m) where
   gamma = do time <- localTimeOfDay . zonedTimeToLocalTime <$> liftBase getZonedTime
-             m <- GammaLinearT ask
-             return . fromMaybe undefined $ do
-               (nextTime , nextGamma) <- catchError (M.lookupGT time m) $
-                                           \ () -> M.lookupMin m
-               (prevTime , prevGamma) <- catchError (M.lookupLE time m) $
-                                           \ () -> M.lookupMax m
-               let timeFraction = diffTimeOfDayToPicoseconds time prevTime R.% diffTimeOfDayToPicoseconds nextTime prevTime
-               return $ weightedAverage' timeFraction prevGamma nextGamma
+             calculateGamma time
+
+calculateGamma :: Monad m => TimeOfDay -> GammaLinearT m Trichromaticity
+calculateGamma time = do
+  m <- GammaLinearT ask
+  return . fromJust $ do
+    (nextTime , nextGamma) <- catchError (M.lookupGT time m) $
+                                \ () -> M.lookupMin m
+    (prevTime , prevGamma) <- catchError (M.lookupLE time m) $
+                                \ () -> M.lookupMax m
+    let timeFraction = diffTimeOfDayToPicoseconds time prevTime R.% diffTimeOfDayToPicoseconds nextTime prevTime
+    return $ weightedAverage' timeFraction prevGamma nextGamma
 
 diffTimeOfDayToPicoseconds :: TimeOfDay -> TimeOfDay -> Integer
 diffTimeOfDayToPicoseconds t1 t2 = diffTimeToPicoseconds $ sinceMidnight t1 - sinceMidnight t2
@@ -63,10 +67,10 @@ runGammaLinearT' rgbs tma = runReaderT (unGammaLinearT tma) rgbs
 runGammaLinearT :: N.NonEmpty (TimeOfDay,Trichromaticity) -> GammaLinearT m a -> m a
 runGammaLinearT rgbs = runGammaLinearT' $ M.fromList . N.toList $ rgbs
 
-newtype Hour = Hour { unHour :: F.Finite 23 }
+newtype Hour = Hour { unHour :: F.Finite 24 }
   deriving (Bounded, Enum, Eq, Generic, Num, Ord, Read, Real, Show)
 
-newtype Minute = Minute { unMinute :: F.Finite 59 }
+newtype Minute = Minute { unMinute :: F.Finite 60 }
   deriving (Bounded, Enum, Eq, Generic, Num, Ord, Read, Real, Show)
 
 infix 7 :.
