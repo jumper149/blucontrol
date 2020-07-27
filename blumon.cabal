@@ -83,7 +83,7 @@ test-suite test
                      , deepseq
                      , hspec        >= 2.6.0   && < 2.8
                      , mtl
-                     , QuickCheck   >= 2.14    && < 2.15
+                     , QuickCheck   >= 2.13.2  && < 2.15
                      , time
   default-language:    Haskell2010
   default-extensions:  DataKinds
