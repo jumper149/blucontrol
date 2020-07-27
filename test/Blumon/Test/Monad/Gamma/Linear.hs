@@ -47,26 +47,19 @@ prop_calculateGamma :: Arbitrary_Time
                     -> (Arbitrary_Time,Arbitrary_Trichromaticity)
                     -> Bool
 prop_calculateGamma (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_Trichromaticity xtc) (Arbitrary_Time yt , Arbitrary_Trichromaticity ytc) =
-  if xtod <= tod && tod <= ytod
-     then and [ smaller `prop_TrichromaticityLE` rgb
-              , rgb `prop_TrichromaticityLE` larger
-              ]
-     else True
+  rgb `prop_TrichromaticityBetween` (xtc , ytc)
   where rgb = runIdentity . runGammaLinearT rgbMap $ calculateGamma tod
         rgbMap = xt Blumon.Monad.Gamma.Linear.==> xtc
             :| [ yt Blumon.Monad.Gamma.Linear.==> ytc
                ]
-        tod = fst $ time Blumon.Monad.Gamma.Linear.==> undefined
-        (smaller,larger) = case xtc `prop_TrichromaticityLE` ytc of
-                             True -> (xtc , ytc)
-                             False -> (xtc , xtc)
-        xtod = fst $ xt Blumon.Monad.Gamma.Linear.==> undefined
-        ytod = fst $ yt Blumon.Monad.Gamma.Linear.==> undefined
+        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blumon.Monad.Gamma.Linear.==> undefined
 
-
-prop_TrichromaticityLE :: Trichromaticity -> Trichromaticity -> Bool
-prop_TrichromaticityLE x y = and
-  [ red x <= red y
-  , green x <= green y
-  , blue x <= blue y
+prop_TrichromaticityBetween :: Trichromaticity -> (Trichromaticity,Trichromaticity) -> Bool
+prop_TrichromaticityBetween x (a,b) = and
+  [ red x `prop_ChromaticityBetween` (red a , red b)
+  , green x `prop_ChromaticityBetween` (green a , green b)
+  , blue x `prop_ChromaticityBetween` (blue a , blue b)
   ]
+
+prop_ChromaticityBetween :: Chromaticity -> (Chromaticity,Chromaticity) -> Bool
+prop_ChromaticityBetween x (a,b) = x <= max a b && x >= min a b
