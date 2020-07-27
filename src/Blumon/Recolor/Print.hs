@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Monad.Recolor.Print (
+module Blumon.Recolor.Print (
   RecolorPrintT
 , runRecolorPrintT
 ) where
@@ -9,8 +9,8 @@ import Control.Monad.Base
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
 
-import Blumon.Monad.Gamma
-import Blumon.Monad.Recolor
+import Blumon.Gamma
+import Blumon.Recolor
 
 newtype RecolorPrintT m a = RecolorPrintT { unRecolorPrintT :: m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadGamma)

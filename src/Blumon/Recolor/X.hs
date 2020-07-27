@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards, UndecidableInstances #-}
 
-module Blumon.Monad.Recolor.X (
+module Blumon.Recolor.X (
   RecolorXT
 , runRecolorXTIO
 , XError (..)
@@ -19,9 +19,9 @@ import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, root
 import Graphics.X11.Xlib.Types (Display)
 
 import Blumon.RGB
-import Blumon.Monad.Gamma
-import Blumon.Monad.Recolor
-import Blumon.Monad.Recolor.X.Internal
+import Blumon.Gamma
+import Blumon.Recolor
+import Blumon.Recolor.X.Internal
 
 newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Display m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadError XError, MonadGamma)

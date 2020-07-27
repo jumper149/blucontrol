@@ -16,18 +16,18 @@ cabal-version:       >= 1.10
 library
   exposed-modules:     Blumon
                        Blumon.Config
+                       Blumon.Control
+                       Blumon.Control.Wait
+                       Blumon.Gamma
+                       Blumon.Gamma.Const
+                       Blumon.Gamma.Linear
                        Blumon.Main
                        Blumon.Main.Control
-                       Blumon.Monad.Control
-                       Blumon.Monad.Control.Wait
-                       Blumon.Monad.Gamma
-                       Blumon.Monad.Gamma.Const
-                       Blumon.Monad.Gamma.Linear
-                       Blumon.Monad.Recolor
-                       Blumon.Monad.Recolor.Print
-                       Blumon.Monad.Recolor.X
+                       Blumon.Recolor
+                       Blumon.Recolor.Print
+                       Blumon.Recolor.X
                        Blumon.RGB
-  other-modules:       Blumon.Monad.Recolor.X.Internal
+  other-modules:       Blumon.Recolor.X.Internal
   build-depends:       base              >= 4.11    && < 5
                      , containers        >= 0.6.2.1 && < 0.7
                      , data-default      >= 0.7.1   && < 0.7.2
@@ -75,7 +75,7 @@ test-suite test
   main-is:             Blumon.hs
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:       Blumon.Test.Monad.Gamma.Linear
+  other-modules:       Blumon.Test.Gamma.Linear
                        Blumon.Test.RGB
   build-depends:       base
                      , blumon

@@ -1,6 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface, RecordWildCards #-}
 
-module Blumon.Monad.Recolor.X.Internal (
+module Blumon.Recolor.X.Internal (
   XRRGamma (..)
 , xrrSetGamma
 ) where

@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Blumon.Test.Monad.Gamma.Linear (
+module Blumon.Test.Gamma.Linear (
   test
 ) where
 
@@ -12,12 +12,12 @@ import Control.Monad.Identity
 import Data.Time
 import GHC.Generics
 
-import Blumon.Monad.Gamma.Linear
+import Blumon.Gamma.Linear
 import Blumon.RGB
 import Blumon.Test.RGB (Arbitrary_Trichromaticity (..))
 
 test :: Spec
-test = describe "Blumon.Monad.Gamma.Linear" $ do
+test = describe "Blumon.Gamma.Linear" $ do
 
   it "convert Time to TimeOfDay" $
     property prop_timeToTimeOfDay
@@ -40,7 +40,7 @@ prop_timeToTimeOfDay (Arbitrary_Time time) = and
   , 0 == todSec
   ]
   where h :. m = time
-        TimeOfDay {..} = fst $ time Blumon.Monad.Gamma.Linear.==> undefined
+        TimeOfDay {..} = fst $ time Blumon.Gamma.Linear.==> undefined
 
 prop_calculateGamma :: Arbitrary_Time
                     -> (Arbitrary_Time,Arbitrary_Trichromaticity)
@@ -49,10 +49,10 @@ prop_calculateGamma :: Arbitrary_Time
 prop_calculateGamma (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_Trichromaticity xtc) (Arbitrary_Time yt , Arbitrary_Trichromaticity ytc) =
   rgb `prop_TrichromaticityBetween` (xtc , ytc)
   where rgb = runIdentity . runGammaLinearT rgbMap $ calculateGamma tod
-        rgbMap = xt Blumon.Monad.Gamma.Linear.==> xtc
-            :| [ yt Blumon.Monad.Gamma.Linear.==> ytc
+        rgbMap = xt Blumon.Gamma.Linear.==> xtc
+            :| [ yt Blumon.Gamma.Linear.==> ytc
                ]
-        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blumon.Monad.Gamma.Linear.==> undefined
+        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blumon.Gamma.Linear.==> undefined
 
 prop_TrichromaticityBetween :: Trichromaticity -> (Trichromaticity,Trichromaticity) -> Bool
 prop_TrichromaticityBetween x (a,b) = and

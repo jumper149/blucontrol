@@ -1,8 +1,8 @@
-module Blumon.Monad.Recolor (
+module Blumon.Recolor (
   MonadRecolor (..)
 ) where
 
-import Blumon.Monad.Gamma
+import Blumon.Gamma
 
 class MonadGamma m => MonadRecolor m where
   recolor :: m ()

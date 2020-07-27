@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Monad.Control (
+module Blumon.Control (
   MonadControl (..)
 ) where
 

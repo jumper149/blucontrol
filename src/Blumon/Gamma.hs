@@ -1,4 +1,4 @@
-module Blumon.Monad.Gamma (
+module Blumon.Gamma (
   MonadGamma (..)
 ) where
 

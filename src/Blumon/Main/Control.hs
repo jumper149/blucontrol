@@ -16,8 +16,8 @@ import qualified Streamly.Prelude as S
 import qualified Streamly.Internal.Prelude as S (evalStateT)
 
 import Blumon.Config
-import Blumon.Monad.Control
-import Blumon.Monad.Recolor
+import Blumon.Control
+import Blumon.Recolor
 
 newtype ControlT m a = ControlT { unControlT :: S.SerialT (ReaderT Config m) a }
   deriving (Applicative, Functor, Monad)

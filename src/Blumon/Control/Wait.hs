@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Monad.Control.Wait (
+module Blumon.Control.Wait (
   ControlWaitT
 , runControlWaitT
 , ConfigWait (..)
@@ -17,7 +17,7 @@ import Data.Default
 import GHC.Generics
 import qualified Streamly as S
 
-import Blumon.Monad.Control
+import Blumon.Control
 
 newtype ControlWaitT m a = ControlWaitT { unControlWaitT :: ReaderT ConfigWait m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadIO, MonadThrow, MonadTrans, MonadTransControl)
