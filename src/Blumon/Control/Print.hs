@@ -7,8 +7,8 @@ module Blumon.Control.Print (
 
 import Control.Monad.Base
 import Control.Monad.Catch
+import Control.Monad.Trans
 import Control.Monad.Trans.Control
-import Control.Monad.Writer
 
 import Blumon.Control
 
