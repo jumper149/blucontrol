@@ -9,4 +9,4 @@ ghc:
   - "8.10.1"
 before_install:
   - sudo apt-get update
-  - sudo apt-get -y install libx11-dev
+  - sudo apt-get -y install libx11-dev libxrandr-dev
