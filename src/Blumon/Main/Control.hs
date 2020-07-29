@@ -34,7 +34,7 @@ runControlT :: Monad m
             -> m [a]
 runControlT conf tma = runReaderT (S.toList $ unControlT tma) conf
 
-loopRecolor :: (MonadControl m, MonadBaseControl IO r, MonadRecolor r)
+loopRecolor :: (ControlConstraint m (StM r ()), MonadControl m, MonadBaseControl IO r, MonadRecolor r)
             => (r () -> m (StM r ()))
             -> ControlT m (StM r ())
 loopRecolor run = do a' <- lift $ run recolor

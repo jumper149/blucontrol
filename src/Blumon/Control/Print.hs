@@ -1,0 +1,32 @@
+{-# LANGUAGE UndecidableInstances #-}
+
+module Blumon.Control.Print (
+  ControlPrintT
+, runControlPrintT
+) where
+
+import Control.Monad.Base
+import Control.Monad.Catch
+import Control.Monad.Trans.Control
+import Control.Monad.Writer
+
+import Blumon.Control
+
+newtype ControlPrintT m a = ControlPrintT { unControlPrintT :: m a }
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadIO, MonadThrow)
+
+instance MonadTrans ControlPrintT where
+  lift = ControlPrintT
+
+instance MonadTransControl ControlPrintT where
+  type StT ControlPrintT a = a
+  liftWith inner = ControlPrintT $ inner unControlPrintT
+  restoreT = ControlPrintT
+
+instance MonadControl m => MonadControl (ControlPrintT m) where
+  type ControlConstraint (ControlPrintT m) a = (ControlConstraint m a, Show a)
+  doInbetween c a = do liftBase $ print a
+                       lift $ doInbetween c a
+
+runControlPrintT :: ControlPrintT m a -> m a
+runControlPrintT = unControlPrintT

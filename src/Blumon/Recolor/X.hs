@@ -3,6 +3,7 @@
 module Blumon.Recolor.X (
   RecolorXT
 , runRecolorXTIO
+, ConfigX (..)
 , XError (..)
 ) where
 
@@ -13,6 +14,9 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Control.Monad.Except
+import Data.Default
+import Data.Maybe (fromMaybe)
+import qualified Data.Text as T
 import GHC.Generics
 
 import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, rootWindow)
@@ -45,6 +49,20 @@ instance (MonadBaseControl IO m, MonadGamma m) => MonadRecolor (RecolorXT m) whe
 runRecolorXT :: Display -> RecolorXT m a -> m (Either XError a)
 runRecolorXT display tma = runReaderT (runExceptT (unRecolorXT tma)) display
 
+data ConfigX = ConfigX { hostName :: Maybe T.Text
+                       , displayServer :: Int
+                       , screen :: Maybe Int
+                       }
+  deriving (Eq, Generic, Ord, Read, Show)
+
+instance NFData ConfigX
+
+instance Default ConfigX where
+  def = ConfigX { hostName = Nothing
+                , displayServer = 0
+                , screen = Nothing
+                }
+
 data XError = XErrorCloseDisplay
             | XErrorOpenDisplay
             | XErrorRead
@@ -56,11 +74,18 @@ instance NFData XError
 liftXIO :: (MonadBaseControl IO m, MonadError XError m) => XError -> IO a -> m a
 liftXIO xError = (flip catch $ \ (SomeException _) -> throwError xError) . liftBase
 
-runRecolorXTIO :: MonadBaseControl IO m => RecolorXT m a -> m (Either XError a)
-runRecolorXTIO tma = runExceptT $ bracket open close run
-  where open = liftXIO XErrorOpenDisplay $ openDisplay ""
+runRecolorXTIO :: MonadBaseControl IO m => ConfigX -> RecolorXT m a -> m (Either XError a)
+runRecolorXTIO conf tma = runExceptT $ bracket open close run
+  where open = liftXIO XErrorOpenDisplay $ openDisplay $ showDisplay conf
         close display = liftXIO XErrorCloseDisplay $ closeDisplay display
         run display = restoreT $ runRecolorXT display tma
+
+showDisplay :: ConfigX -> String
+showDisplay ConfigX {..} = T.unpack . T.concat $
+  [ fromMaybe "" hostName
+  , ":" <> T.pack (show displayServer)
+  , maybe "" (("." <>) . T.pack . show) screen
+  ]
 
 translateRGB :: Trichromaticity -> XRRGamma
 translateRGB Trichromaticity {..} = XRRGamma {..}

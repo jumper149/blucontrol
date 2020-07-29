@@ -15,15 +15,16 @@ import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Data.Default
 import GHC.Generics
-import qualified Streamly as S
 
 import Blumon.Control
 
 newtype ControlWaitT m a = ControlWaitT { unControlWaitT :: ReaderT ConfigWait m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadIO, MonadThrow, MonadTrans, MonadTransControl)
 
-instance S.MonadAsync m => MonadControl (ControlWaitT m) where
-  doInbetween _ _ = do liftBase . threadDelay . interval =<< ControlWaitT ask
+instance MonadControl m => MonadControl (ControlWaitT m) where
+  type ControlConstraint (ControlWaitT m) a = ControlConstraint m a
+  doInbetween c a = do liftBase . threadDelay . interval =<< ControlWaitT ask
+                       lift $ doInbetween c a
 
 runControlWaitT :: ConfigWait -> ControlWaitT m a -> m a
 runControlWaitT conf tma = runReaderT (unControlWaitT tma) conf
