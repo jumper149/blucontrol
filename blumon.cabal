@@ -45,7 +45,6 @@ library
                      , X11               >= 1.9     && < 1.10
   hs-source-dirs:      src
   includes:            XrandrGamma.h
-  install-includes:    XrandrGamma.h
   extra-libraries:     X11, Xrandr
   include-dirs:        include
   c-sources:           include/XrandrGamma.c
