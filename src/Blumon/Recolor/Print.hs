@@ -9,7 +9,6 @@ import Control.Monad.Base
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
 
-import Blumon.Gamma
 import Blumon.Recolor
 
 newtype RecolorPrintT m a = RecolorPrintT { unRecolorPrintT :: m a }

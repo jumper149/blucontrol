@@ -10,7 +10,6 @@ module Blumon.Recolor.X (
 import Control.DeepSeq
 import Control.Exception.Lifted (SomeException (..), bracket, catch)
 import Control.Monad.Base
-import Control.Monad.Trans
 import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Control.Monad.Except
@@ -23,7 +22,6 @@ import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, root
 import Graphics.X11.Xlib.Types (Display)
 
 import Blumon.RGB
-import Blumon.Gamma
 import Blumon.Recolor
 import Blumon.Recolor.X.Internal
 
