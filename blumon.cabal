@@ -23,12 +23,14 @@ library
                        Blumon.Gamma.Const
                        Blumon.Gamma.Linear
                        Blumon.Main
+                       Blumon.Main.CLI
                        Blumon.Main.Control
                        Blumon.Recolor
                        Blumon.Recolor.Print
                        Blumon.Recolor.X
                        Blumon.RGB
   other-modules:       Blumon.Recolor.X.Internal
+                       Paths_blumon
   build-depends:       base              >= 4.11    && < 5
                      , containers        >= 0.6.2.1 && < 0.7
                      , data-default      >= 0.7.1   && < 0.7.2
