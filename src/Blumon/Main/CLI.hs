@@ -23,14 +23,13 @@ options = [ Option ['h'] ["help"] (NoArg Help) "Explain CLI usage"
           , Option ['v'] ["version"] (NoArg Version) "Display version"
           ]
 
-printUsage :: IO ()
-printUsage = putStr $ usageInfo header options
-  where header = "Usage: blumon [OPTIONS]"
-
--- TODO: don't hardcode version
-printVersion :: IO ()
-printVersion = putStrLn $ "blumon-" <> showVersion version <> " compiled with " <> compiler
-  where compiler = compilerName <> "-" <> showVersion compilerVersion
+launch :: IO ()
+launch = do
+  args <- getArgs
+  case getOpt Permute options args of
+    (optArgs, [], []) -> controlOptions optArgs
+    _ -> do putStr $ usageInfo "Usage: blumon" options
+            exitFailure
 
 controlOptions :: [Flag] -> IO ()
 controlOptions flags
@@ -43,10 +42,11 @@ controlOptions flags
     _ -> do printUsage
             exitFailure
 
-launch :: IO ()
-launch = do
-  args <- getArgs
-  case getOpt Permute options args of
-    (optArgs, [], []) -> controlOptions optArgs
-    _ -> do putStr $ usageInfo "Usage: blumon" options
-            exitFailure
+printUsage :: IO ()
+printUsage = putStr $ usageInfo header options
+  where header = "Usage: blumon [OPTIONS]"
+
+-- TODO: don't hardcode version
+printVersion :: IO ()
+printVersion = putStrLn $ "blumon-" <> showVersion version <> " compiled with " <> compiler
+  where compiler = compilerName <> "-" <> showVersion compilerVersion
