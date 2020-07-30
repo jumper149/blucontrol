@@ -17,6 +17,7 @@ import qualified Streamly.Internal.Prelude as S (evalStateT)
 
 import Blumon.Config
 import Blumon.Control
+import Blumon.Gamma
 import Blumon.Recolor
 
 newtype ControlT m a = ControlT { unControlT :: S.SerialT (ReaderT Config m) a }
@@ -34,16 +35,25 @@ runControlT :: Monad m
             -> m [a]
 runControlT conf tma = runReaderT (S.toList $ unControlT tma) conf
 
-loopRecolor :: (ControlConstraint m (StM r ()), MonadControl m, MonadBaseControl IO r, MonadRecolor r)
-            => (r () -> m (StM r ()))
-            -> ControlT m (StM r ())
-loopRecolor run = do a' <- lift $ run recolor
-                     ControlT . (a' S..:) . S.evalStateT a' $ do
-                       S.repeatM $ do a <- get
-                                      conf <- ask
-                                      lift . lift $ doInbetween conf a
-                                      lift . lift $ run recolor
+loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r)
+            => (forall a. g a -> m (StM g a))
+            -> (forall a. r a -> g (StM r a))
+            -> ControlT m (StM g (StM r ()))
+loopRecolor runG runR = do
+  a <- lift $ doRecolorGamma
+  ControlT . (a S..:) . S.evalStateT a $ do
+    S.repeatM $ do
+      a' <- get
+      conf <- ask
+      lift . lift $ doInbetween conf a'
+      a'' <- lift $ lift $ doRecolorGamma
+      put a''
+      return a''
+  where doRecolorGamma = runG $ do
+          rgb <- gamma
+          runR $ recolor rgb
 
-data ConfigControl m r = ConfigControl { runControl :: forall a. m a -> IO a
-                                       , runRecolor :: forall a. r a -> m (StM r a)
-                                       }
+data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
+                                         , runGamma   :: forall a. g a -> m (StM g a)
+                                         , runRecolor :: forall a. r a -> g (StM r a)
+                                         }

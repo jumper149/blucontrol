@@ -13,7 +13,7 @@ import Blumon.Gamma
 import Blumon.Recolor
 
 newtype RecolorPrintT m a = RecolorPrintT { unRecolorPrintT :: m a }
-  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadGamma)
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
 
 instance MonadTrans RecolorPrintT where
   lift = RecolorPrintT
@@ -23,8 +23,8 @@ instance MonadTransControl RecolorPrintT where
   liftWith inner = RecolorPrintT $ inner unRecolorPrintT
   restoreT = RecolorPrintT
 
-instance (MonadBaseControl IO m, MonadGamma m) => MonadRecolor (RecolorPrintT m) where
-  recolor = liftBase . print =<< gamma
+instance MonadBaseControl IO m => MonadRecolor (RecolorPrintT m) where
+  recolor = liftBase . print
 
 runRecolorPrintT :: RecolorPrintT m a -> m a
 runRecolorPrintT = unRecolorPrintT

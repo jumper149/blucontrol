@@ -2,7 +2,7 @@ module Blumon.Recolor (
   MonadRecolor (..)
 ) where
 
-import Blumon.Gamma
+import Blumon.RGB
 
-class MonadGamma m => MonadRecolor m where
-  recolor :: m ()
+class Monad m => MonadRecolor m where
+  recolor :: Trichromaticity -> m ()

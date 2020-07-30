@@ -28,7 +28,7 @@ import Blumon.Recolor
 import Blumon.Recolor.X.Internal
 
 newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Display m) a }
-  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadError XError, MonadGamma)
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadError XError)
 
 instance MonadTrans RecolorXT where
   lift = RecolorXT . lift . lift
@@ -38,13 +38,13 @@ instance MonadTransControl RecolorXT where
   liftWith = defaultLiftWith2 RecolorXT unRecolorXT
   restoreT = defaultRestoreT2 RecolorXT
 
-instance (MonadBaseControl IO m, MonadGamma m) => MonadRecolor (RecolorXT m) where
-  recolor = do display <- RecolorXT ask
-               root <- liftXIO XErrorRead $
-                 rootWindow display $ defaultScreen display
+instance MonadBaseControl IO m => MonadRecolor (RecolorXT m) where
+  recolor rgb = do
+    display <- RecolorXT ask
+    root <- liftXIO XErrorRead $
+      rootWindow display $ defaultScreen display
 
-               rgb <- translateRGB <$> gamma
-               liftXIO XErrorSetGamma $ xrrSetGamma rgb display root
+    liftXIO XErrorSetGamma $ xrrSetGamma (translateRGB rgb) display root
 
 runRecolorXT :: Display -> RecolorXT m a -> m (Either XError a)
 runRecolorXT display tma = runReaderT (runExceptT (unRecolorXT tma)) display

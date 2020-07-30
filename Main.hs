@@ -9,7 +9,8 @@ import Blumon.Recolor.X
 main :: IO ()
 main = blumon def configControl
   where configControl = ConfigControl { runControl = runControlWaitT def . runControlPrintT
-                                      , runRecolor = runGammaLinearT rgbMap . runRecolorXTIO def
+                                      , runGamma = runGammaLinearT rgbMap
+                                      , runRecolor = runRecolorXTIO def
                                       }
         rgbMap = 00:.00 ==> Trichromaticity { red = 255, green = 255, blue = 000 }
             :| [ 08:.00 ==> Trichromaticity { red = 255, green = 000, blue = 255 }
