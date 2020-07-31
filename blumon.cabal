@@ -29,6 +29,7 @@ library
                        Blumon.Recolor.Print
                        Blumon.Recolor.X
                        Blumon.RGB
+                       Blumon.RGB.Temperature
   other-modules:       Blumon.Recolor.X.Internal
                        Paths_blumon
   build-depends:       base              >= 4.11    && < 5

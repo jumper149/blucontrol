@@ -12,7 +12,7 @@ main = blumon def configControl
                                       , runGamma = runGammaLinearT rgbMap
                                       , runRecolor = runRecolorXTIO def
                                       }
-        rgbMap = 00:.00 ==> Trichromaticity { red = 255, green = 255, blue = 000 }
-            :| [ 08:.00 ==> Trichromaticity { red = 255, green = 000, blue = 255 }
-               , 16:.00 ==> Trichromaticity { red = 000, green = 255, blue = 255 }
+        rgbMap = 00:.00 ==> temperature 6600
+            :| [ 08:.00 ==> temperature 4600
+               , 16:.00 ==> temperature 8600
                ]
