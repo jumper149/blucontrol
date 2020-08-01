@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Blumon.Test.RGB (
+module Bludigon.Test.RGB (
   test
 , Arbitrary_Chromaticity (..)
 , Arbitrary_Trichromaticity (..)
@@ -12,10 +12,10 @@ import Test.QuickCheck
 import Control.DeepSeq
 import GHC.Generics
 
-import Blumon.RGB
+import Bludigon.RGB
 
 test :: Spec
-test = describe "Blumon.RGB" $ do
+test = describe "Bludigon.RGB" $ do
 
   it "Chromaticity in bounds." $
     property $ total @Arbitrary_Chromaticity

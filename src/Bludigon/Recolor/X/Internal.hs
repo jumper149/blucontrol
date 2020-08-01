@@ -1,6 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface, RecordWildCards #-}
 
-module Blumon.Recolor.X.Internal (
+module Bludigon.Recolor.X.Internal (
   XRRGamma (..)
 , xrrSetGamma
 ) where

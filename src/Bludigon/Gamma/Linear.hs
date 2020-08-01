@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Gamma.Linear (
+module Bludigon.Gamma.Linear (
   GammaLinearT
 , runGammaLinearT
 , Time (..)
@@ -23,8 +23,8 @@ import Data.Maybe (fromJust)
 import Data.Time
 import GHC.Generics
 
-import Blumon.Gamma
-import Blumon.RGB
+import Bludigon.Gamma
+import Bludigon.RGB
 
 newtype GammaLinearT m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay Trichromaticity) m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)

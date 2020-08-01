@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Blumon.RGB.Temperature (
+module Bludigon.RGB.Temperature (
   Temperature
 , temperature
 ) where
@@ -9,7 +9,7 @@ import Control.DeepSeq
 import Data.Default
 import GHC.Generics
 
-import Blumon.RGB
+import Bludigon.RGB
 
 -- | Arbitrary precision temperature in Kelvin
 newtype Temperature = Temperature Rational

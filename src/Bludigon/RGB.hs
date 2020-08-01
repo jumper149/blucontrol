@@ -1,4 +1,4 @@
-module Blumon.RGB (
+module Bludigon.RGB (
   Chromaticity
 , Trichromaticity (..)
 ) where

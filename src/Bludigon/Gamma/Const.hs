@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Gamma.Const (
+module Bludigon.Gamma.Const (
   GammaConstT
 , runGammaConstT
 ) where
@@ -10,8 +10,8 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Control
 import Control.Monad.Reader
 
-import Blumon.Gamma
-import Blumon.RGB
+import Bludigon.Gamma
+import Bludigon.RGB
 
 newtype GammaConstT m a = GammaConstT { unGammaConstT :: ReaderT Trichromaticity m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)

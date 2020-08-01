@@ -2,22 +2,22 @@ let
   overlay = self: super: {
     haskellPackages = super.haskellPackages.extend (
       self: super: {
-        blumon = super.callCabal2nix "blumon" ./. {};
+        bludigon = super.callCabal2nix "bludigon" ./. {};
       }
     );
   };
 in
   with import <nixpkgs> { overlays = [ overlay ]; };
   let
-    blumonEnv' = packages: pkgs.haskellPackages.ghcWithPackages (self: [ self.blumon ] ++ packages self);
-    blumonEnv = blumonEnv' (_: []);
+    bludigonEnv' = packages: pkgs.haskellPackages.ghcWithPackages (self: [ self.bludigon ] ++ packages self);
+    bludigonEnv = bludigonEnv' (_: []);
   in
     stdenv.mkDerivation {
-      name = "blumon-with-packages-${pkgs.haskellPackages.blumon.version}-${blumonEnv.version}";
+      name = "bludigon-with-packages-${pkgs.haskellPackages.bludigon.version}-${bludigonEnv.version}";
       nativeBuildInputs = [ makeWrapper ];
       buildCommand = ''
-        makeWrapper ${blumonEnv}/bin/blumon $out/bin/blumon \
-          --prefix PATH : ${lib.makeBinPath [ blumonEnv ]}
+        makeWrapper ${bludigonEnv}/bin/bludigon $out/bin/bludigon \
+          --prefix PATH : ${lib.makeBinPath [ bludigonEnv ]}
       '';
       preferLocalBuild = true;
       allowSubstitues = false;

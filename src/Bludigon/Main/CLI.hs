@@ -1,4 +1,4 @@
-module Blumon.Main.CLI (
+module Bludigon.Main.CLI (
   launch
 ) where
 
@@ -14,7 +14,7 @@ import System.Info (arch, compilerName, compilerVersion, os)
 import System.Posix.Process (executeFile)
 import System.Process (runProcess, waitForProcess)
 
-import Paths_blumon (version)
+import Paths_bludigon (version)
 
 data Flag = Help
           | Version
@@ -48,14 +48,14 @@ controlOptions flags
 
 printUsage :: IO ()
 printUsage = putStr $ usageInfo header options
-  where header = "Usage: blumon [OPTIONS]"
+  where header = "Usage: bludigon [OPTIONS]"
 
 printVersion :: IO ()
-printVersion = putStrLn $ "blumon-" <> showVersion version <> " compiled with " <> compiler
+printVersion = putStrLn $ "bludigon-" <> showVersion version <> " compiled with " <> compiler
   where compiler = compilerName <> "-" <> showVersion compilerVersion
 
 getXdgDir :: XdgDirectory -> IO FilePath
-getXdgDir = flip getXdgDirectory "blumon"
+getXdgDir = flip getXdgDirectory "bludigon"
 
 build :: IO ()
 build = do
@@ -87,7 +87,7 @@ compile = do
     ExitFailure _ -> exitFailure
 
 compiledConfigLeafname :: FilePath
-compiledConfigLeafname = "blumon-" <> arch <> "-" <> os
+compiledConfigLeafname = "bludigon-" <> arch <> "-" <> os
 
 configLeafname :: FilePath
-configLeafname = "blumon.hs"
+configLeafname = "bludigon.hs"

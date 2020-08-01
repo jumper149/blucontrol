@@ -1,4 +1,4 @@
-name:                blumon
+name:                bludigon
 version:             0.1.0.0
 synopsis:            Apply gamma correction to your display server
 -- description:
@@ -6,32 +6,32 @@ license:             BSD3
 license-file:        LICENSE
 author:              Felix Springer
 maintainer:          felixspringer149@gmail.com
-homepage:            https://github.com/jumper149/blumon
-bug-reports:         https://github.com/jumper149/blumon/issues
+homepage:            https://github.com/jumper149/bludigon
+bug-reports:         https://github.com/jumper149/bludigon/issues
 category:            System
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
 cabal-version:       >= 1.10
 
 library
-  exposed-modules:     Blumon
-                       Blumon.Config
-                       Blumon.Control
-                       Blumon.Control.Print
-                       Blumon.Control.Wait
-                       Blumon.Gamma
-                       Blumon.Gamma.Const
-                       Blumon.Gamma.Linear
-                       Blumon.Main
-                       Blumon.Main.CLI
-                       Blumon.Main.Control
-                       Blumon.Recolor
-                       Blumon.Recolor.Print
-                       Blumon.Recolor.X
-                       Blumon.RGB
-                       Blumon.RGB.Temperature
-  other-modules:       Blumon.Recolor.X.Internal
-                       Paths_blumon
+  exposed-modules:     Bludigon
+                       Bludigon.Config
+                       Bludigon.Control
+                       Bludigon.Control.Print
+                       Bludigon.Control.Wait
+                       Bludigon.Gamma
+                       Bludigon.Gamma.Const
+                       Bludigon.Gamma.Linear
+                       Bludigon.Main
+                       Bludigon.Main.CLI
+                       Bludigon.Main.Control
+                       Bludigon.Recolor
+                       Bludigon.Recolor.Print
+                       Bludigon.Recolor.X
+                       Bludigon.RGB
+                       Bludigon.RGB.Temperature
+  other-modules:       Bludigon.Recolor.X.Internal
+                       Paths_bludigon
   build-depends:       base              >= 4.11    && < 5
                      , containers        >= 0.6.2.1 && < 0.7
                      , directory         >= 1.3.6.0 && < 1.4
@@ -70,21 +70,21 @@ library
                        TypeFamilies
   ghc-options:         -Wall
 
-executable blumon
+executable bludigon
   main-is:             Main.hs
   build-depends:       base
-                     , blumon
+                     , bludigon
   default-language:    Haskell2010
   ghc-options:         -Wall
 
 test-suite test
-  main-is:             Blumon.hs
+  main-is:             Bludigon.hs
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:       Blumon.Test.Gamma.Linear
-                       Blumon.Test.RGB
+  other-modules:       Bludigon.Test.Gamma.Linear
+                       Bludigon.Test.RGB
   build-depends:       base
-                     , blumon
+                     , bludigon
                      , data-default
                      , deepseq
                      , hspec        >= 2.6.0   && < 2.8

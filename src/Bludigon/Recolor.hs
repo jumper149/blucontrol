@@ -1,8 +1,8 @@
-module Blumon.Recolor (
+module Bludigon.Recolor (
   MonadRecolor (..)
 ) where
 
-import Blumon.RGB
+import Bludigon.RGB
 
 class Monad m => MonadRecolor m where
   recolor :: Trichromaticity -> m ()

@@ -1,13 +1,13 @@
 module Main where
 
-import Blumon
-import Blumon.Control.Print
-import Blumon.Control.Wait
-import Blumon.Gamma.Linear
-import Blumon.Recolor.X
+import Bludigon
+import Bludigon.Control.Print
+import Bludigon.Control.Wait
+import Bludigon.Gamma.Linear
+import Bludigon.Recolor.X
 
 main :: IO ()
-main = blumon def configControl
+main = bludigon def configControl
   where configControl = ConfigControl { runControl = runControlWaitT def . runControlPrintT
                                       , runGamma = runGammaLinearT rgbMap
                                       , runRecolor = runRecolorXTIO def

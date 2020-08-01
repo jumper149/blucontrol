@@ -1,26 +1,26 @@
-# blumon
+# bludigon
 
-[![Travis CI](https://img.shields.io/travis/com/jumper149/blumon?style=for-the-badge)](https://travis-ci.com/github/jumper149/blumon)
-[![License](https://img.shields.io/github/license/jumper149/blumon?style=for-the-badge)](./LICENSE)
+[![Travis CI](https://img.shields.io/travis/com/jumper149/bludigon?style=for-the-badge)](https://travis-ci.com/github/jumper149/bludigon)
+[![License](https://img.shields.io/github/license/jumper149/bludigon?style=for-the-badge)](./LICENSE)
 
 ## Install
 
 ### Nix
 
-Install blumon with the nix package manager:
+Install bludigon with the nix package manager:
 
 ```bash
-git clone https://github.com/jumper149/blumon.git
-cd blumon
+git clone https://github.com/jumper149/bludigon.git
+cd bludigon
 nix-env -i -f default.nix
 ```
 
 ### Cabal
 
-Build blumon with cabal-install:
+Build bludigon with cabal-install:
 
 ```bash
-git clone https://github.com/jumper149/blumon.git
-cd blumon
+git clone https://github.com/jumper149/bludigon.git
+cd bludigon
 cabal v2-build
 ```

@@ -1,13 +1,13 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Control (
+module Bludigon.Control (
   MonadControl (..)
 ) where
 
 import Control.Monad.Trans.Control
 import Data.Kind
 
-import Blumon.Config
+import Bludigon.Config
 
 class MonadBaseControl IO m => MonadControl m where
   type ControlConstraint m a :: Constraint

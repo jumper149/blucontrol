@@ -1,4 +1,4 @@
-module Blumon.Config (
+module Bludigon.Config (
   Config (..)
 ) where
 

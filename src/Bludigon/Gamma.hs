@@ -1,11 +1,11 @@
-module Blumon.Gamma (
+module Bludigon.Gamma (
   MonadGamma (..)
 ) where
 
 import Control.Monad.Except
 import Control.Monad.Reader
 
-import Blumon.RGB
+import Bludigon.RGB
 
 class Monad m => MonadGamma m where
   gamma :: m Trichromaticity

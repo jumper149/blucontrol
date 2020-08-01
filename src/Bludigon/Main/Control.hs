@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blumon.Main.Control (
+module Bludigon.Main.Control (
   ControlT
 , runControlT
 , loopRecolor
@@ -12,10 +12,10 @@ import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 
-import Blumon.Config
-import Blumon.Control
-import Blumon.Gamma
-import Blumon.Recolor
+import Bludigon.Config
+import Bludigon.Control
+import Bludigon.Gamma
+import Bludigon.Recolor
 
 newtype ControlT m a = ControlT { unControlT :: ReaderT Config m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
