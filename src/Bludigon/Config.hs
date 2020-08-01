@@ -13,5 +13,5 @@ data Config = Config { configDir :: FilePath
 instance NFData Config
 
 instance Default Config where
-  def = Config { configDir = ".config/blumon" 
+  def = Config { configDir = ".config/bludigon"
                }
