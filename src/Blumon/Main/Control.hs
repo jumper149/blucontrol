@@ -10,48 +10,39 @@ module Blumon.Main.Control (
 import Control.Monad.Base
 import Control.Monad.Trans.Control
 import Control.Monad.Reader
-import Control.Monad.State
-import qualified Streamly as S
-import qualified Streamly.Prelude as S
-import qualified Streamly.Internal.Prelude as S (evalStateT)
+import Control.Monad.State.Strict
 
 import Blumon.Config
 import Blumon.Control
 import Blumon.Gamma
 import Blumon.Recolor
 
-newtype ControlT m a = ControlT { unControlT :: S.SerialT (ReaderT Config m) a }
-  deriving (Applicative, Functor, Monad)
-
-instance MonadTrans ControlT where
-  lift = ControlT . lift . lift
-
-instance MonadBase b m => MonadBase b (ControlT m) where
-  liftBase = liftBaseDefault
+newtype ControlT m a = ControlT { unControlT :: ReaderT Config m a }
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
 runControlT :: Monad m
             => Config
             -> ControlT m a
-            -> m [a]
-runControlT conf tma = runReaderT (S.toList $ unControlT tma) conf
+            -> m a
+runControlT conf tma = runReaderT (unControlT tma) conf
 
 loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r)
             => (forall a. g a -> m (StM g a))
             -> (forall a. r a -> g (StM r a))
-            -> ControlT m (StM g (StM r ()))
+            -> ControlT m ()
 loopRecolor runG runR = do
   a <- lift $ doRecolorGamma
-  ControlT . (a S..:) . S.evalStateT a $ do
-    S.repeatM $ do
-      a' <- get
-      conf <- ask
-      lift . lift $ doInbetween conf a'
-      a'' <- lift $ lift $ doRecolorGamma
-      put a''
-      return a''
+  ControlT $ evalStateT doLoopRecolor a
   where doRecolorGamma = runG $ do
           rgb <- gamma
           runR $ recolor rgb
+        doLoopRecolor = do
+          a' <- get
+          conf <- ask
+          lift . lift $ doInbetween conf a'
+          a'' <- lift $ lift $ doRecolorGamma
+          put a''
+          doLoopRecolor
 
 data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
                                          , runGamma   :: forall a. g a -> m (StM g a)
