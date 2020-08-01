@@ -6,14 +6,13 @@ module Blumon.Control.Print (
 ) where
 
 import Control.Monad.Base
-import Control.Monad.Catch
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
 
 import Blumon.Control
 
 newtype ControlPrintT m a = ControlPrintT { unControlPrintT :: m a }
-  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadIO, MonadThrow)
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
 
 instance MonadTrans ControlPrintT where
   lift = ControlPrintT

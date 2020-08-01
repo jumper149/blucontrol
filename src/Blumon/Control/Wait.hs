@@ -10,7 +10,6 @@ module Blumon.Control.Wait (
 import Control.Concurrent (threadDelay)
 import Control.DeepSeq
 import Control.Monad.Base
-import Control.Monad.Catch
 import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Data.Default
@@ -19,7 +18,7 @@ import GHC.Generics
 import Blumon.Control
 
 newtype ControlWaitT m a = ControlWaitT { unControlWaitT :: ReaderT ConfigWait m a }
-  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadIO, MonadThrow, MonadTrans, MonadTransControl)
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
 instance MonadControl m => MonadControl (ControlWaitT m) where
   type ControlConstraint (ControlWaitT m) a = ControlConstraint m a
