@@ -12,19 +12,25 @@ import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 
-import Bludigon.Config
 import Bludigon.Control
 import Bludigon.Gamma
 import Bludigon.Recolor
 
-newtype ControlT m a = ControlT { unControlT :: ReaderT Config m a }
-  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
+newtype ControlT m a = ControlT { unControlT :: m a }
+  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
+
+instance MonadTrans ControlT where
+  lift = ControlT
+
+instance MonadTransControl ControlT where
+  type StT ControlT a = a
+  liftWith inner = ControlT $ inner unControlT
+  restoreT = ControlT
 
 runControlT :: Monad m
-            => Config
-            -> ControlT m a
+            => ControlT m a
             -> m a
-runControlT conf tma = runReaderT (unControlT tma) conf
+runControlT = unControlT
 
 loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r)
             => (forall a. g a -> m (StM g a))
@@ -38,9 +44,8 @@ loopRecolor runG runR = do
           runR $ recolor rgb
         doLoopRecolor = do
           a' <- get
-          conf <- ask
-          lift . lift $ doInbetween conf a'
-          a'' <- lift $ lift $ doRecolorGamma
+          lift $ doInbetween a'
+          a'' <- lift $ doRecolorGamma
           put a''
           doLoopRecolor
 

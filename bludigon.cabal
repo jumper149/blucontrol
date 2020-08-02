@@ -15,7 +15,6 @@ cabal-version:       >= 1.10
 
 library
   exposed-modules:     Bludigon
-                       Bludigon.Config
                        Bludigon.Control
                        Bludigon.Control.Print
                        Bludigon.Control.Wait

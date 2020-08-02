@@ -1,6 +1,5 @@
 module Bludigon (
-  module Bludigon.Config
-, module Bludigon.Main
+  module Bludigon.Main
 , module Bludigon.RGB
 , module Bludigon.RGB.Temperature
 , Default (..)
@@ -8,7 +7,6 @@ module Bludigon (
 
 import Data.Default
 
-import Bludigon.Config
 import Bludigon.Main
 import Bludigon.RGB
 import Bludigon.RGB.Temperature

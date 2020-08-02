@@ -22,8 +22,8 @@ newtype ControlWaitT m a = ControlWaitT { unControlWaitT :: ReaderT ConfigWait m
 
 instance MonadControl m => MonadControl (ControlWaitT m) where
   type ControlConstraint (ControlWaitT m) a = ControlConstraint m a
-  doInbetween c a = do liftBase . threadDelay . interval =<< ControlWaitT ask
-                       lift $ doInbetween c a
+  doInbetween a = do liftBase . threadDelay . interval =<< ControlWaitT ask
+                     lift $ doInbetween a
 
 runControlWaitT :: ConfigWait -> ControlWaitT m a -> m a
 runControlWaitT conf tma = runReaderT (unControlWaitT tma) conf
