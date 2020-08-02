@@ -1,5 +1,5 @@
 name:                bludigon
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Configurable blue light filter
 description:         This application is a blue light filter, with the main focus on
                      configurability.
