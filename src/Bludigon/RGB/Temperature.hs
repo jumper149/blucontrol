@@ -22,10 +22,10 @@ instance Bounded Temperature where
   maxBound = 20000
 
 instance Default Temperature where
-  def = 6500
+  def = 6600
 
--- TODO: test and implement more accurate.
--- Currently based on blugon
+-- TODO: test and implement more accurate, currently based on blugon
+-- | Calculate a 'Trichromaticity' from a 'Temperatute'.
 temperature :: Temperature -> Trichromaticity
 temperature (Temperature temp) = Trichromaticity {..}
   where red = round . inBounds $
