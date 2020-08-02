@@ -3,8 +3,9 @@ let
   bludigon = haskellPackages.callCabal2nix "bludigon" ./. {};
 in
   pkgs.mkShell {
-    buildInputs = [
+    buildInputs = with pkgs; [
       cabal-install
+      hlint
     ];
     inputsFrom = [
       bludigon.env
