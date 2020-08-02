@@ -1,5 +1,6 @@
 # bludigon
 
+[![AUR](https://img.shields.io/aur/version/bludigon.svg?style=for-the-badge)](https://aur.archlinux.org/packages/bludigon)
 [![Travis CI](https://img.shields.io/travis/com/jumper149/bludigon?style=for-the-badge)](https://travis-ci.com/github/jumper149/bludigon)
 [![License](https://img.shields.io/github/license/jumper149/bludigon?style=for-the-badge)](./LICENSE)
 
