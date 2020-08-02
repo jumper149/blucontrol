@@ -12,7 +12,8 @@ main = bludigon configControl
                                       , runGamma = runGammaLinearT rgbMap
                                       , runRecolor = runRecolorXTIO def
                                       }
-        rgbMap = 00:.00 ==> temperature 6600
+        rgbMap = 00:.00 ==> temperature 4000
             :| [ 08:.00 ==> temperature 4600
-               , 16:.00 ==> temperature 8600
+               , 12:.00 ==> temperature 6600
+               , 18:.00 ==> temperature 6000
                ]
