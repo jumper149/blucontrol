@@ -10,6 +10,8 @@ description:         This application is a blue light filter, with the main focu
                      Bludigon makes use of monad transformers and allows monadic calculation of
                      gamma values and recoloring.
                      The user chooses, what will be captured in the monadic state.
+                     .
+                     To get started with configuring read "Bludigon".
 license:             BSD3
 license-file:        LICENSE
 author:              Felix Springer
