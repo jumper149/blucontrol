@@ -1,7 +1,15 @@
 name:                bludigon
 version:             0.1.0.0
 synopsis:            Apply gamma correction to your display server
--- description:
+description:         This application is a blue light filter, with the main focus on
+                     configurability.
+                     .
+                     Configuration is done in Haskell in the style of
+                     <https://hackage.haskell.org/package/xmonad xmonad>.
+                     .
+                     Bludigon makes use of monad transformers and allows monadic calculation of
+                     gamma values and recoloring.
+                     The user chooses, what will be captured in the monadic state.
 license:             BSD3
 license-file:        LICENSE
 author:              Felix Springer
