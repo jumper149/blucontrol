@@ -43,8 +43,7 @@ temperature (Temperature temp) = Trichromaticity {..}
                      then 255
                      else 138.5177312231 * log (t - 10) - 305.0447927307
         t = fromRational $ temp / 100 :: Double
-        inBounds x = if x < 0
-                        then 0
-                        else if x > 255
-                             then 255
-                             else x
+        inBounds x
+          | x < 0 = 0
+          | x > 255 = 255
+          | otherwise = x

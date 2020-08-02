@@ -70,7 +70,8 @@ data XError = XErrorCloseDisplay
 instance NFData XError
 
 liftXIO :: (MonadBaseControl IO m, MonadError XError m) => XError -> IO a -> m a
-liftXIO xError = (flip catch $ \ (SomeException _) -> throwError xError) . liftBase
+liftXIO xError = flip catch throwXError . liftBase
+  where throwXError (SomeException _) = throwError xError
 
 runRecolorXTIO :: MonadBaseControl IO m => ConfigX -> RecolorXT m a -> m (Either XError a)
 runRecolorXTIO conf tma = runExceptT $ bracket open close run

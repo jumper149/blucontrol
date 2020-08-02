@@ -28,8 +28,8 @@ instance MonadControl m => MonadControl (ControlWaitT m) where
 runControlWaitT :: ConfigWait -> ControlWaitT m a -> m a
 runControlWaitT conf tma = runReaderT (unControlWaitT tma) conf
 
-data ConfigWait = ConfigWait { interval :: Microseconds
-                             }
+newtype ConfigWait = ConfigWait { interval :: Microseconds
+                                }
   deriving (Eq, Generic, Ord, Read, Show)
 
 instance NFData ConfigWait

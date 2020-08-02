@@ -37,7 +37,7 @@ loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, M
             -> (forall a. r a -> g (StM r a))
             -> ControlT m ()
 loopRecolor runG runR = do
-  a <- lift $ doRecolorGamma
+  a <- lift doRecolorGamma
   ControlT $ evalStateT doLoopRecolor a
   where doRecolorGamma = runG $ do
           rgb <- gamma
@@ -45,7 +45,7 @@ loopRecolor runG runR = do
         doLoopRecolor = do
           a' <- get
           lift $ doInbetween a'
-          a'' <- lift $ doRecolorGamma
+          a'' <- lift doRecolorGamma
           put a''
           doLoopRecolor
 
