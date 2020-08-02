@@ -9,7 +9,7 @@ import Data.Kind
 
 class MonadBaseControl IO m => MonadControl m where
 
-  {- | A constraint, to allow 'doInbetween' to handle a polymorphic argument.
+  {- | Give a constraint to allow 'doInbetween' to handle a polymorphic argument.
     This is usfeul to allow arguments wrapped in monadic state 'StM' from running 'MonadGamma' and
     'MonadRecolor'.
   -}

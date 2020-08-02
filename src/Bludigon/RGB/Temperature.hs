@@ -25,7 +25,7 @@ instance Default Temperature where
   def = 6600
 
 -- TODO: test and implement more accurate, currently based on blugon
--- | Calculate a 'Trichromaticity' from a 'Temperatute'.
+-- | Calculate a 'Trichromaticity' from a 'Temperature'.
 temperature :: Temperature -> Trichromaticity
 temperature (Temperature temp) = Trichromaticity {..}
   where red = round . inBounds $
