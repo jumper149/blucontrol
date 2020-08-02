@@ -7,7 +7,7 @@ import Bludigon.Gamma.Linear
 import Bludigon.Recolor.X
 
 main :: IO ()
-main = bludigon def configControl
+main = bludigon configControl
   where configControl = ConfigControl { runControl = runControlWaitT def . runControlPrintT
                                       , runGamma = runGammaLinearT rgbMap
                                       , runRecolor = runRecolorXTIO def
