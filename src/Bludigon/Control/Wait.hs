@@ -20,10 +20,9 @@ import Bludigon.Control
 newtype ControlWaitT m a = ControlWaitT { unControlWaitT :: ReaderT ConfigWait m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
-instance MonadControl m => MonadControl (ControlWaitT m) where
-  type ControlConstraint (ControlWaitT m) a = ControlConstraint m a
-  doInbetween a = do liftBase . threadDelay . interval =<< ControlWaitT ask
-                     lift $ doInbetween a
+instance MonadBaseControl IO m => MonadControl (ControlWaitT m) where
+  type ControlConstraint (ControlWaitT m) a = ()
+  doInbetween _ = liftBase . threadDelay . interval =<< ControlWaitT ask
 
 runControlWaitT :: ConfigWait -> ControlWaitT m a -> m a
 runControlWaitT conf tma = runReaderT (unControlWaitT tma) conf

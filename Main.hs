@@ -1,6 +1,7 @@
 module Main where
 
 import Bludigon
+import Bludigon.Control.Concat
 import Bludigon.Control.Print
 import Bludigon.Control.Wait
 import Bludigon.Gamma.Linear
@@ -8,7 +9,7 @@ import Bludigon.Recolor.X
 
 main :: IO ()
 main = bludigon configControl
-  where configControl = ConfigControl { runControl = runControlWaitT def . runControlPrintT
+  where configControl = ConfigControl { runControl = runControlPrintT !> runControlWaitT def
                                       , runGamma = runGammaLinearT rgbMap
                                       , runRecolor = runRecolorXTIO def
                                       }

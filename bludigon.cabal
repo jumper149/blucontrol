@@ -26,6 +26,7 @@ cabal-version:       >= 1.10
 library
   exposed-modules:     Bludigon
                        Bludigon.Control
+                       Bludigon.Control.Concat
                        Bludigon.Control.Print
                        Bludigon.Control.Wait
                        Bludigon.Gamma

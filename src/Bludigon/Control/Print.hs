@@ -22,10 +22,9 @@ instance MonadTransControl ControlPrintT where
   liftWith inner = ControlPrintT $ inner unControlPrintT
   restoreT = ControlPrintT
 
-instance MonadControl m => MonadControl (ControlPrintT m) where
-  type ControlConstraint (ControlPrintT m) a = (ControlConstraint m a, Show a)
-  doInbetween a = do liftBase $ print a
-                     lift $ doInbetween a
+instance MonadBaseControl IO m => MonadControl (ControlPrintT m) where
+  type ControlConstraint (ControlPrintT m) a = Show a
+  doInbetween a = liftBase $ print a
 
 runControlPrintT :: ControlPrintT m a -> m a
 runControlPrintT = unControlPrintT
