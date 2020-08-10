@@ -1,7 +1,6 @@
 module Main where
 
 import Bludigon
-import Bludigon.Control.Concat
 import Bludigon.Control.Count
 import Bludigon.Control.Print
 import Bludigon.Control.Wait

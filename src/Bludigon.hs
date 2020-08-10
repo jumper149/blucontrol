@@ -24,6 +24,12 @@ module Bludigon (
 -- | Modules with instances of 'MonadControl' can be found under @Bludigon.Control.*@.
 , MonadControl (..)
 
+{- | To compose instances of 'MonadControl' avoid function composition, as it won't compose
+   'doInbetween'.
+   Use '!>' instead.
+-}
+, (!>)
+
 -- * Gamma
 -- | Modules with instances of 'MonadGamma' can be found under @Bludigon.Gamma.*@.
 , MonadGamma (..)
@@ -39,6 +45,7 @@ module Bludigon (
 import Data.Default
 
 import Bludigon.Control
+import Bludigon.Control.Concat
 import Bludigon.Gamma
 import Bludigon.Main
 import Bludigon.Recolor
