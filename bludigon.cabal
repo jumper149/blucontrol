@@ -27,6 +27,7 @@ library
   exposed-modules:     Bludigon
                        Bludigon.Control
                        Bludigon.Control.Concat
+                       Bludigon.Control.Count
                        Bludigon.Control.Print
                        Bludigon.Control.Wait
                        Bludigon.Gamma
