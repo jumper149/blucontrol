@@ -1,6 +1,6 @@
 with import <nixpkgs> {};
 let
-  bludigon = haskellPackages.callCabal2nix "bludigon" ./. {};
+  blucontrol = haskellPackages.callCabal2nix "blucontrol" ./. {};
 in
   pkgs.mkShell {
     buildInputs = with pkgs; [
@@ -8,6 +8,6 @@ in
       hlint
     ];
     inputsFrom = [
-      bludigon.env
+      blucontrol.env
     ];
   }

@@ -1,4 +1,8 @@
-# Revision history for bludigon
+# Revision history for blucontrol
+
+## 0.2.0.0 -- 2020-08-10
+
+* Rename the whole application from bludigon to blucontrol
 
 ## 0.1.1.0 -- 2020-08-10
 

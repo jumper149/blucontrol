@@ -2,22 +2,22 @@ let
   overlay = self: super: {
     haskellPackages = super.haskellPackages.extend (
       self: super: {
-        bludigon = super.callCabal2nix "bludigon" ./. {};
+        blucontrol = super.callCabal2nix "blucontrol" ./. {};
       }
     );
   };
 in
   with import <nixpkgs> { overlays = [ overlay ]; };
   let
-    bludigonEnv' = packages: pkgs.haskellPackages.ghcWithPackages (self: [ self.bludigon ] ++ packages self);
-    bludigonEnv = bludigonEnv' (_: []);
+    blucontrolEnv' = packages: pkgs.haskellPackages.ghcWithPackages (self: [ self.blucontrol ] ++ packages self);
+    blucontrolEnv = blucontrolEnv' (_: []);
   in
     stdenv.mkDerivation {
-      name = "bludigon-with-packages-${pkgs.haskellPackages.bludigon.version}-${bludigonEnv.version}";
+      name = "blucontrol-with-packages-${pkgs.haskellPackages.blucontrol.version}-${blucontrolEnv.version}";
       nativeBuildInputs = [ makeWrapper ];
       buildCommand = ''
-        makeWrapper ${bludigonEnv}/bin/bludigon $out/bin/bludigon \
-          --prefix PATH : ${lib.makeBinPath [ bludigonEnv ]}
+        makeWrapper ${blucontrolEnv}/bin/blucontrol $out/bin/blucontrol \
+          --prefix PATH : ${lib.makeBinPath [ blucontrolEnv ]}
       '';
       preferLocalBuild = true;
       allowSubstitues = false;
