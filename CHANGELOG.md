@@ -2,13 +2,13 @@
 
 ## 0.2.0.0 -- 2020-08-10
 
-* Rename the whole application from bludigon to blucontrol
+* Rename the whole application from bludigon to blucontrol.
 
 ## 0.1.1.0 -- 2020-08-10
 
-* `runGamma` runs directly in `IO` now
-* New module `Bludigon.Control.Concat`
-* New module `Bludigon.Control.Count`
+* `runGamma` runs directly in `IO` now.
+* New module `Bludigon.Control.Concat`.
+* New module `Bludigon.Control.Count`.
 
 ## 0.1.0.1 -- 2020-08-02
 
