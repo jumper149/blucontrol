@@ -33,11 +33,11 @@ runControlT :: Monad m
 runControlT = unControlT
 
 loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r)
-            => (forall a. g a -> m (StM g a))
+            => (forall a. g a -> IO (StM g a))
             -> (forall a. r a -> g (StM r a))
             -> ControlT m ()
 loopRecolor runG runR = do
-  a <- lift doRecolorGamma
+  a <- liftBase doRecolorGamma
   ControlT $ evalStateT doLoopRecolor a
   where doRecolorGamma = runG $ do
           rgb <- gamma
@@ -45,11 +45,11 @@ loopRecolor runG runR = do
         doLoopRecolor = do
           a' <- get
           lift $ doInbetween a'
-          a'' <- lift doRecolorGamma
+          a'' <- liftBase doRecolorGamma
           put a''
           doLoopRecolor
 
 data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
-                                         , runGamma   :: forall a. g a -> m (StM g a)
+                                         , runGamma   :: forall a. g a -> IO (StM g a)
                                          , runRecolor :: forall a. r a -> g (StM r a)
                                          }
