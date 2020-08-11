@@ -3,10 +3,11 @@ module Blucontrol.Main.CLI (
 ) where
 
 import Control.DeepSeq
+import Control.Monad (when)
 import Data.Version (showVersion)
 import GHC.Generics
 import System.Console.GetOpt
-import System.Directory (XdgDirectory (..), createDirectoryIfMissing, doesFileExist, getXdgDirectory)
+import System.Directory (XdgDirectory (..), createDirectoryIfMissing, doesFileExist, getModificationTime, getXdgDirectory)
 import System.Environment (getArgs, getProgName)
 import System.Exit (ExitCode (..), exitFailure, exitSuccess)
 import System.FilePath ((</>))
@@ -61,14 +62,17 @@ build :: IO ()
 build = do
   configPath <- (</> configLeafname) <$> getXdgDir XdgConfig
   configExists <- doesFileExist configPath
-  if configExists
-     then do progName <- getProgName
-             if progName == compiledConfigLeafname
-                then return ()
-                else do compile
-                        cacheDir <- getXdgDir XdgCache
-                        executeFile (cacheDir </> compiledConfigLeafname) False [] Nothing
-     else return ()
+  when configExists $ do
+    progName <- getProgName
+    compiledConfigPath <- (</> compiledConfigLeafname) <$> getXdgDir XdgCache
+    if progName == compiledConfigLeafname
+       then do configTime <- getModificationTime configPath -- TODO: getModificationTime can fail
+               compiledConfigTime <- getModificationTime compiledConfigPath
+               when (configTime > compiledConfigTime) $ do
+                 compile
+                 executeFile compiledConfigPath False [] Nothing
+       else do compile
+               executeFile compiledConfigPath False [] Nothing
 
 compile :: IO ()
 compile = do
