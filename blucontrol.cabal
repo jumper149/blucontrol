@@ -41,7 +41,8 @@ library
                        Blucontrol.Recolor.X
                        Blucontrol.RGB
                        Blucontrol.RGB.Temperature
-  other-modules:       Blucontrol.Recolor.X.Internal
+  other-modules:       Blucontrol.Main.GHC.Internal
+                       Blucontrol.Recolor.X.Internal
                        Paths_blucontrol
   build-depends:       base              >= 4.11    && < 5
                      , containers        >= 0.6.2.1 && < 0.7

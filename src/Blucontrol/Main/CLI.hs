@@ -15,6 +15,7 @@ import System.Info (arch, compilerName, compilerVersion, os)
 import System.Posix.Process (executeFile)
 import System.Process (runProcess, waitForProcess)
 
+import Blucontrol.Main.GHC.Internal
 import Paths_blucontrol (version)
 
 data Flag = Help
@@ -79,13 +80,14 @@ compile = do
   configDir <- getXdgDir XdgConfig
   cacheDir <- getXdgDir XdgCache
   createDirectoryIfMissing False cacheDir
+  let ghcFlags = [ "--make"
+                 , configLeafname
+                 , "-main-is", "main"
+                 , "-v0"
+                 , "-o", cacheDir </> compiledConfigLeafname
+                 ] <> ghcAdditionalFlags
   status <- waitForProcess =<<
-    runProcess "ghc" [ "--make"
-                     , configLeafname
-                     , "-main-is", "main"
-                     , "-v0"
-                     , "-o", cacheDir </> compiledConfigLeafname
-                     ] (Just configDir) Nothing Nothing Nothing Nothing
+    runProcess ghcBinary ghcFlags (Just configDir) Nothing Nothing Nothing Nothing
   case status of
     ExitSuccess -> return ()
     ExitFailure _ -> exitFailure
