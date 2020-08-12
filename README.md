@@ -41,7 +41,7 @@ The reason for this, is to avoid problems with finding libraries.
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
 $EDITOR Main.hs
-cabal v2-install
+cabal v2-run blucontrol
 ```
 
 ## Development
