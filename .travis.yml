@@ -9,4 +9,5 @@ addons:
   apt:
     update: true
     packages:
+      - libx11-dev
       - libxrandr-dev
