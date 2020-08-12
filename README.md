@@ -17,6 +17,17 @@ cd blucontrol
 nix-env -i -f default.nix
 ```
 
+### AUR
+
+Build blucontrol with makepkg and install with pacman.
+You might need to install some dependencies from the AUR.
+
+```bash
+git clone https://aur.archlinux.org/blucontrol.git
+cd blucontrol
+makepkg --syncdeps --install
+```
+
 ### Cabal
 
 Build blucontrol with cabal-install:
