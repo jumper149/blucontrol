@@ -34,14 +34,6 @@ Make sure to have dependencies that are not managed by cabal installed.
 - libx11-dev
 - libxrandr-dev
 
-Build blucontrol for development with cabal-install.
-
-```bash
-git clone https://github.com/jumper149/blucontrol.git
-cd blucontrol
-cabal v2-build
-```
-
 If you want to actually use blucontrol without installing I recommend editing `Main.hs` in the source tree instead of using `$XDG_CONFIG_HOME/blucontrol/blucontrol.hs`.
 The reason for this, is to avoid problems with finding libraries.
 
@@ -54,13 +46,15 @@ cabal v2-install
 
 ## Development
 
+### Nix
+
 I recommend to use nix for handling dependencies.
-To use ghcide you will have to export some environment variables with the `dev-shell.sh` script.
+To use ghcide you will have to export some environment variables with the script `dev/shell.sh`.
 You can then test if ghcide is working.
 
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
-nix-shell dev-shell.nix --command "source dev-shell.sh; return"
+nix-shell dev/shell.nix --command "source dev/shell.sh; return"
 ghcide
 ```
