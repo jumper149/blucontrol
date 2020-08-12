@@ -42,7 +42,8 @@ cd blucontrol
 cabal v2-build
 ```
 
-If you want to actually use blucontrol without installing I recommend editing `Main.hs` in the source tree instead of using `$XDG_CONFIG_HOME/blucontrol/blucontrol.hs`. The reason for this, is to avoid problems with finding libraries.
+If you want to actually use blucontrol without installing I recommend editing `Main.hs` in the source tree instead of using `$XDG_CONFIG_HOME/blucontrol/blucontrol.hs`.
+The reason for this, is to avoid problems with finding libraries.
 
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
@@ -51,7 +52,11 @@ $EDITOR Main.hs
 cabal v2-install
 ```
 
-For development with ghcide some environment variables need to be set.
+## Development
+
+I recommend to use nix for handling dependencies.
+To use ghcide you will have to export some environment variables with the `dev-shell.sh` script.
+You can then test if ghcide is working.
 
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
