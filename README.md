@@ -35,7 +35,7 @@ Make sure to have dependencies that are not managed by cabal installed.
 - libxrandr-dev
 
 If you want to actually use blucontrol without installing I recommend editing `Main.hs` in the source tree instead of using `$XDG_CONFIG_HOME/blucontrol/blucontrol.hs`.
-The reason for this, is to avoid problems with finding libraries.
+The reason for this is to avoid problems with finding libraries.
 
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
