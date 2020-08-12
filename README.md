@@ -48,13 +48,10 @@ cabal v2-run blucontrol
 
 ### Nix
 
-I recommend to use nix for handling dependencies.
-To use ghcide you will have to export some environment variables with the script `dev/shell.sh`.
-You can then test if ghcide is working.
+Enter the nix-shell for development.
 
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
-nix-shell dev/shell.nix --command "source dev/shell.sh; return"
-ghcide
+nix-shell dev/shell.nix
 ```
