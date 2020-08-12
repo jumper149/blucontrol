@@ -50,3 +50,12 @@ cd blucontrol
 $EDITOR Main.hs
 cabal v2-install
 ```
+
+For development with ghcide some environment variables need to be set.
+
+```bash
+git clone https://github.com/jumper149/blucontrol.git
+cd blucontrol
+nix-shell dev-shell.nix --command "source dev-shell.sh; return"
+ghcide
+```

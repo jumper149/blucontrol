@@ -6,6 +6,8 @@ in
     buildInputs = with pkgs; [
       cabal-install
       hlint
+      haskellPackages.ghcide
+      haskellPackages.implicit-hie
     ];
     inputsFrom = [
       blucontrol.env

@@ -1,0 +1,10 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:blucontrol"
+
+    - path: "./Main.hs"
+      component: "blucontrol:exe:blucontrol"
+
+    - path: "test"
+      component: "blucontrol:test:test"
