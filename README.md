@@ -9,7 +9,7 @@
 
 ### Nix
 
-Install blucontrol with the nix package manager:
+Install blucontrol with the nix package manager.
 
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
@@ -30,10 +30,23 @@ makepkg --syncdeps --install
 
 ### Cabal
 
-Build blucontrol with cabal-install:
+Make sure to have dependencies that are not managed by cabal installed.
+- libx11-dev
+- libxrandr-dev
+
+Build blucontrol for development with cabal-install.
 
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
 cabal v2-build
+```
+
+If you want to actually use blucontrol without installing I recommend editing `Main.hs` in the source tree instead of using `$XDG_CONFIG_HOME/blucontrol/blucontrol.hs`. The reason for this, is to avoid problems with finding libraries.
+
+```bash
+git clone https://github.com/jumper149/blucontrol.git
+cd blucontrol
+$EDITOR Main.hs
+cabal v2-install
 ```
