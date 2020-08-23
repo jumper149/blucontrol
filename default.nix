@@ -1,6 +1,6 @@
-{ stdenv, makeWrapper, makeBinPath, ghcWithPackages, packages ? (_:[]) }:
+{ stdenv, lib, makeWrapper, haskellPackages, packages ? (_:[]) }:
 let
-  blucontrolEnv = ghcWithPackages (
+  blucontrolEnv = haskellPackages.ghcWithPackages (
     self: [
       (self.callCabal2nix "blucontrol" ./. {})
     ] ++ packages self
@@ -11,7 +11,7 @@ in
     nativeBuildInputs = [ makeWrapper ];
     buildCommand = ''
       makeWrapper ${blucontrolEnv}/bin/blucontrol $out/bin/blucontrol \
-        --prefix PATH : ${makeBinPath [ blucontrolEnv ]}
+        --prefix PATH : ${lib.makeBinPath [ blucontrolEnv ]}
     '';
     preferLocalBuild = true;
     allowSubstitues = false;
