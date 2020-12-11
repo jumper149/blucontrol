@@ -21,7 +21,7 @@ newtype ControlWaitT m a = ControlWaitT { unControlWaitT :: ReaderT ConfigWait m
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
 instance MonadBaseControl IO m => MonadControl (ControlWaitT m) where
-  type ControlConstraint (ControlWaitT m) a = ()
+  type ControlConstraint (ControlWaitT m) _ = ()
   doInbetween _ = liftBase . threadDelay . interval =<< ControlWaitT ask
 
 runControlWaitT :: ConfigWait -> ControlWaitT m a -> m a

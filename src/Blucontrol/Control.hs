@@ -21,5 +21,5 @@ class MonadBaseControl IO m => MonadControl m where
               -> m () -- ^ the side effect to be run inbetween recoloring
 
 instance MonadControl IO where
-  type ControlConstraint IO a = ()
+  type ControlConstraint IO _ = ()
   doInbetween _ = return ()
