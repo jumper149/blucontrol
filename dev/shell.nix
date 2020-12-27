@@ -6,7 +6,7 @@ in
     buildInputs = with pkgs; [
       cabal-install
       hlint
-      haskellPackages.ghcide
+      haskellPackages.haskell-language-server
       haskellPackages.implicit-hie
     ];
     inputsFrom = [
