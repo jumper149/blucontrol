@@ -12,6 +12,14 @@
 Install blucontrol with the nix package manager.
 
 ```bash
+nix-env --install blucontrol-with-packages
+```
+Watch out: `haskellPackages.blucontrol` is just the library, but doesn't add GHC to the `PATH`.
+You need `blucontrol-with-packages` to be able to compile your configuration.
+
+You can also install it from the cloned repository.
+
+```bash
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
 nix-env -i -f default.nix
