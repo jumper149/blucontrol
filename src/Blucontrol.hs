@@ -14,11 +14,10 @@ module Blucontrol (
 -- | RGB values are represented by 'Trichromaticity'.
 , Trichromaticity (..)
 
-{- | An alternative way to declaring 'Trichromaticity' directly is to use 'Temperature' and the
-  conversion function 'temperature'.
+{- | An alternative way, which avoids declaring 'Trichromaticity' directly, uses the 'RGB' type
+    class.
 -}
-, Temperature
-, temperature
+, RGB (..)
 
 -- * Control
 -- | Modules with instances of 'MonadControl' can be found under @Blucontrol.Control.*@.
@@ -50,4 +49,3 @@ import Blucontrol.Gamma
 import Blucontrol.Main
 import Blucontrol.Recolor
 import Blucontrol.RGB
-import Blucontrol.RGB.Temperature
