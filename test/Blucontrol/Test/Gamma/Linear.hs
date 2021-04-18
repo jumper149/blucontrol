@@ -22,8 +22,9 @@ test = describe "Blucontrol.Gamma.Linear" $ do
   it "convert Time to TimeOfDay" $
     property prop_timeToTimeOfDay
 
-  it "calculateGamma between surrounding values" $
-    property prop_calculateGamma
+  -- TODO: this tests `calculateRGB weightedAverageTrichromaticity`
+  it "calculateTrichromaticity between surrounding values" $
+    property prop_calculateTrichromaticity
 
 newtype Arbitrary_Time = Arbitrary_Time Time
   deriving (Bounded, Enum, Eq, Generic, Ord, Read, Show)
@@ -40,19 +41,19 @@ prop_timeToTimeOfDay (Arbitrary_Time time) = and
   , 0 == todSec
   ]
   where h :. m = time
-        TimeOfDay {..} = fst $ time Blucontrol.Gamma.Linear.==> undefined
+        TimeOfDay {..} = fst $ time Blucontrol.Gamma.Linear.==> (undefined :: Trichromaticity)
 
-prop_calculateGamma :: Arbitrary_Time
-                    -> (Arbitrary_Time,Arbitrary_Trichromaticity)
-                    -> (Arbitrary_Time,Arbitrary_Trichromaticity)
-                    -> Bool
-prop_calculateGamma (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_Trichromaticity xtc) (Arbitrary_Time yt , Arbitrary_Trichromaticity ytc) =
+prop_calculateTrichromaticity :: Arbitrary_Time
+                              -> (Arbitrary_Time,Arbitrary_Trichromaticity)
+                              -> (Arbitrary_Time,Arbitrary_Trichromaticity)
+                              -> Bool
+prop_calculateTrichromaticity (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_Trichromaticity xtc) (Arbitrary_Time yt , Arbitrary_Trichromaticity ytc) =
   rgb `prop_TrichromaticityBetween` (xtc , ytc)
-  where rgb = runIdentity . runGammaLinearT rgbMap $ calculateGamma tod
+  where rgb = runIdentity . runGammaLinearT rgbMap $ calculateRGB weightedAverageTrichromaticity tod
         rgbMap = xt Blucontrol.Gamma.Linear.==> xtc
             :| [ yt Blucontrol.Gamma.Linear.==> ytc
                ]
-        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blucontrol.Gamma.Linear.==> undefined
+        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blucontrol.Gamma.Linear.==> (undefined :: Trichromaticity)
 
 prop_TrichromaticityBetween :: Trichromaticity -> (Trichromaticity,Trichromaticity) -> Bool
 prop_TrichromaticityBetween x (a,b) = and

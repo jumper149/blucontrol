@@ -8,7 +8,8 @@ module Blucontrol.Gamma.Linear (
 , Minute
 , (==>)
 , N.NonEmpty (..) -- TODO: keep here?
-, calculateGamma -- TODO: export for testing
+, calculateRGB -- TODO: export for testing
+, weightedAverageTrichromaticity -- TODO: export for testing
 ) where
 
 import Control.DeepSeq
@@ -25,6 +26,7 @@ import GHC.Generics
 
 import Blucontrol.Gamma
 import Blucontrol.RGB
+import Blucontrol.RGB.Temperature
 
 newtype GammaLinearT c m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay c) m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
@@ -35,21 +37,14 @@ instance MonadReader r m => MonadReader r (GammaLinearT c m) where
     local f $ run tma
 
 instance MonadBase IO m => MonadGamma (GammaLinearT Trichromaticity m) where
-  gamma = calculateGamma . zonedTimeToLocalTime =<< liftBase getZonedTime
+  gamma = calculateRGB weightedAverageTrichromaticity . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-calculateGamma :: Monad m => LocalTime -> GammaLinearT Trichromaticity m Trichromaticity
-calculateGamma time = do
-  m <- GammaLinearT ask
-  return . fromJust $ do
-    (nextTime , nextGamma) <- nextTimeGamma m time
-    (prevTime , prevGamma) <- prevTimeGamma m time
-    let diffSeconds t1 t2 = nominalDiffTimeToSeconds $ t1 `diffLocalTime` t2
-        timeFraction = toRational $ (time `diffSeconds` prevTime) / (nextTime `diffSeconds` prevTime)
-    return $ weightedAverage timeFraction prevGamma nextGamma
+instance MonadBase IO m => MonadGamma (GammaLinearT Temperature m) where
+  gamma = fmap toRGB $ calculateRGB weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-nextTimeGamma :: M.Map TimeOfDay Trichromaticity -> LocalTime -> Maybe (LocalTime,Trichromaticity)
-nextTimeGamma m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay time) m) $
-                         const (toLocalTimeTomorrow <$> M.lookupMin m)
+nextTimeRGB :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
+nextTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay time) m) $
+                     const (toLocalTimeTomorrow <$> M.lookupMin m)
   where toLocalTimeToday (tod,tc) = let t = LocalTime { localDay = localDay time
                                                       , localTimeOfDay = tod
                                                       }
@@ -58,9 +53,9 @@ nextTimeGamma m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfD
                                     t' = t { localDay = succ $ localDay t }
                                  in (t',tc)
 
-prevTimeGamma :: M.Map TimeOfDay Trichromaticity -> LocalTime -> Maybe (LocalTime,Trichromaticity)
-prevTimeGamma m time = catchError (toLocalTimeToday <$> M.lookupLE (localTimeOfDay time) m) $
-                         const (toLocalTimeYesterday <$> M.lookupMax m)
+prevTimeRGB :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
+prevTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupLE (localTimeOfDay time) m) $
+                     const (toLocalTimeYesterday <$> M.lookupMax m)
   where toLocalTimeToday (tod,tc) = let t = LocalTime { localDay = localDay time
                                                       , localTimeOfDay = tod
                                                       }
@@ -69,17 +64,34 @@ prevTimeGamma m time = catchError (toLocalTimeToday <$> M.lookupLE (localTimeOfD
                                      t' = t { localDay = pred $ localDay t }
                                   in (t',tc)
 
-weightedAverage :: Rational -> Trichromaticity -> Trichromaticity -> Trichromaticity
-weightedAverage w tc1 tc2 = Trichromaticity { red = f (red tc1) (red tc2)
-                                            , green = f (green tc1) (green tc2)
-                                            , blue = f (blue tc1) (blue tc2)
-                                            }
+calculateRGB :: Monad m
+             => (Rational -> c -> c -> c)
+             -> LocalTime -> GammaLinearT c m c
+calculateRGB weightedAverage time = do
+  m <- GammaLinearT ask
+  return . fromJust $ do
+    (nextTime , nextRGB) <- nextTimeRGB m time
+    (prevTime , prevRGB) <- prevTimeRGB m time
+    let diffSeconds t1 t2 = nominalDiffTimeToSeconds $ t1 `diffLocalTime` t2
+        timeFraction = toRational $ (time `diffSeconds` prevTime) / (nextTime `diffSeconds` prevTime)
+    return $ weightedAverage timeFraction prevRGB nextRGB
+
+weightedAverageTrichromaticity :: Rational -> Trichromaticity -> Trichromaticity -> Trichromaticity
+weightedAverageTrichromaticity w tc1 tc2 = Trichromaticity { red = f (red tc1) (red tc2)
+                                                           , green = f (green tc1) (green tc2)
+                                                           , blue = f (blue tc1) (blue tc2)
+                                                           }
   where f c1 c2 = round $ fromIntegral c1 + w * (fromIntegral c2 - fromIntegral c1)
 
-runGammaLinearT' :: M.Map TimeOfDay Trichromaticity -> GammaLinearT Trichromaticity m a -> m a
+weightedAverageTemperature :: Rational -> Temperature -> Temperature -> Temperature
+weightedAverageTemperature w t1 t2 = fromRational $ toRational t1 + w * (toRational t2 - toRational t1)
+
+-- TODO: maybe remove RGB constraint
+runGammaLinearT' :: RGB c => M.Map TimeOfDay c -> GammaLinearT c m a -> m a
 runGammaLinearT' rgbs tma = runReaderT (unGammaLinearT tma) rgbs
 
-runGammaLinearT :: N.NonEmpty (TimeOfDay,Trichromaticity) -> GammaLinearT Trichromaticity m a -> m a
+-- TODO: maybe remove RGB constraint
+runGammaLinearT :: RGB c => N.NonEmpty (TimeOfDay,c) -> GammaLinearT c m a -> m a
 runGammaLinearT rgbs = runGammaLinearT' $ M.fromList . N.toList $ rgbs
 
 newtype Hour = Hour { unHour :: F.Finite 24 }
@@ -103,8 +115,9 @@ instance Enum Time where
   toEnum i = let (h , m) = i `divMod` succ (fromEnum $ maxBound @Minute)
               in toEnum h :. toEnum m
 
+-- TODO: maybe remove RGB constraint
 infix 6 ==>
-(==>) :: Time -> Trichromaticity -> (TimeOfDay,Trichromaticity)
+(==>) :: RGB c => Time -> c -> (TimeOfDay,c)
 (==>) (h :. m) c = (time,c)
   where time = TimeOfDay { todHour = fromIntegral h
                          , todMin = fromIntegral m
