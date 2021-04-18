@@ -1,5 +1,11 @@
 # Revision history for blucontrol
 
+## 0.3.0.0 *18 Apr 2021*
+
+* Add `RGB` class.
+* Remove `temperature` conversion function in favor of `toRGB`.
+* `GammaLinearT` now interpolates between `Temperature`s instead of `Trichromaticity`s.
+
 ## 0.2.1.1 *12 Aug 2020*
 
 * Improve miscallenous documentation.
