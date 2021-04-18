@@ -29,6 +29,11 @@ import Blucontrol.RGB
 newtype GammaLinearT c m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay c) m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
+instance MonadReader r m => MonadReader r (GammaLinearT c m) where
+  ask = lift ask
+  local f tma = liftWith $ \ run ->
+    local f $ run tma
+
 instance MonadBase IO m => MonadGamma (GammaLinearT Trichromaticity m) where
   gamma = calculateGamma . zonedTimeToLocalTime =<< liftBase getZonedTime
 
@@ -70,11 +75,6 @@ weightedAverage w tc1 tc2 = Trichromaticity { red = f (red tc1) (red tc2)
                                             , blue = f (blue tc1) (blue tc2)
                                             }
   where f c1 c2 = round $ fromIntegral c1 + w * (fromIntegral c2 - fromIntegral c1)
-
-instance MonadReader r m => MonadReader r (GammaLinearT c m) where
-  ask = lift ask
-  local f tma = liftWith $ \ run ->
-    local f $ run tma
 
 runGammaLinearT' :: M.Map TimeOfDay Trichromaticity -> GammaLinearT Trichromaticity m a -> m a
 runGammaLinearT' rgbs tma = runReaderT (unGammaLinearT tma) rgbs
