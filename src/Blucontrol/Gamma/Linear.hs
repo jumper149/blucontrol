@@ -26,13 +26,13 @@ import GHC.Generics
 import Blucontrol.Gamma
 import Blucontrol.RGB
 
-newtype GammaLinearT m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay Trichromaticity) m a }
+newtype GammaLinearT c m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay c) m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
-instance MonadBase IO m => MonadGamma (GammaLinearT m) where
+instance MonadBase IO m => MonadGamma (GammaLinearT Trichromaticity m) where
   gamma = calculateGamma . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-calculateGamma :: Monad m => LocalTime -> GammaLinearT m Trichromaticity
+calculateGamma :: Monad m => LocalTime -> GammaLinearT Trichromaticity m Trichromaticity
 calculateGamma time = do
   m <- GammaLinearT ask
   return . fromJust $ do
@@ -71,15 +71,15 @@ weightedAverage w tc1 tc2 = Trichromaticity { red = f (red tc1) (red tc2)
                                             }
   where f c1 c2 = round $ fromIntegral c1 + w * (fromIntegral c2 - fromIntegral c1)
 
-instance MonadReader r m => MonadReader r (GammaLinearT m) where
+instance MonadReader r m => MonadReader r (GammaLinearT c m) where
   ask = lift ask
   local f tma = liftWith $ \ run ->
     local f $ run tma
 
-runGammaLinearT' :: M.Map TimeOfDay Trichromaticity -> GammaLinearT m a -> m a
+runGammaLinearT' :: M.Map TimeOfDay Trichromaticity -> GammaLinearT Trichromaticity m a -> m a
 runGammaLinearT' rgbs tma = runReaderT (unGammaLinearT tma) rgbs
 
-runGammaLinearT :: N.NonEmpty (TimeOfDay,Trichromaticity) -> GammaLinearT m a -> m a
+runGammaLinearT :: N.NonEmpty (TimeOfDay,Trichromaticity) -> GammaLinearT Trichromaticity m a -> m a
 runGammaLinearT rgbs = runGammaLinearT' $ M.fromList . N.toList $ rgbs
 
 newtype Hour = Hour { unHour :: F.Finite 24 }

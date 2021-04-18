@@ -24,6 +24,9 @@ instance Bounded Temperature where
 instance Default Temperature where
   def = 6600
 
+instance RGB Temperature where
+  toRGB = temperature
+
 -- TODO: test and implement more accurate, currently based on blugon
 -- | Calculate a 'Trichromaticity' from a 'Temperature'.
 temperature :: Temperature -> Trichromaticity

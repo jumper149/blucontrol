@@ -1,5 +1,6 @@
 module Blucontrol.RGB (
-  Chromaticity
+  RGB (..)
+, Chromaticity
 , Trichromaticity (..)
 ) where
 
@@ -7,6 +8,10 @@ import Control.DeepSeq
 import Data.Default
 import Data.Word
 import GHC.Generics
+
+-- | convertible to 8-bit RGB values
+class RGB c where
+  toRGB :: c -> Trichromaticity
 
 -- | 8-bit value for color channel intensity
 newtype Chromaticity = Chromaticity Word8
@@ -45,3 +50,6 @@ instance Default Trichromaticity where
                         , green = def
                         , blue = def
                         }
+
+instance RGB Trichromaticity where
+  toRGB = id
