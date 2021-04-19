@@ -36,11 +36,11 @@ instance MonadReader r m => MonadReader r (GammaLinearT c m) where
   local f tma = liftWith $ \ run ->
     local f $ run tma
 
-instance MonadBase IO m => MonadGamma (GammaLinearT Trichromaticity m) where
+instance MonadBase IO m => MonadGamma Trichromaticity (GammaLinearT Trichromaticity m) where
   gamma = calculateRGB weightedAverageTrichromaticity . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-instance MonadBase IO m => MonadGamma (GammaLinearT Temperature m) where
-  gamma = fmap toRGB $ calculateRGB weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
+instance MonadBase IO m => MonadGamma Temperature (GammaLinearT Temperature m) where
+  gamma = calculateRGB weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
 
 nextTimeRGB :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
 nextTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay time) m) $

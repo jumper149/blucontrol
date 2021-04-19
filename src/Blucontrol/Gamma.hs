@@ -4,10 +4,10 @@ module Blucontrol.Gamma (
 
 import Blucontrol.RGB
 
-class Monad m => MonadGamma m where
+class (Monad m, RGB c) => MonadGamma c m | m -> c where
 
-  {- | Calculate a 'Trichromaticity'.
+  {- | Calculate an 'RGB' value.
      This is a monadic function, to allow the value to be dependent on side effects like time and
      location.
   -}
-  gamma :: m Trichromaticity
+  gamma :: m c

@@ -21,8 +21,8 @@ instance MonadReader r m => MonadReader r (GammaConstT c m) where
   local f tma = liftWith $ \ run ->
     local f $ run tma
 
-instance (Monad m, RGB c) => MonadGamma (GammaConstT c m) where
-  gamma = toRGB <$> GammaConstT ask
+instance (Monad m, RGB c) => MonadGamma c (GammaConstT c m) where
+  gamma = GammaConstT ask
 
 runGammaConstT :: RGB c => c -> GammaConstT c m a -> m a
 runGammaConstT rgb tma = runReaderT (unGammaConstT tma) rgb
