@@ -1,13 +1,14 @@
 with import <nixpkgs> {};
 let
-  blucontrol = haskellPackages.callCabal2nix "blucontrol" ../. {};
+  packages = haskell.packages.ghc8104;
+  blucontrol = packages.callCabal2nix "blucontrol" ../. {};
 in
   pkgs.mkShell {
-    buildInputs = with pkgs; [
+    buildInputs = with packages; [
       cabal-install
       hlint
-      haskellPackages.haskell-language-server
-      haskellPackages.implicit-hie
+      haskell-language-server
+      implicit-hie
     ];
     inputsFrom = [
       blucontrol.env
