@@ -31,9 +31,18 @@ newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Displ
 instance MonadTrans RecolorXT where
   lift = RecolorXT . lift . lift
 
+-- TODO: ghc-9.0.1 can't unify 'Run RecolorXT' and 'RunDefault2 RecolorXT n n'', when using 'defaultLiftWith2'
+-- current solution is the exact same on the value level, but uses 'Run RecolorXT' on the type level
+defaultLiftWith2' :: Monad n
+                  => (Run RecolorXT -> n a)
+                  -> RecolorXT n a
+defaultLiftWith2' f = RecolorXT $ liftWith $ \run -> liftWith $ \run' -> f $ run' . run . unRecolorXT
+
 instance MonadTransControl RecolorXT where
   type StT RecolorXT a = StT (ReaderT Display) (StT (ExceptT XError) a)
-  liftWith = defaultLiftWith2 RecolorXT unRecolorXT
+  -- TODO: broken by ghc-9.0.1
+  -- liftWith = defaultLiftWith2' RecolorXT unRecolorXT
+  liftWith = defaultLiftWith2'
   restoreT = defaultRestoreT2 RecolorXT
 
 instance MonadBaseControl IO m => MonadRecolor (RecolorXT m) where
