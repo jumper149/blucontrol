@@ -5,6 +5,10 @@
 [![Travis CI](https://img.shields.io/travis/com/jumper149/blucontrol?style=for-the-badge)](https://travis-ci.com/github/jumper149/blucontrol)
 [![License](https://img.shields.io/github/license/jumper149/blucontrol?style=for-the-badge)](./LICENSE)
 
+## Configuration
+
+Read the [Haddock documentation](http://hackage.haskell.org/package/blucontrol-0.3.0.0/docs/Blucontrol.html) and use [Main.hs](./Main.hs) as a template.
+
 ## Install
 
 ### Nix
