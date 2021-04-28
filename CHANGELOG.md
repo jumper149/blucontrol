@@ -1,5 +1,9 @@
 # Revision history for blucontrol
 
+## 0.3.0.1 *28 Apr 2021*
+
+* Support GHC 9.0.1.
+
 ## 0.3.0.0 *18 Apr 2021*
 
 * Add `RGB` class.
