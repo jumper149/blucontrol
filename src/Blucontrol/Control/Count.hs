@@ -24,6 +24,19 @@ newtype ControlCountT m a = ControlCountT { unControlCountT :: StateT Natural (R
 instance MonadTrans ControlCountT where
   lift = ControlCountT . lift . lift
 
+-- TODO: workaround for ghc-9.0.1
+defaultLiftWith2' :: (Monad m)
+                  => (Run ControlCountT -> m a)
+                  -> ControlCountT m a
+defaultLiftWith2' f = ControlCountT $ liftWith $ \run -> liftWith $ \run' -> f $ run' . run . unControlCountT
+
+instance MonadTransControl ControlCountT where
+  type StT ControlCountT a = StT (ReaderT ConfigCount) (StT (StateT Natural) a)
+  -- TODO: workaround for ghc-9.0.1
+  --liftWith = defaultLiftWith2 ControlCountT unControlCountT
+  liftWith = defaultLiftWith2'
+  restoreT = defaultRestoreT2 ControlCountT
+
 instance MonadBaseControl IO m => MonadControl (ControlCountT m) where
   type ControlConstraint (ControlCountT m) a = CountableException a
   doInbetween a = do if isException a
