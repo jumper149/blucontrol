@@ -9,10 +9,11 @@ module Blucontrol.Control.Concat (
 import Control.Monad.Base
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
+import Data.Kind
 
 import Blucontrol.Control
 
-newtype ControlConcatT (t1 :: (* -> *) -> * -> *) (t2 :: (* -> *) -> * -> *) (m :: * -> *) a = ControlConcatT { unControlConcatT :: t2 (t1 m) a }
+newtype ControlConcatT (t1 :: (Type -> Type) -> Type -> Type) (t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type) a = ControlConcatT { unControlConcatT :: t2 (t1 m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
 
 instance (forall m. Monad m => Monad (t1 m), MonadTrans t1, MonadTrans t2) => MonadTrans (ControlConcatT t1 t2) where
