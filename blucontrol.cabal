@@ -33,6 +33,7 @@ library
                        Blucontrol.Gamma
                        Blucontrol.Gamma.Const
                        Blucontrol.Gamma.Linear
+                       Blucontrol.Gamma.Modifier
                        Blucontrol.Main
                        Blucontrol.Main.CLI
                        Blucontrol.Main.Control
