@@ -26,7 +26,7 @@ You can also install it from the cloned repository.
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
-nix-env -i -f default.nix
+nix-env --install --file dev/build.nix
 ```
 
 ### AUR
@@ -53,7 +53,7 @@ The reason for this is to avoid problems with finding libraries.
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
 $EDITOR Main.hs
-cabal v2-run blucontrol
+cabal run blucontrol
 ```
 
 ## Development
