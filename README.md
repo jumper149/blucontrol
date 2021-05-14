@@ -42,7 +42,7 @@ makepkg --syncdeps --install
 
 ### Cabal
 
-Make sure to have dependencies that are not managed by cabal installed.
+Make sure to install dependencies that are not managed by cabal.
 - libx11-dev
 - libxrandr-dev
 
