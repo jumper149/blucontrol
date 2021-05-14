@@ -20,6 +20,7 @@ import Paths_blucontrol (version)
 
 data Flag = Help
           | Version
+          | IgnoreConfig
   deriving (Eq, Generic, Ord, Read, Show)
 
 instance NFData Flag
@@ -27,6 +28,7 @@ instance NFData Flag
 options :: [OptDescr Flag]
 options = [ Option ['h'] ["help"] (NoArg Help) "Explain CLI usage"
           , Option ['v'] ["version"] (NoArg Version) "Display version"
+          , Option ['i'] ["ignore-config"] (NoArg IgnoreConfig) "Use default configuration"
           ]
 
 launch :: IO ()
@@ -45,6 +47,7 @@ controlOptions flags
     [] -> build
     [Version] -> do printVersion
                     exitSuccess
+    [IgnoreConfig] -> return ()
     _ -> do printUsage
             exitFailure
 
