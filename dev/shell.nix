@@ -1,17 +1,16 @@
 let
   nixpkgs = import ./nixpkgs.nix;
-  haskellPackages = nixpkgs.haskell.packages.ghc8104;
-  blucontrol = p: p.callCabal2nix "blucontrol" ../. {};
+  blucontrol = haskellPackages: haskellPackages.callCabal2nix "blucontrol" ../. {};
 in
-  haskellPackages.shellFor {
-    buildInputs = with haskellPackages; [
+  nixpkgs.haskellPackages.shellFor {
+    buildInputs = with nixpkgs.haskellPackages; [
       cabal-install
       haskell-language-server
       hlint
       implicit-hie
     ];
-    packages = p: [
-      (blucontrol p)
+    packages = haskellPackages: [
+      (blucontrol haskellPackages)
     ];
     withHoogle = true;
   }
