@@ -1,5 +1,5 @@
 let
-  nixpkgs = import <nixpkgs> {};
+  nixpkgs = import ./nixpkgs.nix;
   haskellPackages = nixpkgs.haskell.packages.ghc8104;
   blucontrol = p: p.callCabal2nix "blucontrol" ../. {};
 in

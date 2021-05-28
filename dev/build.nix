@@ -1,2 +1,5 @@
-with import <nixpkgs> {};
-callPackage (import ../default.nix) { haskellPackages = haskell.packages.ghc8104; }
+let
+  nixpkgs = import ./nixpkgs.nix;
+  haskellPackages = nixpkgs.haskell.packages.ghc8104;
+in
+  nixpkgs.callPackage (import ../default.nix) { haskellPackages = haskellPackages; }
