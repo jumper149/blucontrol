@@ -14,3 +14,10 @@ in
     ];
     withHoogle = true;
   }
+
+# TODO: workaround to use ghc-9.0.1
+#  nixpkgs.mkShell {
+#    inputsFrom = [
+#      (nixpkgs.haskell.packages.ghc901.callCabal2nix "blucontrol" ../. {}).env
+#    ];
+#  }
