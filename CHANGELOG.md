@@ -1,5 +1,10 @@
 # Revision history for blucontrol
 
+## 0.3.1.0 *30 May 2021*
+
+* New module `Blucontrol.Gamma.Modifier`.
+* New command line flag `-i`/`--ignore-config` to stick to the default configuration.
+
 ## 0.3.0.1 *28 Apr 2021*
 
 * Support GHC 9.0.1.
