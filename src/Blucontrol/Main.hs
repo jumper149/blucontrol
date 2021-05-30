@@ -15,4 +15,4 @@ blucontrol :: (ControlConstraint m (StM g (StM r ())), MonadControl m, MonadBase
            => ConfigControl m g r
            -> IO ()
 blucontrol c = do launch
-                  runControl c . runControlT $ loopRecolor (runGamma c) (runRecolor c)
+                  runControl c $ loopRecolor (runGamma c) (runRecolor c)

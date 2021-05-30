@@ -1,9 +1,5 @@
-{-# LANGUAGE UndecidableInstances #-}
-
 module Blucontrol.Main.Control (
-  ControlT
-, runControlT
-, loopRecolor
+  loopRecolor
 , ConfigControl (..)
 ) where
 
@@ -17,40 +13,29 @@ import Blucontrol.Gamma
 import Blucontrol.Recolor
 import Blucontrol.RGB
 
-newtype ControlT c m a = ControlT { unControlT :: m a }
-  deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
-
-instance MonadTrans (ControlT c) where
-  lift = ControlT
-
-instance MonadTransControl (ControlT c) where
-  type StT (ControlT c) a = a
-  liftWith inner = ControlT $ inner unControlT
-  restoreT = ControlT
-
-runControlT :: Monad m
-            => ControlT c m a
-            -> m a
-runControlT = unControlT
-
 loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma c g, MonadRecolor r)
             => (forall a. g a -> IO (StM g a))
-            -> (forall a. r a -> g (StM r a))
-            -> ControlT c m ()
-loopRecolor runG runR = do
-  a <- liftBase doRecolorGamma
-  ControlT $ evalStateT doLoopRecolor a
-  where doRecolorGamma = runG $ do
-          rgb <- toRGB <$> gamma
-          runR $ recolor rgb
-        doLoopRecolor = do
-          a' <- get
-          lift $ doInbetween a'
-          a'' <- liftBase doRecolorGamma
-          put a''
-          doLoopRecolor
+            -> (forall a. r a -> IO (StM r a))
+            -> m ()
+loopRecolor runG runR = void $
+  liftBaseWith $ \ runCIO ->
+    runR $ liftBaseWith $ \ runRIO ->
+      runG $ liftBaseWith $ \ runGIO -> do
+        let doRecolorGamma = do
+              runGIO $ do
+                rgb <- toRGB <$> gamma
+                liftBase $ runRIO $ recolor rgb
+            doLoopRecolor = do
+              lastResult <- get
+              _ <- liftBase $ runCIO $ doInbetween lastResult
+              nextResult <- liftBase doRecolorGamma
+              put nextResult
+              doLoopRecolor
+        firstResult <- doRecolorGamma
+        evalStateT doLoopRecolor firstResult
+
 
 data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
                                          , runGamma   :: forall a. g a -> IO (StM g a)
-                                         , runRecolor :: forall a. r a -> g (StM r a)
+                                         , runRecolor :: forall a. r a -> IO (StM r a)
                                          }
