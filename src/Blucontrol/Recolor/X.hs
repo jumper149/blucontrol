@@ -76,7 +76,7 @@ liftXIO xError = flip catch throwXError . liftBase
   where throwXError (SomeException _) = throwError xError
 
 runRecolorXTIO :: MonadBaseControl IO m => ConfigX -> RecolorXT m a -> m (Either XError a)
-runRecolorXTIO conf tma = runExceptT $ bracket open close run
+runRecolorXTIO !conf tma = runExceptT $ bracket open close run
   where open = liftXIO XErrorOpenDisplay $ openDisplay $ showDisplay conf
         close display = liftXIO XErrorCloseDisplay $ closeDisplay display
         run display = restoreT $ runRecolorXT display tma

@@ -25,7 +25,7 @@ instance MonadBaseControl IO m => MonadControl (ControlWaitT m) where
   doInbetween _ = liftBase . threadDelay . interval =<< ControlWaitT ask
 
 runControlWaitT :: ConfigWait -> ControlWaitT m a -> m a
-runControlWaitT conf tma = runReaderT (unControlWaitT tma) conf
+runControlWaitT !conf tma = runReaderT (unControlWaitT tma) conf
 
 newtype ConfigWait = ConfigWait { interval :: Microseconds
                                 }

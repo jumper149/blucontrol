@@ -69,7 +69,8 @@ library
   c-sources:           include/XrandrGamma.c
                        include/XrandrGamma.h
   default-language:    Haskell2010
-  default-extensions:  ConstraintKinds
+  default-extensions:  BangPatterns
+                       ConstraintKinds
                        DataKinds
                        DeriveGeneric
                        FlexibleContexts
@@ -106,7 +107,8 @@ test-suite test
                      , QuickCheck   >= 2.13.2  && < 2.15
                      , time
   default-language:    Haskell2010
-  default-extensions:  ConstraintKinds
+  default-extensions:  BangPatterns
+                       ConstraintKinds
                        DataKinds
                        DeriveGeneric
                        FlexibleContexts

@@ -43,7 +43,7 @@ instance MonadBaseControl IO m => MonadControl (ControlCountT m) where
                         else return ()
 
 runControlCountT :: Monad m => ConfigCount -> ControlCountT m a -> m a
-runControlCountT conf tma = runReaderT (evalStateT (unControlCountT tma) 0) conf
+runControlCountT !conf tma = runReaderT (evalStateT (unControlCountT tma) 0) conf
 
 newtype ConfigCount = ConfigCount { maxCount :: Natural
                                   }

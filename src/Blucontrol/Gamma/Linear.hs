@@ -88,7 +88,7 @@ weightedAverageTemperature w t1 t2 = fromRational $ toRational t1 + w * (toRatio
 
 -- TODO: maybe remove RGB constraint
 runGammaLinearT' :: RGB c => M.Map TimeOfDay c -> GammaLinearT c m a -> m a
-runGammaLinearT' rgbs tma = runReaderT (unGammaLinearT tma) rgbs
+runGammaLinearT' !rgbs tma = runReaderT (unGammaLinearT tma) rgbs
 
 -- TODO: maybe remove RGB constraint
 runGammaLinearT :: RGB c => N.NonEmpty (TimeOfDay,c) -> GammaLinearT c m a -> m a
