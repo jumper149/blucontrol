@@ -26,6 +26,7 @@ import GHC.Generics
 
 import Blucontrol.Gamma
 import Blucontrol.RGB
+import Blucontrol.RGB.Brightness
 import Blucontrol.RGB.Temperature
 
 newtype GammaLinearT c m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay c) m a }
@@ -41,6 +42,20 @@ instance MonadBase IO m => MonadGamma Trichromaticity (GammaLinearT Trichromatic
 
 instance MonadBase IO m => MonadGamma Temperature (GammaLinearT Temperature m) where
   gamma = calculateRGB weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
+
+instance (RGB Trichromaticity, MonadBase IO m) => MonadGamma (WithBrightness Trichromaticity) (GammaLinearT (WithBrightness Trichromaticity) m) where
+  gamma = calculateRGB weightedAverage . zonedTimeToLocalTime =<< liftBase getZonedTime
+    where weightedAverage w WithBrightness { brightness = b1, rgb = tc1 } WithBrightness { brightness = b2, rgb = tc2 } =
+            WithBrightness { brightness = weightedAverageBrightness w b1 b2
+                           , rgb = weightedAverageTrichromaticity w tc1 tc2
+                           }
+
+instance (RGB Temperature, MonadBase IO m) => MonadGamma (WithBrightness Temperature) (GammaLinearT (WithBrightness Temperature) m) where
+  gamma = calculateRGB weightedAverage . zonedTimeToLocalTime =<< liftBase getZonedTime
+    where weightedAverage w WithBrightness { brightness = b1, rgb = tc1 } WithBrightness { brightness = b2, rgb = tc2 } =
+            WithBrightness { brightness = weightedAverageBrightness w b1 b2
+                           , rgb = weightedAverageTemperature w tc1 tc2
+                           }
 
 nextTimeRGB :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
 nextTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay time) m) $
@@ -85,6 +100,9 @@ weightedAverageTrichromaticity w tc1 tc2 = Trichromaticity { red = f (red tc1) (
 
 weightedAverageTemperature :: Rational -> Temperature -> Temperature -> Temperature
 weightedAverageTemperature w t1 t2 = fromRational $ toRational t1 + w * (toRational t2 - toRational t1)
+
+weightedAverageBrightness :: Rational -> Brightness -> Brightness -> Brightness
+weightedAverageBrightness w b1 b2 = fromRational $ toRational b1 + w * (toRational b2 - toRational b1)
 
 -- TODO: maybe remove RGB constraint
 runGammaLinearT' :: RGB c => M.Map TimeOfDay c -> GammaLinearT c m a -> m a
