@@ -41,6 +41,7 @@ library
                        Blucontrol.Recolor.Print
                        Blucontrol.Recolor.X
                        Blucontrol.RGB
+                       Blucontrol.RGB.Brightness
                        Blucontrol.RGB.Temperature
   other-modules:       Blucontrol.Main.GHC.Internal
                        Blucontrol.Recolor.X.Internal
