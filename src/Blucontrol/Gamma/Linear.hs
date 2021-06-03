@@ -37,20 +37,24 @@ instance MonadReader r m => MonadReader r (GammaLinearT c m) where
   local f tma = liftWith $ \ run ->
     local f $ run tma
 
-instance MonadBase IO m => MonadGamma Trichromaticity (GammaLinearT Trichromaticity m) where
+instance MonadBase IO m => MonadGamma (GammaLinearT Trichromaticity m) where
+  type GammaRGB (GammaLinearT Trichromaticity m) = Trichromaticity
   gamma = calculateRGB weightedAverageTrichromaticity . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-instance MonadBase IO m => MonadGamma Temperature (GammaLinearT Temperature m) where
+instance MonadBase IO m => MonadGamma (GammaLinearT Temperature m) where
+  type GammaRGB (GammaLinearT Temperature m) = Temperature
   gamma = calculateRGB weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-instance (RGB Trichromaticity, MonadBase IO m) => MonadGamma (WithBrightness Trichromaticity) (GammaLinearT (WithBrightness Trichromaticity) m) where
+instance (RGB Trichromaticity, MonadBase IO m) => MonadGamma (GammaLinearT (WithBrightness Trichromaticity) m) where
+  type GammaRGB (GammaLinearT (WithBrightness Trichromaticity) m) = WithBrightness Trichromaticity
   gamma = calculateRGB weightedAverage . zonedTimeToLocalTime =<< liftBase getZonedTime
     where weightedAverage w WithBrightness { brightness = b1, rgb = tc1 } WithBrightness { brightness = b2, rgb = tc2 } =
             WithBrightness { brightness = weightedAverageBrightness w b1 b2
                            , rgb = weightedAverageTrichromaticity w tc1 tc2
                            }
 
-instance (RGB Temperature, MonadBase IO m) => MonadGamma (WithBrightness Temperature) (GammaLinearT (WithBrightness Temperature) m) where
+instance (RGB Temperature, MonadBase IO m) => MonadGamma (GammaLinearT (WithBrightness Temperature) m) where
+  type GammaRGB (GammaLinearT (WithBrightness Temperature) m) = WithBrightness Temperature
   gamma = calculateRGB weightedAverage . zonedTimeToLocalTime =<< liftBase getZonedTime
     where weightedAverage w WithBrightness { brightness = b1, rgb = tc1 } WithBrightness { brightness = b2, rgb = tc2 } =
             WithBrightness { brightness = weightedAverageBrightness w b1 b2

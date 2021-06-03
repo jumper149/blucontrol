@@ -39,6 +39,7 @@ instance MonadTransControl RecolorXT where
   restoreT = defaultRestoreT2 RecolorXT
 
 instance MonadBaseControl IO m => MonadRecolor (RecolorXT m) where
+  type RecolorRGB (RecolorXT m) = Trichromaticity
   recolor rgb = do
     display <- RecolorXT ask
     root <- liftXIO XErrorRead $

@@ -11,8 +11,8 @@ import Blucontrol.Control
 import Blucontrol.Gamma
 import Blucontrol.Recolor
 
-blucontrol :: (ControlConstraint m (StM g (StM r ())), MonadControl m, MonadBaseControl IO g, MonadBaseControl IO r, MonadGamma c g, MonadRecolor r)
+blucontrol :: (ControlConstraint m (StM g (StM r ())), MonadControl m, MonadBaseControl IO g, MonadBaseControl IO r, MonadGamma g, MonadRecolor r)
            => ConfigControl m g r
            -> IO ()
 blucontrol c = do launch
-                  runControl c $ loopRecolor (runGamma c) (runRecolor c)
+                  runControl c $ loopRecolor (runGamma c) (runRecolor c) (coerceRGB c)
