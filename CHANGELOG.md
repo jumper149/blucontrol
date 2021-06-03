@@ -1,5 +1,11 @@
 # Revision history for blucontrol
 
+## 0.3.2.0 *04 Jun 2021*
+
+* New module `Blucontrol.RGB.Brightness`.
+* Introduce strictness to improve performance.
+* Allow `runGamma` to directly run in the `IO` monad instead of `g` with `MonadGamma c g`.
+
 ## 0.3.1.0 *30 May 2021*
 
 * New module `Blucontrol.Gamma.Modifier`.
