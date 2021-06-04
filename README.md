@@ -67,3 +67,18 @@ git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
 nix-shell dev/shell.nix
 ```
+Use cabal to build
+
+```bash
+cabal build
+```
+, run tests
+
+```bash
+cabal run test
+```
+and execute the program.
+
+```bash
+cabal run blucontrol -- --ignore-config
+```
