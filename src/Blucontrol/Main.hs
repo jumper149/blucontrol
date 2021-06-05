@@ -1,5 +1,6 @@
 module Blucontrol.Main (
   blucontrol
+, BlucontrolConstraints
 , ConfigControl (..)
 ) where
 
@@ -11,8 +12,23 @@ import Blucontrol.Control
 import Blucontrol.Gamma
 import Blucontrol.Recolor
 
-blucontrol :: (ControlConstraint m (StM g (StM r ())), MonadControl m, MonadBaseControl IO g, MonadBaseControl IO r, MonadGamma g, MonadRecolor r)
+type BlucontrolConstraints m g r =
+  ( ControlConstraint m (StM g (StM r ()))
+  , MonadControl m
+  , MonadBaseControl IO g
+  , MonadBaseControl IO r
+  , MonadGamma g
+  , MonadRecolor r
+  )
+
+blucontrol :: BlucontrolConstraints m g r
            => ConfigControl m g r
            -> IO ()
 blucontrol c = do launch
                   runControl c $ loopRecolor (runGamma c) (runRecolor c) (coerceRGB c)
+
+data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
+                                         , runGamma   :: forall a. g a -> IO (StM g a)
+                                         , runRecolor :: forall a. r a -> IO (StM r a)
+                                         , coerceRGB  :: GammaRGB g -> RecolorRGB r
+                                         }

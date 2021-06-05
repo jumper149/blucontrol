@@ -5,6 +5,7 @@ module Blucontrol (
    @$XDG_CONFIG_HOME\/blucontrol\/blucontrol.hs@
 -}
   blucontrol
+, BlucontrolConstraints
 {- | 'ConfigControl' will set the monads in which recoloring and calculation of the gamma values
   will take place.
 -}
