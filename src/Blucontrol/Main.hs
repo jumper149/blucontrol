@@ -25,10 +25,10 @@ blucontrol :: BlucontrolConstraints m g r
            => ConfigControl m g r
            -> IO ()
 blucontrol c = do launch
-                  runControl c $ loopRecolor (runGamma c) (runRecolor c) (coerceRGB c)
+                  runControl c $ loopRecolor (runGamma c) (runRecolor c) (coerceValue c)
 
 data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
                                          , runGamma   :: forall a. g a -> IO (StM g a)
                                          , runRecolor :: forall a. r a -> IO (StM r a)
-                                         , coerceRGB  :: GammaRGB g -> RecolorRGB r
+                                         , coerceValue :: GammaRGB g -> RecolorRGB r
                                          }

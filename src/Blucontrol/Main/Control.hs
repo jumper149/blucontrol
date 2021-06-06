@@ -18,12 +18,12 @@ loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, M
             -> (forall a. r a -> IO (StM r a))
             -> (GammaRGB g -> RecolorRGB r)
             -> m ()
-loopRecolor runG runR coerceRGB = void $
+loopRecolor runG runR coerceValue = void $
   liftBaseWith $ \ runCIO ->
     runR $ liftBaseWith $ \ runRIO ->
       runG $ liftBaseWith $ \ runGIO -> do
-        firstResult <- doRecolorGamma runGIO runRIO coerceRGB
-        evalStateT (doLoopRecolor runCIO runGIO runRIO coerceRGB) firstResult
+        firstResult <- doRecolorGamma runGIO runRIO coerceValue
+        evalStateT (doLoopRecolor runCIO runGIO runRIO coerceValue) firstResult
 
 -- | Use `gamma` and give the result to `recolor`.
 -- The arguments are runners from `liftBaseWith`.
@@ -32,9 +32,9 @@ doRecolorGamma :: (MonadBaseControl IO g, MonadBaseControl IO r, MonadGamma g, M
                -> (forall a. r a -> IO (StM r a))
                -> (GammaRGB g -> RecolorRGB r)
                -> IO (StM g (StM r ()))
-doRecolorGamma runGIO runRIO coerceRGB = runGIO $ do
-  rgb <- coerceRGB <$> gamma
-  liftBase $ runRIO $ recolor rgb
+doRecolorGamma runGIO runRIO coerceValue = runGIO $ do
+  value <- coerceValue <$> gamma
+  liftBase $ runRIO $ recolor value
 
 -- | A single iteration of `loopRecolor`.
 -- The arguments are runners from `liftBaseWith`.
@@ -44,9 +44,9 @@ doLoopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g,
               -> (forall a. r a -> IO (StM r a))
               -> (GammaRGB g -> RecolorRGB r)
               -> StateT (StM g (StM r ())) IO ()
-doLoopRecolor runCIO runGIO runRIO coerceRGB = do
+doLoopRecolor runCIO runGIO runRIO coerceValue = do
   lastResult <- get
   void $ liftBase $ runCIO $ doInbetween lastResult
-  nextResult <- liftBase $ doRecolorGamma runGIO runRIO coerceRGB
+  nextResult <- liftBase $ doRecolorGamma runGIO runRIO coerceValue
   put nextResult
-  doLoopRecolor runCIO runGIO runRIO coerceRGB
+  doLoopRecolor runCIO runGIO runRIO coerceValue

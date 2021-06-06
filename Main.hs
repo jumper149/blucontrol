@@ -16,7 +16,7 @@ main = blucontrol configControl
   where configControl = ConfigControl { runControl = runControlPrintT !> runControlCountT def !> runControlWaitT def
                                       , runGamma = runGammaLinearT @Temperature rgbMap
                                       , runRecolor = runRecolorXTIO def
-                                      , coerceRGB = mapRGB word8ToFloat . toRGBWord8
+                                      , coerceValue = mapRGB word8ToFloat . toRGBWord8
                                       }
         rgbMap = 00:.00 ==> 4000
             :| [ 08:.00 ==> 4600
