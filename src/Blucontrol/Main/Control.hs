@@ -16,7 +16,7 @@ import Blucontrol.Recolor
 loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r)
             => (forall a. g a -> IO (StM g a))
             -> (forall a. r a -> IO (StM r a))
-            -> (GammaRGB g -> RecolorRGB r)
+            -> (GammaValue g -> RecolorValue r)
             -> m ()
 loopRecolor runG runR coerceValue = void $
   liftBaseWith $ \ runCIO ->
@@ -30,7 +30,7 @@ loopRecolor runG runR coerceValue = void $
 doRecolorGamma :: (MonadBaseControl IO g, MonadBaseControl IO r, MonadGamma g, MonadRecolor r)
                => (forall a. g a -> IO (StM g a))
                -> (forall a. r a -> IO (StM r a))
-               -> (GammaRGB g -> RecolorRGB r)
+               -> (GammaValue g -> RecolorValue r)
                -> IO (StM g (StM r ()))
 doRecolorGamma runGIO runRIO coerceValue = runGIO $ do
   value <- coerceValue <$> gamma
@@ -42,7 +42,7 @@ doLoopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO g,
               => (forall a. m a -> IO (StM m a))
               -> (forall a. g a -> IO (StM g a))
               -> (forall a. r a -> IO (StM r a))
-              -> (GammaRGB g -> RecolorRGB r)
+              -> (GammaValue g -> RecolorValue r)
               -> StateT (StM g (StM r ())) IO ()
 doLoopRecolor runCIO runGIO runRIO coerceValue = do
   lastResult <- get

@@ -21,7 +21,7 @@ instance MonadReader r m => MonadReader r (GammaConstT c m) where
     local f $ run tma
 
 instance Monad m => MonadGamma (GammaConstT c m) where
-  type GammaRGB (GammaConstT c m) = c
+  type GammaValue (GammaConstT c m) = c
   gamma = GammaConstT ask
 
 runGammaConstT :: c -> GammaConstT c m a -> m a

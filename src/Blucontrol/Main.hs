@@ -30,5 +30,5 @@ blucontrol c = do launch
 data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
                                          , runGamma   :: forall a. g a -> IO (StM g a)
                                          , runRecolor :: forall a. r a -> IO (StM r a)
-                                         , coerceValue :: GammaRGB g -> RecolorRGB r
+                                         , coerceValue :: GammaValue g -> RecolorValue r
                                          }

@@ -8,7 +8,7 @@ module Blucontrol.Gamma.Linear (
 , Minute
 , (==>)
 , N.NonEmpty (..) -- TODO: keep here?
-, calculateRGB -- TODO: export for testing
+, calculateValue -- TODO: export for testing
 , weightedAverageRGB -- TODO: export for testing
 ) where
 
@@ -39,19 +39,19 @@ instance MonadReader r m => MonadReader r (GammaLinearT c m) where
     local f $ run tma
 
 instance MonadBase IO m => MonadGamma (GammaLinearT (RGB Word8) m) where
-  type GammaRGB (GammaLinearT (RGB Word8) m) = RGB Word8
-  gamma = calculateRGB weightedAverageRGB . zonedTimeToLocalTime =<< liftBase getZonedTime
+  type GammaValue (GammaLinearT (RGB Word8) m) = RGB Word8
+  gamma = calculateValue weightedAverageRGB . zonedTimeToLocalTime =<< liftBase getZonedTime
 
 instance MonadBase IO m => MonadGamma (GammaLinearT Temperature m) where
-  type GammaRGB (GammaLinearT Temperature m) = Temperature
-  gamma = calculateRGB weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
+  type GammaValue (GammaLinearT Temperature m) = Temperature
+  gamma = calculateValue weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
 
 instance (MonadBase IO m, MonadGamma (GammaLinearT c m)) => MonadGamma (GammaLinearT (WithBrightness c) m) where
-  type GammaRGB (GammaLinearT (WithBrightness c) m) = WithBrightness (GammaRGB (GammaLinearT c m))
+  type GammaValue (GammaLinearT (WithBrightness c) m) = WithBrightness (GammaValue (GammaLinearT c m))
   -- TODO: It would be nice to use the same exact time for `color'` and `brightness'`.
   gamma = do
     color' <- withGammaLinearT color gamma
-    brightness' <- withGammaLinearT brightness $ calculateRGB weightedAverageBrightness . zonedTimeToLocalTime =<< liftBase getZonedTime
+    brightness' <- withGammaLinearT brightness $ calculateValue weightedAverageBrightness . zonedTimeToLocalTime =<< liftBase getZonedTime
     return WithBrightness { brightness = brightness'
                           , color = color'
                           }
@@ -59,8 +59,8 @@ instance (MonadBase IO m, MonadGamma (GammaLinearT c m)) => MonadGamma (GammaLin
 withGammaLinearT :: (c' -> c) -> GammaLinearT c m a -> GammaLinearT c' m a
 withGammaLinearT f m = GammaLinearT $ withReaderT (fmap f) $ unGammaLinearT m
 
-nextTimeRGB :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
-nextTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay time) m) $
+nextTimeValue :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
+nextTimeValue m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay time) m) $
                      const (toLocalTimeTomorrow <$> M.lookupMin m)
   where toLocalTimeToday (tod,tc) = let t = LocalTime { localDay = localDay time
                                                       , localTimeOfDay = tod
@@ -70,8 +70,8 @@ nextTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay
                                     t' = t { localDay = succ $ localDay t }
                                  in (t',tc)
 
-prevTimeRGB :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
-prevTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupLE (localTimeOfDay time) m) $
+prevTimeValue :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
+prevTimeValue m time = catchError (toLocalTimeToday <$> M.lookupLE (localTimeOfDay time) m) $
                      const (toLocalTimeYesterday <$> M.lookupMax m)
   where toLocalTimeToday (tod,tc) = let t = LocalTime { localDay = localDay time
                                                       , localTimeOfDay = tod
@@ -81,17 +81,17 @@ prevTimeRGB m time = catchError (toLocalTimeToday <$> M.lookupLE (localTimeOfDay
                                      t' = t { localDay = pred $ localDay t }
                                   in (t',tc)
 
-calculateRGB :: Monad m
-             => (Rational -> c -> c -> c)
-             -> LocalTime -> GammaLinearT c m c
-calculateRGB weightedAverage time = do
+calculateValue :: Monad m
+               => (Rational -> c -> c -> c)
+               -> LocalTime -> GammaLinearT c m c
+calculateValue weightedAverage time = do
   m <- GammaLinearT ask
   return . fromJust $ do
-    (nextTime , nextRGB) <- nextTimeRGB m time
-    (prevTime , prevRGB) <- prevTimeRGB m time
+    (nextTime , nextValue) <- nextTimeValue m time
+    (prevTime , prevValue) <- prevTimeValue m time
     let diffSeconds t1 t2 = nominalDiffTimeToSeconds $ t1 `diffLocalTime` t2
         timeFraction = toRational $ (time `diffSeconds` prevTime) / (nextTime `diffSeconds` prevTime)
-    return $ weightedAverage timeFraction prevRGB nextRGB
+    return $ weightedAverage timeFraction prevValue nextValue
 
 weightedAverageRGB :: Rational -> RGB Word8 -> RGB Word8 -> RGB Word8
 weightedAverageRGB w rgb1 rgb2 = RGB { red = f (red rgb1) (red rgb2)

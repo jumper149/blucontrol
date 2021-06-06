@@ -4,10 +4,10 @@ module Blucontrol.Gamma (
 
 class Monad m => MonadGamma m where
 
-  type GammaRGB m
+  type GammaValue m
 
-  {- | Calculate an gamma value.
+  {- | Calculate a gamma value.
      This is a monadic function, to allow the value to be dependent on side effects like time and
      location.
   -}
-  gamma :: m (GammaRGB m)
+  gamma :: m (GammaValue m)

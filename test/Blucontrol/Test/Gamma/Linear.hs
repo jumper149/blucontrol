@@ -23,7 +23,7 @@ test = describe "Blucontrol.Gamma.Linear" $ do
   it "convert Time to TimeOfDay" $
     property prop_timeToTimeOfDay
 
-  -- TODO: this tests `calculateRGB weightedAverageRGB`
+  -- TODO: this tests `calculateValue weightedAverageRGB`
   it "calculateRGB between surrounding values" $
     property prop_calculateRGB
 
@@ -50,7 +50,7 @@ prop_calculateRGB :: Arbitrary_Time
                   -> Bool
 prop_calculateRGB (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_RGBWord8 xtc) (Arbitrary_Time yt , Arbitrary_RGBWord8 ytc) =
   rgb `prop_RGBBetween` (xtc , ytc)
-  where rgb = runIdentity . runGammaLinearT rgbMap $ calculateRGB weightedAverageRGB tod
+  where rgb = runIdentity . runGammaLinearT rgbMap $ calculateValue weightedAverageRGB tod
         rgbMap = xt Blucontrol.Gamma.Linear.==> xtc
             :| [ yt Blucontrol.Gamma.Linear.==> ytc
                ]

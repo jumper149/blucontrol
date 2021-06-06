@@ -4,10 +4,10 @@ module Blucontrol.Recolor (
 
 class Monad m => MonadRecolor m where
 
-  type RecolorRGB m
+  type RecolorValue m
 
   {- | Apply a gamma value.
      This is a monadic function, to allow application to external programs like an X display
      server.
   -}
-  recolor :: RecolorRGB m -> m ()
+  recolor :: RecolorValue m -> m ()

@@ -23,7 +23,7 @@ instance MonadTransControl (RecolorPrintT c) where
   restoreT = RecolorPrintT
 
 instance (MonadBaseControl IO m, Show c) => MonadRecolor (RecolorPrintT c m) where
-  type RecolorRGB (RecolorPrintT c m) = c
+  type RecolorValue (RecolorPrintT c m) = c
   recolor = liftBase . print
 
 runRecolorPrintT :: RecolorPrintT c m a -> m a
