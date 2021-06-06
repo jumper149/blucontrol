@@ -2,12 +2,12 @@ module Blucontrol.Gamma (
   MonadGamma (..)
 ) where
 
-import Blucontrol.RGB
+class Monad m => MonadGamma m where
 
-class (Monad m, RGB c) => MonadGamma c m | m -> c where
+  type GammaValue m
 
-  {- | Calculate an 'RGB' value.
+  {- | Calculate a gamma value.
      This is a monadic function, to allow the value to be dependent on side effects like time and
      location.
   -}
-  gamma :: m c
+  gamma :: m (GammaValue m)
