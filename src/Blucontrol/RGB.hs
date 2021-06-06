@@ -3,6 +3,7 @@
 module Blucontrol.RGB (
   RGB (..)
 , mapRGB
+, word8ToFloat
 ) where
 
 import Control.DeepSeq
@@ -45,3 +46,6 @@ mapRGB f rgb = RGB { red = f $ red rgb
                    , green = f $ green rgb
                    , blue = f $ blue rgb
                    }
+
+word8ToFloat :: Word8 -> Float
+word8ToFloat = (/ fromIntegral (maxBound @Word8)) . fromIntegral
