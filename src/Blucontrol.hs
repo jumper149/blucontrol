@@ -11,15 +11,6 @@ module Blucontrol (
 -}
 , ConfigControl (..)
 
--- * RGB
--- | RGB values are represented by 'Trichromaticity'.
-, Trichromaticity (..)
-
-{- | An alternative way, which avoids declaring 'Trichromaticity' directly, uses the 'RGB' type
-    class.
--}
-, RGB (..)
-
 -- * Control
 -- | Modules with instances of 'MonadControl' can be found under @Blucontrol.Control.*@.
 , MonadControl (..)
@@ -49,4 +40,3 @@ import Blucontrol.Control.Concat
 import Blucontrol.Gamma
 import Blucontrol.Main
 import Blucontrol.Recolor
-import Blucontrol.RGB

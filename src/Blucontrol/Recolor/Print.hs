@@ -10,7 +10,6 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Control
 
 import Blucontrol.Recolor
-import Blucontrol.RGB
 
 newtype RecolorPrintT c m a = RecolorPrintT { unRecolorPrintT :: m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
@@ -23,7 +22,7 @@ instance MonadTransControl (RecolorPrintT c) where
   liftWith inner = RecolorPrintT $ inner unRecolorPrintT
   restoreT = RecolorPrintT
 
-instance (MonadBaseControl IO m, RGB c, Show c) => MonadRecolor (RecolorPrintT c m) where
+instance (MonadBaseControl IO m, Show c) => MonadRecolor (RecolorPrintT c m) where
   type RecolorRGB (RecolorPrintT c m) = c
   recolor = liftBase . print
 

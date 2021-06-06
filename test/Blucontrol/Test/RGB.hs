@@ -2,14 +2,14 @@
 
 module Blucontrol.Test.RGB (
   test
-, Arbitrary_Chromaticity (..)
-, Arbitrary_Trichromaticity (..)
+, Arbitrary_RGBWord8 (..)
 ) where
 
 import Test.Hspec
 import Test.QuickCheck
 
 import Control.DeepSeq
+import Data.Word
 import GHC.Generics
 
 import Blucontrol.RGB
@@ -17,24 +17,13 @@ import Blucontrol.RGB
 test :: Spec
 test = describe "Blucontrol.RGB" $ do
 
-  it "Chromaticity in bounds." $
-    property $ total @Arbitrary_Chromaticity
+  it "(RGB Word8) in bounds." $
+    property $ total @Arbitrary_RGBWord8
 
-  it "Trichromaticity in bounds." $
-    property $ total @Arbitrary_Trichromaticity
-
-newtype Arbitrary_Chromaticity = Arbitrary_Chromaticity Chromaticity
+newtype Arbitrary_RGBWord8 = Arbitrary_RGBWord8 (RGB Word8)
   deriving (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
-instance NFData Arbitrary_Chromaticity
+instance NFData Arbitrary_RGBWord8
 
-instance Arbitrary Arbitrary_Chromaticity where
-  arbitrary = elements [minBound .. maxBound]
-
-newtype Arbitrary_Trichromaticity = Arbitrary_Trichromaticity Trichromaticity
-  deriving (Bounded, Enum, Eq, Generic, Ord, Read, Show)
-
-instance NFData Arbitrary_Trichromaticity
-
-instance Arbitrary Arbitrary_Trichromaticity where
+instance Arbitrary Arbitrary_RGBWord8 where
   arbitrary = elements [minBound .. maxBound]

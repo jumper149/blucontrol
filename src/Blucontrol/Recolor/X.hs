@@ -39,7 +39,7 @@ instance MonadTransControl RecolorXT where
   restoreT = defaultRestoreT2 RecolorXT
 
 instance MonadBaseControl IO m => MonadRecolor (RecolorXT m) where
-  type RecolorRGB (RecolorXT m) = Trichromaticity
+  type RecolorRGB (RecolorXT m) = RGB Float
   recolor rgb = do
     display <- RecolorXT ask
     root <- liftXIO XErrorRead $
@@ -89,12 +89,8 @@ showDisplay ConfigX {..} = T.unpack . T.concat $
   , maybe "" (("." <>) . T.pack . show) screen
   ]
 
-translateRGB :: Trichromaticity -> XRRGamma
-translateRGB Trichromaticity {..} = XRRGamma {..}
-  where xrr_gamma_red = translateColor red
-        xrr_gamma_green = translateColor green
-        xrr_gamma_blue = translateColor blue
-
--- | Create a normalized value for a 'Chromaticity'.
-translateColor :: (Fractional a, Num a) => Chromaticity -> a
-translateColor = (/ fromIntegral (maxBound @Chromaticity)) . fromIntegral
+translateRGB :: RGB Float -> XRRGamma
+translateRGB RGB {..} = XRRGamma {..}
+  where xrr_gamma_red = red
+        xrr_gamma_green = green
+        xrr_gamma_blue = blue

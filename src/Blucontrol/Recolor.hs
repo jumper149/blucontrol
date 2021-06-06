@@ -2,11 +2,12 @@ module Blucontrol.Recolor (
   MonadRecolor (..)
 ) where
 
-import Blucontrol.RGB
-
-class (Monad m, RGB (RecolorRGB m)) => MonadRecolor m where
+class Monad m => MonadRecolor m where
 
   type RecolorRGB m
 
-  -- | Apply a 'Trichromaticity'.
+  {- | Apply a gamma value.
+     This is a monadic function, to allow application to external programs like an X display
+     server.
+  -}
   recolor :: RecolorRGB m -> m ()

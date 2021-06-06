@@ -1,5 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
-
 module Blucontrol.RGB.Brightness (
   Brightness
 , WithBrightness (..)
@@ -8,8 +6,6 @@ module Blucontrol.RGB.Brightness (
 import Control.DeepSeq
 import Data.Default
 import GHC.Generics
-
-import Blucontrol.RGB
 
 -- | Arbitrary precision brightness between 0 and 1
 newtype Brightness = Brightness Rational
@@ -24,9 +20,9 @@ instance Bounded Brightness where
 instance Default Brightness where
   def = 1
 
--- | Parametric RGB value with an associated brightness
+-- | Combination of a color value and a 'Brightness'
 data WithBrightness a = WithBrightness { brightness :: Brightness
-                                       , rgb :: a
+                                       , color :: a
                                        }
   deriving (Eq, Generic, Ord, Read, Show)
 
@@ -34,16 +30,9 @@ instance NFData a => NFData (WithBrightness a)
 
 instance Default a => Default (WithBrightness a) where
   def = WithBrightness { brightness = def
-                       , rgb = def
+                       , color = def
                        }
 
--- TODO: maybe create separate instances for Trichromaticity and Temperature
-instance RGB a => RGB (WithBrightness a) where
-  toRGB WithBrightness {..} = mapChromaticity applyBrightness $ toRGB rgb
-      where applyBrightness = truncate . (toRational brightness *) . toRational
-
-mapChromaticity :: (Chromaticity -> Chromaticity) -> Trichromaticity -> Trichromaticity
-mapChromaticity f rgb = Trichromaticity { red = f $ red rgb
-                                        , green = f $ green rgb
-                                        , blue = f $ blue rgb
-                                        }
+-- TODO: Maybe allow applying to RGB?
+--toRGB WithBrightness {..} = mapRGB applyBrightness $ toRGB rgb
+--  where applyBrightness = truncate . (toRational brightness *) . toRational
