@@ -1,5 +1,16 @@
 # Revision history for blucontrol
 
+## 0.4.0.0 *06 Jun 2021*
+
+* Remove `RGB` class.
+* Remove `Chromaticity`.
+* Replace `Trichromaticity` by `RGB`.
+* Add type families `GammaValue` and `RecolorValue` to `MonadGamma` and `MonadRecolor`.
+* Add `coerceValue` to `ConfigControl`.
+* `RecolorXT` now uses `RGB Float` instead of `Trichromaticity`.
+* `Temperature` is now explicitly convertible to `RGB Word8` using `toRGBWord8`.
+* Rename parametric field of `WithBrightness` record from `rgb` to `color`.
+
 ## 0.3.2.0 *04 Jun 2021*
 
 * New module `Blucontrol.RGB.Brightness`.
