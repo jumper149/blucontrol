@@ -41,8 +41,8 @@ library
                        Blucontrol.Monad.Recolor
                        Blucontrol.Monad.Recolor.Print
                        Blucontrol.Monad.Recolor.X
+                       Blucontrol.Value.Brightness
                        Blucontrol.Value.RGB
-                       Blucontrol.Value.RGB.Brightness
                        Blucontrol.Value.RGB.Temperature
   other-modules:       Blucontrol.Main.GHC.Internal
                        Blucontrol.Monad.Recolor.X.Internal

@@ -26,8 +26,8 @@ import Data.Word
 import GHC.Generics
 
 import Blucontrol.Monad.Gamma
+import Blucontrol.Value.Brightness
 import Blucontrol.Value.RGB
-import Blucontrol.Value.RGB.Brightness
 import Blucontrol.Value.RGB.Temperature
 
 newtype GammaLinearT c m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay c) m a }
