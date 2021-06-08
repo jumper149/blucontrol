@@ -25,6 +25,7 @@ cabal-version:       >= 1.10
 
 library
   exposed-modules:     Blucontrol
+                       Blucontrol.CompatibleValues
                        Blucontrol.Control
                        Blucontrol.Control.Concat
                        Blucontrol.Control.Count

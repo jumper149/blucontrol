@@ -2,14 +2,14 @@
 
 module Blucontrol.RGB (
   RGB (..)
-, mapRGB
-, word8ToFloat
 ) where
 
 import Control.DeepSeq
 import Data.Default
 import Data.Word
 import GHC.Generics
+
+import Blucontrol.CompatibleValues
 
 -- | Values for the colors 'red', 'green' and 'blue'
 data RGB a = RGB { red :: a
@@ -47,5 +47,6 @@ mapRGB f rgb = RGB { red = f $ red rgb
                    , blue = f $ blue rgb
                    }
 
-word8ToFloat :: Word8 -> Float
-word8ToFloat = (/ fromIntegral (maxBound @Word8)) . fromIntegral
+instance CompatibleValues (RGB Word8) (RGB Float) where
+  convertValue = mapRGB word8ToFloat
+    where word8ToFloat = (/ fromIntegral (maxBound @Word8)) . fromIntegral

@@ -6,6 +6,7 @@ module Blucontrol.Main (
 
 import Control.Monad.Trans.Control
 
+import Blucontrol.CompatibleValues
 import Blucontrol.Main.Control
 import Blucontrol.Main.CLI
 import Blucontrol.Control
@@ -19,16 +20,16 @@ type BlucontrolConstraints m g r =
   , MonadBaseControl IO r
   , MonadGamma g
   , MonadRecolor r
+  , CompatibleValues (GammaValue g) (RecolorValue r)
   )
 
 blucontrol :: BlucontrolConstraints m g r
            => ConfigControl m g r
            -> IO ()
 blucontrol c = do launch
-                  runControl c $ loopRecolor (runGamma c) (runRecolor c) (coerceValue c)
+                  runControl c $ loopRecolor (runGamma c) (runRecolor c) convertValue
 
 data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
                                          , runGamma   :: forall a. g a -> IO (StM g a)
                                          , runRecolor :: forall a. r a -> IO (StM r a)
-                                         , coerceValue :: GammaValue g -> RecolorValue r
                                          }
