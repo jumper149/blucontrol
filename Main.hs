@@ -3,11 +3,11 @@
 module Main where
 
 import Blucontrol
-import Blucontrol.Control.Count
-import Blucontrol.Control.Print
-import Blucontrol.Control.Wait
-import Blucontrol.Gamma.Linear
-import Blucontrol.Recolor.X
+import Blucontrol.Monad.Control.Count
+import Blucontrol.Monad.Control.Print
+import Blucontrol.Monad.Control.Wait
+import Blucontrol.Monad.Gamma.Linear
+import Blucontrol.Monad.Recolor.X
 import Blucontrol.RGB.Temperature
 
 main :: IO ()

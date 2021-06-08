@@ -1,6 +1,6 @@
 {-# LANGUAGE QuantifiedConstraints, UndecidableInstances #-}
 
-module Blucontrol.Control.Concat (
+module Blucontrol.Monad.Control.Concat (
   ControlConcatT
 , runControlConcatT
 , (!>)
@@ -11,7 +11,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Control
 import Data.Kind
 
-import Blucontrol.Control
+import Blucontrol.Monad.Control
 
 newtype ControlConcatT (t1 :: (Type -> Type) -> Type -> Type) (t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type) a = ControlConcatT { unControlConcatT :: t2 (t1 m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)

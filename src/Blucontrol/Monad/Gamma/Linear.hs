@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Gamma.Linear (
+module Blucontrol.Monad.Gamma.Linear (
   GammaLinearT
 , runGammaLinearT
 , Time (..)
@@ -25,7 +25,7 @@ import Data.Time
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.Gamma
+import Blucontrol.Monad.Gamma
 import Blucontrol.RGB
 import Blucontrol.RGB.Brightness
 import Blucontrol.RGB.Temperature

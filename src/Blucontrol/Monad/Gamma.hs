@@ -1,4 +1,4 @@
-module Blucontrol.Gamma (
+module Blucontrol.Monad.Gamma (
   MonadGamma (..)
 ) where
 

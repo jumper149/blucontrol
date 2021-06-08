@@ -26,26 +26,26 @@ cabal-version:       >= 1.10
 library
   exposed-modules:     Blucontrol
                        Blucontrol.CompatibleValues
-                       Blucontrol.Control
-                       Blucontrol.Control.Concat
-                       Blucontrol.Control.Count
-                       Blucontrol.Control.Print
-                       Blucontrol.Control.Wait
-                       Blucontrol.Gamma
-                       Blucontrol.Gamma.Const
-                       Blucontrol.Gamma.Linear
-                       Blucontrol.Gamma.Modifier
                        Blucontrol.Main
                        Blucontrol.Main.CLI
                        Blucontrol.Main.Control
-                       Blucontrol.Recolor
-                       Blucontrol.Recolor.Print
-                       Blucontrol.Recolor.X
+                       Blucontrol.Monad.Control
+                       Blucontrol.Monad.Control.Concat
+                       Blucontrol.Monad.Control.Count
+                       Blucontrol.Monad.Control.Print
+                       Blucontrol.Monad.Control.Wait
+                       Blucontrol.Monad.Gamma
+                       Blucontrol.Monad.Gamma.Const
+                       Blucontrol.Monad.Gamma.Linear
+                       Blucontrol.Monad.Gamma.Modifier
+                       Blucontrol.Monad.Recolor
+                       Blucontrol.Monad.Recolor.Print
+                       Blucontrol.Monad.Recolor.X
                        Blucontrol.RGB
                        Blucontrol.RGB.Brightness
                        Blucontrol.RGB.Temperature
   other-modules:       Blucontrol.Main.GHC.Internal
-                       Blucontrol.Recolor.X.Internal
+                       Blucontrol.Monad.Recolor.X.Internal
                        Paths_blucontrol
   build-depends:       base              >= 4.11    && < 5
                      , containers        >= 0.6.2.1 && < 0.7

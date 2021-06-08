@@ -35,8 +35,8 @@ module Blucontrol (
 
 import Data.Default
 
-import Blucontrol.Control
-import Blucontrol.Control.Concat
-import Blucontrol.Gamma
 import Blucontrol.Main
-import Blucontrol.Recolor
+import Blucontrol.Monad.Control
+import Blucontrol.Monad.Control.Concat
+import Blucontrol.Monad.Gamma
+import Blucontrol.Monad.Recolor

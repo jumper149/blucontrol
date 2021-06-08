@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Gamma.Modifier (
+module Blucontrol.Monad.Gamma.Modifier (
   GammaModifierT
 , runGammaModifierT
 ) where
@@ -10,7 +10,7 @@ import Control.Monad.Except
 import Control.Monad.Reader
 import Control.Monad.Trans.Control
 
-import Blucontrol.Gamma
+import Blucontrol.Monad.Gamma
 
 newtype GammaModifierT m a = GammaModifierT { unGammaModifierT :: ReaderT (GammaValue m -> IO (GammaValue m)) m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)

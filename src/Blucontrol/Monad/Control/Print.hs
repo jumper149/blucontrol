@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Control.Print (
+module Blucontrol.Monad.Control.Print (
   ControlPrintT
 , runControlPrintT
 ) where
@@ -9,7 +9,7 @@ import Control.Monad.Base
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
 
-import Blucontrol.Control
+import Blucontrol.Monad.Control
 
 newtype ControlPrintT m a = ControlPrintT { unControlPrintT :: m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)

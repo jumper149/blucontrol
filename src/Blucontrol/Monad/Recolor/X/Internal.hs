@@ -1,6 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface, RecordWildCards #-}
 
-module Blucontrol.Recolor.X.Internal (
+module Blucontrol.Monad.Recolor.X.Internal (
   XRRGamma (..)
 , xrrSetGamma
 ) where

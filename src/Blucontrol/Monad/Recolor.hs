@@ -1,4 +1,4 @@
-module Blucontrol.Recolor (
+module Blucontrol.Monad.Recolor (
   MonadRecolor (..)
 ) where
 

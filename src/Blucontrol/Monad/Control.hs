@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Control (
+module Blucontrol.Monad.Control (
   MonadControl (..)
 ) where
 

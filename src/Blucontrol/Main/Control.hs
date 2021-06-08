@@ -7,9 +7,9 @@ import Control.Monad.Trans.Control
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 
-import Blucontrol.Control
-import Blucontrol.Gamma
-import Blucontrol.Recolor
+import Blucontrol.Monad.Control
+import Blucontrol.Monad.Gamma
+import Blucontrol.Monad.Recolor
 
 -- | Run the loop, using `gamma`, `recolor` and `doInbetween`.
 -- The arguments are the actual monad runners.

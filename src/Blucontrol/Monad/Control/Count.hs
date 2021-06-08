@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Control.Count (
+module Blucontrol.Monad.Control.Count (
   ControlCountT
 , runControlCountT
 , ConfigCount (..)
@@ -16,7 +16,7 @@ import Data.Default
 import GHC.Generics
 import Numeric.Natural
 
-import Blucontrol.Control
+import Blucontrol.Monad.Control
 
 newtype ControlCountT m a = ControlCountT { unControlCountT :: StateT Natural (ReaderT ConfigCount m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)

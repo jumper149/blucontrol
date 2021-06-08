@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Recolor.Print (
+module Blucontrol.Monad.Recolor.Print (
   RecolorPrintT
 , runRecolorPrintT
 ) where
@@ -9,7 +9,7 @@ import Control.Monad.Base
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
 
-import Blucontrol.Recolor
+import Blucontrol.Monad.Recolor
 
 newtype RecolorPrintT c m a = RecolorPrintT { unRecolorPrintT :: m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)

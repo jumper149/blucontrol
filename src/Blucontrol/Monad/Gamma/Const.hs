@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Gamma.Const (
+module Blucontrol.Monad.Gamma.Const (
   GammaConstT
 , runGammaConstT
 ) where
@@ -10,7 +10,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Control
 import Control.Monad.Reader
 
-import Blucontrol.Gamma
+import Blucontrol.Monad.Gamma
 
 newtype GammaConstT c m a = GammaConstT { unGammaConstT :: ReaderT c m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)

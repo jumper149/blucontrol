@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards, UndecidableInstances #-}
 
-module Blucontrol.Recolor.X (
+module Blucontrol.Monad.Recolor.X (
   RecolorXT
 , runRecolorXTIO
 , ConfigX (..)
@@ -21,9 +21,9 @@ import GHC.Generics
 import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, rootWindow)
 import Graphics.X11.Xlib.Types (Display)
 
+import Blucontrol.Monad.Recolor
+import Blucontrol.Monad.Recolor.X.Internal
 import Blucontrol.RGB
-import Blucontrol.Recolor
-import Blucontrol.Recolor.X.Internal
 
 newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Display m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadError XError)
