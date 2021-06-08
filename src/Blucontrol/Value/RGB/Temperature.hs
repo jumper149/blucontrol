@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards, UndecidableInstances #-}
 
-module Blucontrol.RGB.Temperature (
+module Blucontrol.Value.RGB.Temperature (
   Temperature
 ) where
 
@@ -10,7 +10,7 @@ import Data.Word
 import GHC.Generics
 
 import Blucontrol.CompatibleValues
-import Blucontrol.RGB
+import Blucontrol.Value.RGB
 
 -- | Arbitrary precision temperature in Kelvin
 newtype Temperature = Temperature Rational

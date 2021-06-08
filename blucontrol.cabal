@@ -41,9 +41,9 @@ library
                        Blucontrol.Monad.Recolor
                        Blucontrol.Monad.Recolor.Print
                        Blucontrol.Monad.Recolor.X
-                       Blucontrol.RGB
-                       Blucontrol.RGB.Brightness
-                       Blucontrol.RGB.Temperature
+                       Blucontrol.Value.RGB
+                       Blucontrol.Value.RGB.Brightness
+                       Blucontrol.Value.RGB.Temperature
   other-modules:       Blucontrol.Main.GHC.Internal
                        Blucontrol.Monad.Recolor.X.Internal
                        Paths_blucontrol
@@ -99,7 +99,7 @@ test-suite test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   other-modules:       Blucontrol.Monad.Gamma.Linear.Test
-                       Blucontrol.RGB.Test
+                       Blucontrol.Value.RGB.Test
   build-depends:       base
                      , blucontrol
                      , data-default

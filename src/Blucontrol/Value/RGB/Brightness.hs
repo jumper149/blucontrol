@@ -1,4 +1,4 @@
-module Blucontrol.RGB.Brightness (
+module Blucontrol.Value.RGB.Brightness (
   Brightness
 , WithBrightness (..)
 ) where

@@ -8,7 +8,7 @@ import Blucontrol.Monad.Control.Print
 import Blucontrol.Monad.Control.Wait
 import Blucontrol.Monad.Gamma.Linear
 import Blucontrol.Monad.Recolor.X
-import Blucontrol.RGB.Temperature
+import Blucontrol.Value.RGB.Temperature
 
 main :: IO ()
 main = blucontrol configControl

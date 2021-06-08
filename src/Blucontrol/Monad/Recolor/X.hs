@@ -23,7 +23,7 @@ import Graphics.X11.Xlib.Types (Display)
 
 import Blucontrol.Monad.Recolor
 import Blucontrol.Monad.Recolor.X.Internal
-import Blucontrol.RGB
+import Blucontrol.Value.RGB
 
 newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Display m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadError XError)

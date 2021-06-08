@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Blucontrol.RGB (
+module Blucontrol.Value.RGB (
   RGB (..)
 ) where
 

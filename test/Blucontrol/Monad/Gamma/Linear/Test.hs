@@ -14,8 +14,8 @@ import Data.Word
 import GHC.Generics
 
 import Blucontrol.Monad.Gamma.Linear
-import Blucontrol.RGB
-import Blucontrol.RGB.Test (Arbitrary_RGBWord8 (..))
+import Blucontrol.Value.RGB
+import Blucontrol.Value.RGB.Test (Arbitrary_RGBWord8 (..))
 
 test :: Spec
 test = describe "Blucontrol.Gamma.Linear" $ do

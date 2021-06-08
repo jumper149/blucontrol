@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Blucontrol.RGB.Test (
+module Blucontrol.Value.RGB.Test (
   test
 , Arbitrary_RGBWord8 (..)
 ) where
@@ -12,7 +12,7 @@ import Control.DeepSeq
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.RGB
+import Blucontrol.Value.RGB
 
 test :: Spec
 test = describe "Blucontrol.RGB" $ do
