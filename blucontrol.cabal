@@ -25,7 +25,6 @@ cabal-version:       >= 1.10
 
 library
   exposed-modules:     Blucontrol
-                       Blucontrol.CompatibleValues
                        Blucontrol.Main
                        Blucontrol.Main.CLI
                        Blucontrol.Main.Control
@@ -41,6 +40,7 @@ library
                        Blucontrol.Monad.Recolor
                        Blucontrol.Monad.Recolor.Print
                        Blucontrol.Monad.Recolor.X
+                       Blucontrol.Value
                        Blucontrol.Value.Brightness
                        Blucontrol.Value.RGB
                        Blucontrol.Value.RGB.Temperature

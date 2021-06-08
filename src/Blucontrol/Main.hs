@@ -6,12 +6,12 @@ module Blucontrol.Main (
 
 import Control.Monad.Trans.Control
 
-import Blucontrol.CompatibleValues
 import Blucontrol.Main.Control
 import Blucontrol.Main.CLI
 import Blucontrol.Monad.Control
 import Blucontrol.Monad.Gamma
 import Blucontrol.Monad.Recolor
+import Blucontrol.Value
 
 type BlucontrolConstraints m g r =
   ( ControlConstraint m (StM g (StM r ()))

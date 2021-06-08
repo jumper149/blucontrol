@@ -9,7 +9,7 @@ import Data.Default
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.CompatibleValues
+import Blucontrol.Value
 import Blucontrol.Value.RGB
 
 -- | Arbitrary precision temperature in Kelvin

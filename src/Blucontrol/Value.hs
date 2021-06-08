@@ -1,4 +1,4 @@
-module Blucontrol.CompatibleValues (
+module Blucontrol.Value (
   CompatibleValues (..)
 ) where
 

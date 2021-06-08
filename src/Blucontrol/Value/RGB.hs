@@ -9,7 +9,7 @@ import Data.Default
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.CompatibleValues
+import Blucontrol.Value
 
 -- | Values for the colors 'red', 'green' and 'blue'
 data RGB a = RGB { red :: a
