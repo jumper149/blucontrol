@@ -1,5 +1,11 @@
 # Revision history for blucontrol
 
+## 0.5.0.0 *09 Jun 2021*
+
+* Change module structure, now using `Blucontrol.Monad` and `Blucontrol.Value`.
+* Move module `Blucontrol.Value.RGB.Brightness` to `Blucontrol.Value.Brightness`.
+* Rename module `Blucontrol.CompatibleValues` to `Blucontrol.Value`.
+
 ## 0.4.1.0 *08 Jun 2021*
 
 * Remove field `coerceValue` from `ConfigControl`.
