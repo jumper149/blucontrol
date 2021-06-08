@@ -1,5 +1,10 @@
 # Revision history for blucontrol
 
+## 0.4.1.0 *08 Jun 2021*
+
+* Remove field `coerceValue` from `ConfigControl`.
+* Add `CompatibleValues` class.
+
 ## 0.4.0.0 *06 Jun 2021*
 
 * Remove `RGB` class.
