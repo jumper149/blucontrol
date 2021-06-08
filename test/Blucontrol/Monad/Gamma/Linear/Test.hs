@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Blucontrol.Test.Gamma.Linear (
+module Blucontrol.Monad.Gamma.Linear.Test (
   test
 ) where
 
@@ -13,9 +13,9 @@ import Data.Time
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.Gamma.Linear
+import Blucontrol.Monad.Gamma.Linear
 import Blucontrol.RGB
-import Blucontrol.Test.RGB (Arbitrary_RGBWord8 (..))
+import Blucontrol.RGB.Test (Arbitrary_RGBWord8 (..))
 
 test :: Spec
 test = describe "Blucontrol.Gamma.Linear" $ do
@@ -42,7 +42,7 @@ prop_timeToTimeOfDay (Arbitrary_Time time) = and
   , 0 == todSec
   ]
   where h :. m = time
-        TimeOfDay {..} = fst $ time Blucontrol.Gamma.Linear.==> (undefined :: RGB Word8)
+        TimeOfDay {..} = fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
 
 prop_calculateRGB :: Arbitrary_Time
                   -> (Arbitrary_Time,Arbitrary_RGBWord8)
@@ -51,10 +51,10 @@ prop_calculateRGB :: Arbitrary_Time
 prop_calculateRGB (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_RGBWord8 xtc) (Arbitrary_Time yt , Arbitrary_RGBWord8 ytc) =
   rgb `prop_RGBBetween` (xtc , ytc)
   where rgb = runIdentity . runGammaLinearT rgbMap $ calculateValue weightedAverageRGB tod
-        rgbMap = xt Blucontrol.Gamma.Linear.==> xtc
-            :| [ yt Blucontrol.Gamma.Linear.==> ytc
+        rgbMap = xt Blucontrol.Monad.Gamma.Linear.==> xtc
+            :| [ yt Blucontrol.Monad.Gamma.Linear.==> ytc
                ]
-        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blucontrol.Gamma.Linear.==> (undefined :: RGB Word8)
+        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
 
 prop_RGBBetween :: RGB Word8 -> (RGB Word8,RGB Word8) -> Bool
 prop_RGBBetween x (a,b) = and

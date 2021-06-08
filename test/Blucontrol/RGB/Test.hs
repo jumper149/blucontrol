@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Blucontrol.Test.RGB (
+module Blucontrol.RGB.Test (
   test
 , Arbitrary_RGBWord8 (..)
 ) where

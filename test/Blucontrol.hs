@@ -2,10 +2,10 @@ module Main where
 
 import Test.Hspec
 
-import qualified Blucontrol.Test.Gamma.Linear
-import qualified Blucontrol.Test.RGB
+import qualified Blucontrol.Monad.Gamma.Linear.Test
+import qualified Blucontrol.RGB.Test
 
 main :: IO ()
 main = hspec $ do
-  Blucontrol.Test.RGB.test
-  Blucontrol.Test.Gamma.Linear.test
+  Blucontrol.RGB.Test.test
+  Blucontrol.Monad.Gamma.Linear.Test.test

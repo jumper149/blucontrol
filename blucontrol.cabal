@@ -98,8 +98,8 @@ test-suite test
   main-is:             Blucontrol.hs
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:       Blucontrol.Test.Gamma.Linear
-                       Blucontrol.Test.RGB
+  other-modules:       Blucontrol.Monad.Gamma.Linear.Test
+                       Blucontrol.RGB.Test
   build-depends:       base
                      , blucontrol
                      , data-default
