@@ -33,11 +33,6 @@ import Blucontrol.Value.RGB.Temperature
 newtype GammaLinearT c m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay c) m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
-instance MonadReader r m => MonadReader r (GammaLinearT c m) where
-  ask = lift ask
-  local f tma = liftWith $ \ run ->
-    local f $ run tma
-
 instance MonadBase IO m => MonadGamma (GammaLinearT (RGB Word8) m) where
   type GammaValue (GammaLinearT (RGB Word8) m) = RGB Word8
   gamma = calculateValue weightedAverageRGB . zonedTimeToLocalTime =<< liftBase getZonedTime
