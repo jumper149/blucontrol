@@ -3,6 +3,7 @@
 module Blucontrol.Monad.Recolor.X (
   RecolorXT
 , runRecolorXTIO
+, RecolorXValue
 , ConfigX (..)
 , XError (..)
 ) where
@@ -16,6 +17,7 @@ import Control.Monad.Except
 import Data.Default
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
+import Data.Word
 import GHC.Generics
 
 import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, rootWindow)
@@ -23,6 +25,7 @@ import Graphics.X11.Xlib.Types (Display)
 
 import Blucontrol.Monad.Recolor
 import Blucontrol.Monad.Recolor.X.Internal
+import Blucontrol.Value
 import Blucontrol.Value.RGB
 
 newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Display m) a }
@@ -39,13 +42,13 @@ instance MonadTransControl RecolorXT where
   restoreT = defaultRestoreT2 RecolorXT
 
 instance MonadBaseControl IO m => MonadRecolor (RecolorXT m) where
-  type RecolorValue (RecolorXT m) = RGB Float
+  type RecolorValue (RecolorXT m) = RecolorXValue
   recolor rgb = do
     display <- RecolorXT ask
     root <- liftXIO XErrorRead $
       rootWindow display $ defaultScreen display
 
-    liftXIO XErrorSetGamma $ xrrSetGamma (translateRGB rgb) display root
+    liftXIO XErrorSetGamma $ xrrSetGamma (unRecolorXValue rgb) display root
 
 runRecolorXT :: Display -> RecolorXT m a -> m (Either XError a)
 runRecolorXT display tma = runReaderT (runExceptT (unRecolorXT tma)) display
@@ -89,8 +92,14 @@ showDisplay ConfigX {..} = T.unpack . T.concat $
   , maybe "" (("." <>) . T.pack . show) screen
   ]
 
-translateRGB :: RGB Float -> XRRGamma
-translateRGB RGB {..} = XRRGamma {..}
-  where xrr_gamma_red = red
-        xrr_gamma_green = green
-        xrr_gamma_blue = blue
+newtype RecolorXValue = RecolorXValue { unRecolorXValue :: XRRGamma }
+  deriving (Eq, Generic, Ord, Read, Show)
+
+instance NFData RecolorXValue
+
+instance CompatibleValues (RGB Word8) RecolorXValue where
+  convertValue RGB {..} = RecolorXValue XRRGamma {..}
+    where xrr_gamma_red = word8ToFloat red
+          xrr_gamma_green = word8ToFloat green
+          xrr_gamma_blue = word8ToFloat blue
+          word8ToFloat = (/ fromIntegral (maxBound @Word8)) . fromIntegral

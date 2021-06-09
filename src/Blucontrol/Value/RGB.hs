@@ -9,8 +9,6 @@ import Data.Default
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.Value
-
 -- | Values for the colors 'red', 'green' and 'blue'
 data RGB a = RGB { red :: a
                  , green :: a
@@ -40,13 +38,3 @@ instance Default (RGB Word8) where
             , green = maxBound
             , blue = maxBound
             }
-
-mapRGB :: (a -> b) -> RGB a -> RGB b
-mapRGB f rgb = RGB { red = f $ red rgb
-                   , green = f $ green rgb
-                   , blue = f $ blue rgb
-                   }
-
-instance CompatibleValues (RGB Word8) (RGB Float) where
-  convertValue = mapRGB word8ToFloat
-    where word8ToFloat = (/ fromIntegral (maxBound @Word8)) . fromIntegral
