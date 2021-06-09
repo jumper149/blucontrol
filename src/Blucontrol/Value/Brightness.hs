@@ -1,11 +1,15 @@
 module Blucontrol.Value.Brightness (
   Brightness
 , WithBrightness (..)
+, applyBrightnessToRGB
 ) where
 
 import Control.DeepSeq
 import Data.Default
 import GHC.Generics
+
+import Blucontrol.Value
+import Blucontrol.Value.RGB
 
 -- | Arbitrary precision brightness between 0 and 1
 newtype Brightness = Brightness Rational
@@ -33,6 +37,15 @@ instance Default a => Default (WithBrightness a) where
                        , color = def
                        }
 
--- TODO: Maybe allow applying to RGB?
---toRGB WithBrightness {..} = mapRGB applyBrightness $ toRGB rgb
---  where applyBrightness = truncate . (toRational brightness *) . toRational
+instance CompatibleValues a b => CompatibleValues a (WithBrightness b) where
+  convertValue a = WithBrightness { brightness = def
+                                  , color = convertValue a
+                                  }
+
+applyBrightnessToRGB :: (Integral a, Real a) => WithBrightness (RGB a) -> RGB a
+applyBrightnessToRGB x = RGB { red = applyBrightness red'
+                             , green = applyBrightness green'
+                             , blue = applyBrightness blue'
+                             }
+  where applyBrightness = truncate . (toRational (brightness x) *) . toRational
+        RGB { red = red', green = green', blue = blue' } = color x
