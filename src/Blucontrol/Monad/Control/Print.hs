@@ -8,19 +8,13 @@ module Blucontrol.Monad.Control.Print (
 import Control.Monad.Base
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Control.Default
 
 import Blucontrol.Monad.Control
 
 newtype ControlPrintT m a = ControlPrintT { unControlPrintT :: m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
-
-instance MonadTrans ControlPrintT where
-  lift = ControlPrintT
-
-instance MonadTransControl ControlPrintT where
-  type StT ControlPrintT a = a
-  liftWith inner = ControlPrintT $ inner unControlPrintT
-  restoreT = ControlPrintT
+  deriving (MonadTrans, MonadTransControl) via Stack0T
 
 instance MonadBaseControl IO m => MonadControl (ControlPrintT m) where
   type ControlConstraint (ControlPrintT m) a = Show a
