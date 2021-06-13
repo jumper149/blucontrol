@@ -12,6 +12,7 @@ import Control.DeepSeq
 import Control.Exception.Lifted (SomeException (..), bracket, catch)
 import Control.Monad.Base
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Control.Default
 import Control.Monad.Reader
 import Control.Monad.Except
 import Data.Default
@@ -30,16 +31,7 @@ import Blucontrol.Value.RGB
 
 newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Display m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadError XError)
-
-instance MonadTrans RecolorXT where
-  lift = RecolorXT . lift . lift
-
-instance MonadTransControl RecolorXT where
-  type StT RecolorXT a = StT (ReaderT Display) (StT (ExceptT XError) a)
-  -- TODO: broken by ghc-9.0.1
-  -- liftWith = defaultLiftWith2 RecolorXT unRecolorXT
-  liftWith f = RecolorXT $ liftWith $ \run -> liftWith $ \run' -> f $ run' . run . unRecolorXT
-  restoreT = defaultRestoreT2 RecolorXT
+  deriving (MonadTrans, MonadTransControl) via Stack2T (ExceptT XError) (ReaderT Display)
 
 instance MonadBaseControl IO m => MonadRecolor (RecolorXT m) where
   type RecolorValue (RecolorXT m) = RecolorXValue

@@ -10,6 +10,7 @@ module Blucontrol.Monad.Control.Count (
 import Control.DeepSeq
 import Control.Monad.Base
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Control.Default
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 import Data.Default
@@ -20,16 +21,7 @@ import Blucontrol.Monad.Control
 
 newtype ControlCountT m a = ControlCountT { unControlCountT :: StateT Natural (ReaderT ConfigCount m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
-
-instance MonadTrans ControlCountT where
-  lift = ControlCountT . lift . lift
-
-instance MonadTransControl ControlCountT where
-  type StT ControlCountT a = StT (ReaderT ConfigCount) (StT (StateT Natural) a)
-  -- TODO: workaround for ghc-9.0.1
-  --liftWith = defaultLiftWith2 ControlCountT unControlCountT
-  liftWith f = ControlCountT $ liftWith $ \run -> liftWith $ \run' -> f $ run' . run . unControlCountT
-  restoreT = defaultRestoreT2 ControlCountT
+  deriving (MonadTrans, MonadTransControl) via Stack2T (StateT Natural) (ReaderT ConfigCount)
 
 instance MonadBaseControl IO m => MonadControl (ControlCountT m) where
   type ControlConstraint (ControlCountT m) a = CountableException a

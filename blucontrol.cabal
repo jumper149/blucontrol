@@ -46,6 +46,7 @@ library
                        Blucontrol.Value.RGB.Temperature
   other-modules:       Blucontrol.Main.GHC.Internal
                        Blucontrol.Monad.Recolor.X.Internal
+                       Control.Monad.Trans.Control.Default
                        Paths_blucontrol
   build-depends:       base              >= 4.11    && < 5
                      , containers        >= 0.6.2.1 && < 0.7
@@ -75,6 +76,8 @@ library
                        ConstraintKinds
                        DataKinds
                        DeriveGeneric
+                       DerivingStrategies
+                       DerivingVia
                        FlexibleContexts
                        FlexibleInstances
                        FunctionalDependencies
@@ -113,6 +116,8 @@ test-suite test
                        ConstraintKinds
                        DataKinds
                        DeriveGeneric
+                       DerivingStrategies
+                       DerivingVia
                        FlexibleContexts
                        FlexibleInstances
                        FunctionalDependencies
