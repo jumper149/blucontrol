@@ -37,5 +37,5 @@ instance ((forall m. Monad m => Monad (t2 m)), MonadTrans t1, MonadTrans t2) => 
 
 instance ((forall m. Monad m => Monad (t2 m)), MonadTransControl t1, MonadTransControl t2) => MonadTransControl (Stack2T t1 t2) where
   type StT (Stack2T t1 t2) a = StT t2 (StT t1 a)
-  liftWith f = Stack2T $ liftWith $ \run -> liftWith $ \run' -> f $ run' . run . unStack2T
+  liftWith f = defaultLiftWith2 Stack2T unStack2T $ \x -> f x
   restoreT = defaultRestoreT2 Stack2T
