@@ -32,10 +32,10 @@ newtype Stack2T
     = Stack2T { unStack2T :: t1 (t2 m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b)
 
-instance ((forall m. Monad m => Monad (t2 m)), MonadTrans t1, MonadTrans t2) => MonadTrans (Stack2T t1 t2) where
+instance (forall m. Monad m => Monad (t2 m), MonadTrans t1, MonadTrans t2) => MonadTrans (Stack2T t1 t2) where
   lift = Stack2T . lift . lift
 
-instance ((forall m. Monad m => Monad (t2 m)), MonadTransControl t1, MonadTransControl t2) => MonadTransControl (Stack2T t1 t2) where
+instance (forall m. Monad m => Monad (t2 m), MonadTransControl t1, MonadTransControl t2) => MonadTransControl (Stack2T t1 t2) where
   type StT (Stack2T t1 t2) a = StT t2 (StT t1 a)
   liftWith f = defaultLiftWith2 Stack2T unStack2T $ \x -> f x
   restoreT = defaultRestoreT2 Stack2T
