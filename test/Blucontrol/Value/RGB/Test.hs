@@ -1,5 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
-
 module Blucontrol.Value.RGB.Test (
   test
 , Arbitrary_RGBWord8 (..)

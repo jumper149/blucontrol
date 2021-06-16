@@ -1,4 +1,4 @@
-{-# LANGUAGE ForeignFunctionInterface, RecordWildCards #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
 
 module Blucontrol.Monad.Recolor.X.Internal (
   XRRGamma (..)
@@ -21,7 +21,7 @@ data XRRGamma = XRRGamma { xrr_gamma_red :: Float
 instance NFData XRRGamma
 
 xrrSetGamma :: XRRGamma -> Display -> Window -> IO ()
-xrrSetGamma XRRGamma {..} (Display display) window = do
+xrrSetGamma XRRGamma { xrr_gamma_red, xrr_gamma_green, xrr_gamma_blue } (Display display) window = do
   res <- _XRRGetScreenResourcesCurrent display window
   _setGamma xrr_gamma_red xrr_gamma_green xrr_gamma_blue res display
 

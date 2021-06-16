@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, UndecidableInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 module Blucontrol.Value.RGB.Temperature (
   Temperature
@@ -29,7 +29,7 @@ instance CompatibleValues (RGB Word8) a => CompatibleValues Temperature a where
   -- TODO: Test and implement more accurately. Currently based on blugon.
   convertValue = convertValue . toRGBWord8
     where toRGBWord8 :: Temperature -> RGB Word8
-          toRGBWord8 (Temperature temp) = RGB {..}
+          toRGBWord8 (Temperature temp) = RGB { red, green, blue }
             where red = round . inBounds $
                     if t <= 66
                        then 255

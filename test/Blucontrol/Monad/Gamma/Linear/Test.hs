@@ -1,5 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
-
 module Blucontrol.Monad.Gamma.Linear.Test (
   test
 ) where
@@ -42,7 +40,7 @@ prop_timeToTimeOfDay (Arbitrary_Time time) = and
   , 0 == todSec
   ]
   where h :. m = time
-        TimeOfDay {..} = fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
+        TimeOfDay { todHour, todMin, todSec } = fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
 
 prop_calculateRGB :: Arbitrary_Time
                   -> (Arbitrary_Time,Arbitrary_RGBWord8)

@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, UndecidableInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 module Blucontrol.Monad.Recolor.X (
   RecolorXT
@@ -78,7 +78,7 @@ runRecolorXTIO !conf tma = runExceptT $ bracket open close run
         run display = restoreT $ runRecolorXT display tma
 
 showDisplay :: ConfigX -> String
-showDisplay ConfigX {..} = T.unpack . T.concat $
+showDisplay ConfigX { hostName, displayServer, screen } = T.unpack . T.concat $
   [ fromMaybe "" hostName
   , ":" <> T.pack (show displayServer)
   , maybe "" (("." <>) . T.pack . show) screen
@@ -90,7 +90,7 @@ newtype RecolorXValue = RecolorXValue { unRecolorXValue :: XRRGamma }
 instance NFData RecolorXValue
 
 instance CompatibleValues (RGB Word8) RecolorXValue where
-  convertValue RGB {..} = RecolorXValue XRRGamma {..}
+  convertValue RGB { red, green, blue } = RecolorXValue XRRGamma { xrr_gamma_red, xrr_gamma_green, xrr_gamma_blue }
     where xrr_gamma_red = word8ToFloat red
           xrr_gamma_green = word8ToFloat green
           xrr_gamma_blue = word8ToFloat blue
