@@ -4,7 +4,6 @@ let
 in
   nixpkgs.haskellPackages.shellFor {
     buildInputs = with nixpkgs.haskellPackages; [
-      cabal-install
       haskell-language-server
       hlint
       implicit-hie
