@@ -75,9 +75,13 @@ library
   default-extensions:  BangPatterns
                        ConstraintKinds
                        DataKinds
+                       DeriveFoldable
+                       DeriveFunctor
                        DeriveGeneric
+                       DeriveTraversable
                        DerivingStrategies
                        DerivingVia
+                       EmptyDataDeriving
                        FlexibleContexts
                        FlexibleInstances
                        FunctionalDependencies
@@ -116,9 +120,13 @@ test-suite test
   default-extensions:  BangPatterns
                        ConstraintKinds
                        DataKinds
+                       DeriveFoldable
+                       DeriveFunctor
                        DeriveGeneric
+                       DeriveTraversable
                        DerivingStrategies
                        DerivingVia
+                       EmptyDataDeriving
                        FlexibleContexts
                        FlexibleInstances
                        FunctionalDependencies
