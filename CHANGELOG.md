@@ -1,5 +1,10 @@
 # Revision history for blucontrol
 
+## 0.5.1.0 *19 Jun 2021*
+
+* `RecolorXT` now uses `RecolorXValue`, which is just a newtype of the old `RGB Float`.
+* Add `applyBrightnessToRGB` conversion function.
+
 ## 0.5.0.0 *09 Jun 2021*
 
 * Change module structure, now using `Blucontrol.Monad` and `Blucontrol.Value`.
