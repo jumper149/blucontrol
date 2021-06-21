@@ -1,5 +1,9 @@
 # Revision history for blucontrol
 
+## 0.5.1.1 *21 Jun 2021*
+
+* Allow building against new versions of X11.
+
 ## 0.5.1.0 *19 Jun 2021*
 
 * `RecolorXT` now uses `RecolorXValue`, which is just a newtype of the old `RGB Float`.
