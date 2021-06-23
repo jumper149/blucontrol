@@ -32,9 +32,13 @@ instance (MonadControl (t1 m), MonadControl (t2 (t1 m)), MonadTrans t2) => Monad
   doInbetween a = do ControlConcatT . lift $ doInbetween a
                      ControlConcatT $ doInbetween a
 
-runControlConcatT :: (t1 m a -> m a) -> (t2 (t1 m) a -> t1 m a) -> ControlConcatT t1 t2 m a -> m a
+runControlConcatT :: (forall a. t1 m a -> m (StT t1 a))
+                  -> (forall a. t2 (t1 m) a -> t1 m (StT t2 a))
+                  -> (forall a. ControlConcatT t1 t2 m a -> m (StT t1 (StT t2 a)))
 runControlConcatT runT1 runT2 = runT1 . runT2 . unControlConcatT
 
 infixr 5 !>
-(!>) :: (t1 m a -> m a) -> (t2 (t1 m) a -> t1 m a) -> (ControlConcatT t1 t2 m a -> m a)
+(!>) :: (forall a. t1 m a -> m (StT t1 a))
+     -> (forall a. t2 (t1 m) a -> t1 m (StT t2 a))
+     -> (forall a. ControlConcatT t1 t2 m a -> m (StT t1 (StT t2 a)))
 (!>) = runControlConcatT

@@ -34,8 +34,8 @@ instance MonadBaseControl IO m => MonadControl (ControlCountT m) where
                         then error $ "failed after " <> show limit <> " consecutive tries"
                         else return ()
 
-runControlCountT :: Monad m => ConfigCount -> ControlCountT m a -> m a
-runControlCountT !conf tma = runReaderT (evalStateT (unControlCountT tma) 0) conf
+runControlCountT :: Monad m => ConfigCount -> ControlCountT m a -> m (a, Natural)
+runControlCountT !conf tma = runReaderT (runStateT (unControlCountT tma) 0) conf
 
 newtype ConfigCount = ConfigCount { maxCount :: Natural
                                   }

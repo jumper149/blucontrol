@@ -13,11 +13,11 @@ import Blucontrol.Monad.Recolor
 
 -- | Run the loop, using `gamma`, `recolor` and `doInbetween`.
 loopRecolor :: (MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r, ControlConstraint m (StM g (StM r ())))
-            => (forall a. m a -> IO a)
+            => (forall a. m a -> IO (StM m a))
             -> (forall a. g a -> IO (StM g a))
             -> (forall a. r a -> IO (StM r a))
             -> (GammaValue g -> RecolorValue r)
-            -> IO (StM g (StM r ()))
+            -> IO (StM m (StM g (StM r ())))
 loopRecolor runC runG runR coerceValue = do
   runC $ liftBaseWith $ \ runCIO ->
     runG $ liftBaseWith $ \ runGIO ->
