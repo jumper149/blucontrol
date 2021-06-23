@@ -2,9 +2,9 @@ module Blucontrol.Main.Control (
   loopRecolor
 ) where
 
+import Control.Monad
 import Control.Monad.Base
 import Control.Monad.Trans.Control
-import Control.Monad.Reader
 import Unsafe.Coerce
 
 import Blucontrol.Monad.Control
@@ -17,11 +17,11 @@ loopRecolor :: (MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl I
             -> (forall a. g a -> IO (StM g a))
             -> (forall a. r a -> IO (StM r a))
             -> (GammaValue g -> RecolorValue r)
-            -> IO ()
-loopRecolor runC runG runR coerceValue = void $ do
+            -> IO (StM g (StM r ()))
+loopRecolor runC runG runR coerceValue = do
   runC $ liftBaseWith $ \ runCIO ->
-    runR $ liftBaseWith $ \ runRIO ->
-      runG $ liftBaseWith $ \ runGIO -> do
+    runG $ liftBaseWith $ \ runGIO ->
+      runR $ liftBaseWith $ \ runRIO -> do
 
             -- Use `gamma` and give the result to `recolor`.
             -- The arguments are runners from `liftBaseWith`.

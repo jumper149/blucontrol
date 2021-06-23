@@ -25,7 +25,7 @@ type BlucontrolConstraints m g r =
 
 blucontrol :: BlucontrolConstraints m g r
            => ConfigControl m g r
-           -> IO ()
+           -> IO (StM g (StM r ()))
 blucontrol c = do launch
                   loopRecolor (runControl c) (runGamma c) (runRecolor c) convertValue
 

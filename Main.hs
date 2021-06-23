@@ -11,7 +11,7 @@ import Blucontrol.Monad.Recolor.X
 import Blucontrol.Value.RGB.Temperature
 
 main :: IO ()
-main = blucontrol configControl
+main = print =<< blucontrol configControl
   where configControl = ConfigControl { runControl = runControlPrintT !> runControlCountT def !> runControlWaitT def
                                       , runGamma = runGammaLinearT @Temperature rgbMap
                                       , runRecolor = runRecolorXTIO def
