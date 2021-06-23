@@ -53,4 +53,4 @@ loopRecolor runCIO runGIO runRIO coerceValue = do
   -- Start an infinite loop.
   -- TODO: `unsafeCoerce` is necessary because of GHC limitations with type families.
   -- `unsafeCoerce` will act like `id`.
-  void $ doLoopRecolor $ unsafeCoerce initStM
+  doLoopRecolor $ unsafeCoerce initStM
