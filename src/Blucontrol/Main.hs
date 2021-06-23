@@ -27,7 +27,7 @@ blucontrol :: BlucontrolConstraints m g r
            => ConfigControl m g r
            -> IO ()
 blucontrol c = do launch
-                  runControl c $ loopRecolor (runGamma c) (runRecolor c) convertValue
+                  loopRecolor (runControl c) (runGamma c) (runRecolor c) convertValue
 
 data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO a
                                          , runGamma   :: forall a. g a -> IO (StM g a)
