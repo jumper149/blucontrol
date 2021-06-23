@@ -36,10 +36,10 @@ loopRecolor runC runG runR coerceValue = do
                 pure x3
           let currentRecolorValue =
                 runG $ do
-                    -- TODO: `unsafeCoerce` is necessary because of GHC limitations with type families.
-                    -- `unsafeCoerce` will act like `id`.
-                    x5 <- restoreM $ unsafeCoerce x4
-                    liftBase $ runR $ void $ restoreM x5
+                  -- TODO: `unsafeCoerce` is necessary because of GHC limitations with type families.
+                  -- `unsafeCoerce` will act like `id`.
+                  x5 <- restoreM $ unsafeCoerce x4
+                  liftBase $ runR $ void $ restoreM x5
           currentRecolorValue' <- liftBase currentRecolorValue
           doInbetween currentRecolorValue'
           pure x4
