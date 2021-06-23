@@ -39,10 +39,10 @@ loopRecolor runC runG runR coerceValue = do
                       pure x3
                 let currentRecolorValue =
                       runGIO $ do
+                          -- TODO: `unsafeCoerce` is necessary because of GHC limitations with type families.
+                          -- `unsafeCoerce` will act like `id`.
                           x5 <- restoreM $ unsafeCoerce x4
-                          liftBase $ runRIO $ do
-                            void $ restoreM x5
-                            pure ()
+                          liftBase $ runRIO $ void $ restoreM x5
                 currentRecolorValue' <- liftBase currentRecolorValue
                 doInbetween currentRecolorValue'
                 pure x4
@@ -54,4 +54,6 @@ loopRecolor runC runG runR coerceValue = do
         initStM <- runCIO $ liftBase $ runGIO $ liftBase $ runRIO $ pure undefined
 
         -- Start an infinite loop.
+        -- TODO: `unsafeCoerce` is necessary because of GHC limitations with type families.
+        -- `unsafeCoerce` will act like `id`.
         void $ doLoopRecolor $ unsafeCoerce initStM
