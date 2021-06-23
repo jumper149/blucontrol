@@ -24,7 +24,8 @@ loopRecolor runC runG runR coerceValue = do
       runR $ liftBaseWith $ \ runRIO -> do
 
             -- Use `gamma` and give the result to `recolor`.
-            -- The arguments are runners from `liftBaseWith`.
+            -- Then use the result of `recolor` and give it to `doInbetween` including the monadic state.
+            -- The argument is an initial monadic state.
         let doRecolorGamma x =
               runCIO $ do
                 x1 <- restoreM x
@@ -46,10 +47,11 @@ loopRecolor runC runG runR coerceValue = do
                 doInbetween currentRecolorValue'
                 pure x4
 
-            doLoopRecolor x = do
-              x' <- liftBase $ doRecolorGamma x
-              doLoopRecolor x'
+            -- Run `doLoopRecolor` in a recursive loop while passing the monadic state explicitly.
+            doLoopRecolor x = doLoopRecolor =<< liftBase (doRecolorGamma x)
 
+        -- Initialize the monadic state.
         initStM <- runCIO $ liftBase $ runGIO $ liftBase $ runRIO $ pure undefined
+
+        -- Start an infinite loop.
         void $ doLoopRecolor $ unsafeCoerce initStM
-        pure ()
