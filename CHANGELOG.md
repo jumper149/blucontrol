@@ -1,5 +1,11 @@
 # Revision history for blucontrol
 
+## 0.6.0.0 *24 Jun 2021*
+
+* `runControl` is now a regular monad runner, that also returns the monadic state.
+* `blucontrol` now returns the monadic state.
+* Changes to the control flow in `Blucontrol.Main.Control` improve how monadic state is handled.
+
 ## 0.5.1.1 *21 Jun 2021*
 
 * Allow building against new versions of X11.
