@@ -26,7 +26,7 @@ You can also install it from the cloned repository.
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
-nix-env --install --file dev/build.nix
+nix-env --install --file build.nix
 ```
 
 ### AUR
@@ -65,7 +65,7 @@ Enter the nix-shell for development.
 ```bash
 git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
-nix-shell dev/shell.nix
+nix-shell
 ```
 Use cabal to build
 

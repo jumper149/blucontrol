@@ -1,6 +1,6 @@
 let
-  nixpkgs = import ./nixpkgs.nix;
-  blucontrol = haskellPackages: haskellPackages.callCabal2nix "blucontrol" ../. {};
+  nixpkgs = import ./nix/nixpkgs.nix;
+  blucontrol = haskellPackages: haskellPackages.callCabal2nix "blucontrol" ./. {};
 in
   nixpkgs.haskellPackages.shellFor {
     buildInputs = with nixpkgs.haskellPackages; [
