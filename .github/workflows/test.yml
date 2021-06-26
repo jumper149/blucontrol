@@ -14,12 +14,11 @@ jobs:
         ghc: [ ghc884, ghc8104, ghc901 ]
 
     steps:
-    - name: Setup GitHub Actions
+    - name: Set up GitHub Actions
       uses: actions/checkout@v2.3.4
-    - name: Setup nix
+
+    - name: Set up nix
       uses: cachix/install-nix-action@v13
-      with:
-        nix_path: nixpkgs=channel:nixos-unstable
 
     - name: Run nix-build
       run: nix-build --argstr ghcVersion ${{ matrix.ghc }}
