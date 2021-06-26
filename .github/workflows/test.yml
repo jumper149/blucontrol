@@ -17,8 +17,6 @@ jobs:
     - name: Build using nix
       run: nix-build
 
-    - name: Build with GHC 8.6.5 using cabal
-      run: nix-shell nix/lib.nix -A simpleShell --argstr ghc ghc865Binary --run "cabal clean && cabal build && cabal run test"
     - name: Build with GHC 8.8.4 using cabal
       run: nix-shell nix/lib.nix -A simpleShell --argstr ghc ghc884 --run "cabal clean && cabal build && cabal run test"
     - name: Build with GHC 8.10.4 using cabal
