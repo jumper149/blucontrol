@@ -1,4 +1,4 @@
-let
+rec {
   blucontrol = { haskellPackages, nix-gitignore }:
     let src = nix-gitignore.gitignoreSource [] ../.;
     in haskellPackages.callCabal2nix "blucontrol" src {};
@@ -42,5 +42,4 @@ let
         (blucontrol { inherit haskellPackages nix-gitignore; }).env
       ];
     };
-in
-  { inherit blucontrol blucontrolEnv blucontrolWrapped blucontrolShell blucontrolShellSimple; }
+}
