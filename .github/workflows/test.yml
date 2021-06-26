@@ -1,12 +1,18 @@
 name: "test"
+
 on:
   pull_request:
   push:
+
 jobs:
   tests:
     runs-on: ubuntu-latest
-    steps:
 
+    strategy:
+      matrix:
+        ghc: [ ghc884, ghc8104, ghc901 ]
+
+    steps:
     - name: Setup GitHub Actions
       uses: actions/checkout@v2.3.4
     - name: Setup nix
@@ -14,12 +20,4 @@ jobs:
       with:
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - name: Build using nix
-      run: nix-build
-
-    - name: Build with GHC 8.8.4 using cabal
-      run: nix-shell nix/lib.nix -A simpleShell --argstr ghc ghc884 --run "cabal clean && cabal build && cabal run test"
-    - name: Build with GHC 8.10.4 using cabal
-      run: nix-shell nix/lib.nix -A simpleShell --argstr ghc ghc8104 --run "cabal clean && cabal build && cabal run test"
-    - name: Build with GHC 9.0.1 using cabal
-      run: nix-shell nix/lib.nix -A simpleShell --argstr ghc ghc901 --run "cabal clean && cabal build && cabal run test"
+    - run: nix-build --argstr ghcVersion ${{ matrix.ghc }}
