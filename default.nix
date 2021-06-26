@@ -1,4 +1,13 @@
+{ ghcVersion ? "ghc8104"
+, nixpkgs ? (import ./nix/nixpkgs.nix)
+, packages ? (_:[])
+}:
 let
-  nixpkgs = import ./nix/nixpkgs.nix;
+  build = import ./nix/build.nix;
+  attrs = {
+    inherit (nixpkgs) lib nix-gitignore stdenv makeWrapper;
+    inherit packages;
+    haskellPackages = nixpkgs.haskell.packages."${ghcVersion}";
+  };
 in
-  nixpkgs.callPackage (import ./derivation.nix) {}
+  build.blucontrolWrapped attrs

@@ -1,15 +1,14 @@
+{ ghcVersion ? "ghc8104"
+, nixpkgs ? (import ./nix/nixpkgs.nix)
+, simple ? false
+}:
 let
-  nixpkgs = import ./nix/nixpkgs.nix;
-  blucontrol = haskellPackages: haskellPackages.callCabal2nix "blucontrol" ./. {};
+  build = import ./nix/build.nix;
+  attrs = {
+    inherit (nixpkgs) nix-gitignore;
+    haskellPackages = nixpkgs.haskell.packages."${ghcVersion}";
+  };
 in
-  nixpkgs.haskellPackages.shellFor {
-    buildInputs = with nixpkgs.haskellPackages; [
-      haskell-language-server
-      hlint
-      implicit-hie
-    ];
-    packages = haskellPackages: [
-      (blucontrol haskellPackages)
-    ];
-    withHoogle = true;
-  }
+  if simple
+  then build.blucontrolShellSimple (attrs // { inherit (nixpkgs) mkShell; })
+  else build.blucontrolShell attrs
