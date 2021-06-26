@@ -5,7 +5,8 @@ on:
   push:
 
 jobs:
-  tests:
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,4 +21,5 @@ jobs:
       with:
         nix_path: nixpkgs=channel:nixos-unstable
 
-    - run: nix-build --argstr ghcVersion ${{ matrix.ghc }}
+    - name: Run nix-build
+      run: nix-build --argstr ghcVersion ${{ matrix.ghc }}
