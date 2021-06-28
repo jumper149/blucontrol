@@ -30,9 +30,8 @@ instance MonadBaseControl IO m => MonadControl (ControlCountT m) where
                         else ControlCountT $ put 0
                      current <- ControlCountT get
                      limit <- ControlCountT . lift $ reader maxCount
-                     if current >= limit
-                        then error $ "failed after " <> show limit <> " consecutive tries"
-                        else return ()
+                     unless (current < limit) $
+                        error $ "failed after " <> show limit <> " consecutive tries"
 
 runControlCountT :: Monad m => ConfigCount -> ControlCountT m a -> m (a, Natural)
 runControlCountT !conf tma = runReaderT (runStateT (unControlCountT tma) 0) conf

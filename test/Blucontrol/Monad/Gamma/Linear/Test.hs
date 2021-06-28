@@ -13,7 +13,7 @@ import GHC.Generics
 
 import Blucontrol.Monad.Gamma.Linear
 import Blucontrol.Value.RGB
-import Blucontrol.Value.RGB.Test (Arbitrary_RGBWord8 (..))
+import Blucontrol.Value.RGB.Test (RGBWord8Arbitrary (..))
 
 test :: Spec
 test = describe "Blucontrol.Gamma.Linear" $ do
@@ -25,28 +25,27 @@ test = describe "Blucontrol.Gamma.Linear" $ do
   it "calculateRGB between surrounding values" $
     property prop_calculateRGB
 
-newtype Arbitrary_Time = Arbitrary_Time Time
+newtype TimeArbitrary = TimeArbitrary Time
   deriving (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
-instance NFData Arbitrary_Time
+instance NFData TimeArbitrary
 
-instance Arbitrary Arbitrary_Time where
+instance Arbitrary TimeArbitrary where
   arbitrary = elements [minBound .. maxBound]
 
-prop_timeToTimeOfDay :: Arbitrary_Time -> Bool
-prop_timeToTimeOfDay (Arbitrary_Time time) = and
-  [ fromIntegral h == todHour
-  , fromIntegral m == todMin
-  , 0 == todSec
-  ]
+prop_timeToTimeOfDay :: TimeArbitrary -> Bool
+prop_timeToTimeOfDay (TimeArbitrary time) =
+     (fromIntegral h == todHour)
+  && (fromIntegral m == todMin)
+  && (0 == todSec)
   where h :. m = time
         TimeOfDay { todHour, todMin, todSec } = fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
 
-prop_calculateRGB :: Arbitrary_Time
-                  -> (Arbitrary_Time,Arbitrary_RGBWord8)
-                  -> (Arbitrary_Time,Arbitrary_RGBWord8)
+prop_calculateRGB :: TimeArbitrary
+                  -> (TimeArbitrary, RGBWord8Arbitrary)
+                  -> (TimeArbitrary, RGBWord8Arbitrary)
                   -> Bool
-prop_calculateRGB (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_RGBWord8 xtc) (Arbitrary_Time yt , Arbitrary_RGBWord8 ytc) =
+prop_calculateRGB (TimeArbitrary time) (TimeArbitrary xt , RGBWord8Arbitrary xtc) (TimeArbitrary yt , RGBWord8Arbitrary ytc) =
   rgb `prop_RGBBetween` (xtc , ytc)
   where rgb = runIdentity . runGammaLinearT rgbMap $ calculateValue weightedAverageRGB tod
         rgbMap = xt Blucontrol.Monad.Gamma.Linear.==> xtc
@@ -55,11 +54,10 @@ prop_calculateRGB (Arbitrary_Time time) (Arbitrary_Time xt , Arbitrary_RGBWord8 
         tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
 
 prop_RGBBetween :: RGB Word8 -> (RGB Word8,RGB Word8) -> Bool
-prop_RGBBetween x (a,b) = and
-  [ red x `prop_between` (red a , red b)
-  , green x `prop_between` (green a , green b)
-  , blue x `prop_between` (blue a , blue b)
-  ]
+prop_RGBBetween x (a,b) =
+     (red x `prop_between` (red a , red b))
+  && (green x `prop_between` (green a , green b))
+  && (blue x `prop_between` (blue a , blue b))
 
 prop_between :: Ord a => a -> (a,a) -> Bool
 prop_between x (a,b) = x <= max a b && x >= min a b

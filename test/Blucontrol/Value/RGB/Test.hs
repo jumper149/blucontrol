@@ -1,6 +1,6 @@
 module Blucontrol.Value.RGB.Test (
   test
-, Arbitrary_RGBWord8 (..)
+, RGBWord8Arbitrary (..)
 ) where
 
 import Test.Hspec
@@ -16,12 +16,12 @@ test :: Spec
 test = describe "Blucontrol.RGB" $ do
 
   it "(RGB Word8) in bounds." $
-    property $ total @Arbitrary_RGBWord8
+    property $ total @RGBWord8Arbitrary
 
-newtype Arbitrary_RGBWord8 = Arbitrary_RGBWord8 (RGB Word8)
+newtype RGBWord8Arbitrary = RGBWord8Arbitrary (RGB Word8)
   deriving (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
-instance NFData Arbitrary_RGBWord8
+instance NFData RGBWord8Arbitrary
 
-instance Arbitrary Arbitrary_RGBWord8 where
+instance Arbitrary RGBWord8Arbitrary where
   arbitrary = elements [minBound .. maxBound]
