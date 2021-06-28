@@ -11,4 +11,4 @@ let
 in
   if simple
   then build.blucontrolShellSimple (attrs // { inherit (nixpkgs) mkShell; })
-  else build.blucontrolShell attrs
+  else build.blucontrolShell (attrs // { inherit (nixpkgs) rnix-lsp; })

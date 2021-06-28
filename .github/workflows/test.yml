@@ -5,6 +5,7 @@ on:
   push:
 
 jobs:
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -22,3 +23,23 @@ jobs:
 
     - name: Run nix-build
       run: nix-build --argstr ghcVersion ${{ matrix.ghc }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up GitHub Actions
+      uses: actions/checkout@v2.3.4
+
+    - name: Set up nix
+      uses: cachix/install-nix-action@v13
+
+    - name: Parse Nix
+      run: nix-shell --run "for file in \$(find . -type f -name '*.nix'); do hnix --parse-only \"\$file\"; done"
+
+    - name: Lint Haskell
+      run: nix-shell --run "hlint ."
+
+    - name: Generate hie.yaml
+      run: nix-shell --run "gen-hie > hie.yaml.new && diff --report-identical-files hie.yaml hie.yaml.new"

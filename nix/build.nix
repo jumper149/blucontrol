@@ -23,12 +23,14 @@ rec {
       allowSubstitues = false;
     };
 
-  blucontrolShell = { haskellPackages, nix-gitignore }:
+  blucontrolShell = { rnix-lsp, haskellPackages, nix-gitignore }:
     haskellPackages.shellFor {
       buildInputs = with haskellPackages; [
         haskell-language-server
         hlint
+        hnix
         implicit-hie
+        rnix-lsp
       ];
       packages = haskellPackages: [
         (blucontrol { inherit haskellPackages nix-gitignore; })
