@@ -1,5 +1,5 @@
 { ghcVersion ? "ghc8104"
-, nixpkgs ? (import ./nix/nixpkgs.nix)
+, nixpkgs ? (import ./nix/nixpkgs.nix { })
 , simple ? false
 }:
 let
