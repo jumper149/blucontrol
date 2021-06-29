@@ -2,7 +2,7 @@
 
 [![Hackage](https://img.shields.io/hackage/v/blucontrol.svg?style=for-the-badge)](http://hackage.haskell.org/package/blucontrol)
 [![AUR](https://img.shields.io/aur/version/blucontrol.svg?style=for-the-badge)](https://aur.archlinux.org/packages/blucontrol)
-[![GitHub Actions](https://img.shields.io/github/workflow/status/jumper149/blucontrol/test?style=for-the-badge)](https://github.com/jumper149/blucontrol/actions/workflows/test.yml)
+[![GitHub Actions](https://img.shields.io/github/workflow/status/jumper149/blucontrol/default?style=for-the-badge)](https://github.com/jumper149/blucontrol/actions/workflows/default.yml)
 [![License](https://img.shields.io/github/license/jumper149/blucontrol?style=for-the-badge)](./LICENSE)
 
 ## Configuration

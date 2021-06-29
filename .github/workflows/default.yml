@@ -1,49 +1,61 @@
-name: "test"
+name: Default
 
 on:
   pull_request:
   push:
 
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         ghc: [ ghc884, ghc8104, ghc901 ]
-
     steps:
     - name: Set up GitHub Actions
       uses: actions/checkout@v2.3.4
-
     - name: Set up nix
       uses: cachix/install-nix-action@v13
       with:
         nix_path: nixpkgs=./nix/nixpkgs.nix
-
     - name: Run nix-build
       run: nix-build --argstr ghcVersion ${{ matrix.ghc }}
 
-  lint:
-    name: Lint
+  parse_nix:
+    name: Parse Nix
     runs-on: ubuntu-latest
-
     steps:
     - name: Set up GitHub Actions
       uses: actions/checkout@v2.3.4
-
     - name: Set up nix
       uses: cachix/install-nix-action@v13
       with:
         nix_path: nixpkgs=./nix/nixpkgs.nix
-
     - name: Parse Nix
       run: nix-shell --run "for file in \$(find . -type f -name '*.nix'); do hnix --parse-only \"\$file\"; done"
 
+  lint_haskell:
+    name: Lint Haskell
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up GitHub Actions
+      uses: actions/checkout@v2.3.4
+    - name: Set up nix
+      uses: cachix/install-nix-action@v13
+      with:
+        nix_path: nixpkgs=./nix/nixpkgs.nix
     - name: Lint Haskell
       run: nix-shell --run "hlint ."
 
+  generate_hie-yaml:
+    name: Generate hie.yaml
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up GitHub Actions
+      uses: actions/checkout@v2.3.4
+    - name: Set up nix
+      uses: cachix/install-nix-action@v13
+      with:
+        nix_path: nixpkgs=./nix/nixpkgs.nix
     - name: Generate hie.yaml
-      run: nix-shell --run "gen-hie > hie.yaml.new && diff --report-identical-files hie.yaml hie.yaml.new"
+      run: nix-shell --run "diff --report-identical-files hie.yaml <(gen-hie)"
