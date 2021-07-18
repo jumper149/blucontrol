@@ -13,27 +13,27 @@ import Blucontrol.Monad.Control
 import Blucontrol.Monad.PrepareValue
 import Blucontrol.Value
 
-type BlucontrolConstraints m g r =
-  ( CompatibleValues (PreparedValue g) (ApplicableValue r)
-  , ControlConstraint m (StM g (StM r ()))
-  , MonadBaseControl IO g
-  , MonadBaseControl IO r
-  , MonadApplyValue r
-  , MonadControl m
-  , MonadPrepareValue g
+type BlucontrolConstraints mc mp ma =
+  ( CompatibleValues (PreparedValue mp) (ApplicableValue ma)
+  , ControlConstraint mc (StM mp (StM ma ()))
+  , MonadBaseControl IO mp
+  , MonadBaseControl IO ma
+  , MonadApplyValue ma
+  , MonadControl mc
+  , MonadPrepareValue mp
   )
 
-blucontrol :: BlucontrolConstraints m g r
-           => ConfigControl m g r
-           -> IO (StM m (StM g (StM r ())))
+blucontrol :: BlucontrolConstraints mc mp ma
+           => ConfigControl mc mp ma
+           -> IO (StM mc (StM mp (StM ma ())))
 blucontrol ConfigControl { runControl, runPrepareValue, runApplyValue } = do
   launch
   runControl $ liftBaseWith $ \ runC ->
-    runPrepareValue $ liftBaseWith $ \ runG ->
-      runApplyValue $ liftBaseWith $ \ runR ->
-        loopRecolor runC runG runR convertValue
+    runPrepareValue $ liftBaseWith $ \ runP ->
+      runApplyValue $ liftBaseWith $ \ runA ->
+        loopRecolor runC runP runA convertValue
 
-data ConfigControl m g r = ConfigControl { runControl :: forall a. m a -> IO (StM m a)
-                                         , runPrepareValue :: forall a. g a -> IO (StM g a)
-                                         , runApplyValue :: forall a. r a -> IO (StM r a)
-                                         }
+data ConfigControl mc mp ma = ConfigControl { runControl :: forall a. mc a -> IO (StM mc a)
+                                            , runPrepareValue :: forall a. mp a -> IO (StM mp a)
+                                            , runApplyValue :: forall a. ma a -> IO (StM ma a)
+                                            }

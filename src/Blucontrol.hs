@@ -6,8 +6,8 @@ module Blucontrol (
 -}
   blucontrol
 , BlucontrolConstraints
-{- | 'ConfigControl' will set the monads in which recoloring and calculation of the gamma values
-  will take place.
+{- | 'ConfigControl' will set the monads in which calculation and application of values will take
+   place.
 -}
 , ConfigControl (..)
 
