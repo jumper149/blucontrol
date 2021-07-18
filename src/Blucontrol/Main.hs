@@ -14,13 +14,13 @@ import Blucontrol.Monad.Recolor
 import Blucontrol.Value
 
 type BlucontrolConstraints m g r =
-  ( ControlConstraint m (StM g (StM r ()))
-  , MonadControl m
+  ( CompatibleValues (GammaValue g) (RecolorValue r)
+  , ControlConstraint m (StM g (StM r ()))
   , MonadBaseControl IO g
   , MonadBaseControl IO r
+  , MonadControl m
   , MonadGamma g
   , MonadRecolor r
-  , CompatibleValues (GammaValue g) (RecolorValue r)
   )
 
 blucontrol :: BlucontrolConstraints m g r

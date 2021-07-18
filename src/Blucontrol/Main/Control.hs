@@ -12,7 +12,7 @@ import Blucontrol.Monad.Gamma
 import Blucontrol.Monad.Recolor
 
 -- | Run the loop, using `gamma`, `recolor` and `doInbetween`.
-loopRecolor :: (MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r, ControlConstraint m (StM g (StM r ())))
+loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r)
             => RunInBase m IO
             -> RunInBase g IO
             -> RunInBase r IO
