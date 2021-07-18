@@ -1,0 +1,24 @@
+name: Dependencies
+
+on:
+  push:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ghc: [ ghc884, ghc8104, ghc901 ]
+        nixpkgs: [ nixpkgs-unstable, nixos-unstable, nixos-21.05, nixos-20.09 ]
+    steps:
+    - name: Set up GitHub Actions
+      uses: actions/checkout@v2.3.4
+    - name: Set up nix
+      uses: cachix/install-nix-action@v13
+      with:
+        nix_path: nixpkgs=channel:${{ matrix.nixpkgs }}
+    - name: Run nix-build
+      run: nix-build --argstr ghcVersion ${{ matrix.ghc }} --arg nixpkgs "import <nixpkgs>"
