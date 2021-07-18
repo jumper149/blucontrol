@@ -25,9 +25,9 @@ module Blucontrol (
 -- | Modules with instances of 'MonadPrepareValue' can be found under @Blucontrol.PrepareValue.*@.
 , MonadPrepareValue (..)
 
--- * Recolor
--- | Modules with instances of 'MonadRecolor' can be found under @Blucontrol.Recolor.*@.
-, MonadRecolor (..)
+-- * ApplyValue
+-- | Modules with instances of 'MonadApplyValue' can be found under @Blucontrol.ApplyValue.*@.
+, MonadApplyValue (..)
 
 -- * other
 , Default (..)
@@ -36,7 +36,7 @@ module Blucontrol (
 import Data.Default
 
 import Blucontrol.Main
+import Blucontrol.Monad.ApplyValue
 import Blucontrol.Monad.Control
 import Blucontrol.Monad.Control.Concat
 import Blucontrol.Monad.PrepareValue
-import Blucontrol.Monad.Recolor

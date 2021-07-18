@@ -1,9 +1,9 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Monad.Recolor.X (
-  RecolorXT
-, runRecolorXTIO
-, RecolorXValue
+module Blucontrol.Monad.ApplyValue.X (
+  ApplyValueXT
+, runApplyValueXTIO
+, ApplicableValueX
 , ConfigX (..)
 , XError (..)
 ) where
@@ -24,26 +24,26 @@ import GHC.Generics
 import Graphics.X11.Xlib.Display (closeDisplay, defaultScreen, openDisplay, rootWindow)
 import Graphics.X11.Xlib.Types (Display)
 
-import Blucontrol.Monad.Recolor
-import Blucontrol.Monad.Recolor.X.Internal
+import Blucontrol.Monad.ApplyValue
+import Blucontrol.Monad.ApplyValue.X.Internal
 import Blucontrol.Value
 import Blucontrol.Value.RGB
 
-newtype RecolorXT m a = RecolorXT { unRecolorXT :: ExceptT XError (ReaderT Display m) a }
+newtype ApplyValueXT m a = ApplyValueXT { unApplyValueXT :: ExceptT XError (ReaderT Display m) a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadError XError)
   deriving (MonadTrans, MonadTransControl) via Stack2T (ExceptT XError) (ReaderT Display)
 
-instance MonadBaseControl IO m => MonadRecolor (RecolorXT m) where
-  type RecolorValue (RecolorXT m) = RecolorXValue
-  recolor rgb = do
-    display <- RecolorXT ask
+instance MonadBaseControl IO m => MonadApplyValue (ApplyValueXT m) where
+  type ApplicableValue (ApplyValueXT m) = ApplicableValueX
+  applyValue rgb = do
+    display <- ApplyValueXT ask
     root <- liftXIO XErrorRead $
       rootWindow display $ defaultScreen display
 
-    liftXIO XErrorSetGamma $ xrrSetGamma (unRecolorXValue rgb) display root
+    liftXIO XErrorSetGamma $ xrrSetGamma (unApplicableValueX rgb) display root
 
-runRecolorXT :: Display -> RecolorXT m a -> m (Either XError a)
-runRecolorXT display tma = runReaderT (runExceptT (unRecolorXT tma)) display
+runApplyValueXT :: Display -> ApplyValueXT m a -> m (Either XError a)
+runApplyValueXT display tma = runReaderT (runExceptT (unApplyValueXT tma)) display
 
 data ConfigX = ConfigX { hostName :: Maybe T.Text
                        , displayServer :: Int
@@ -71,11 +71,11 @@ liftXIO :: (MonadBaseControl IO m, MonadError XError m) => XError -> IO a -> m a
 liftXIO xError = flip catch throwXError . liftBase
   where throwXError (SomeException _) = throwError xError
 
-runRecolorXTIO :: MonadBaseControl IO m => ConfigX -> RecolorXT m a -> m (Either XError a)
-runRecolorXTIO !conf tma = runExceptT $ bracket open close run
+runApplyValueXTIO :: MonadBaseControl IO m => ConfigX -> ApplyValueXT m a -> m (Either XError a)
+runApplyValueXTIO !conf tma = runExceptT $ bracket open close run
   where open = liftXIO XErrorOpenDisplay $ openDisplay $ showDisplay conf
         close display = liftXIO XErrorCloseDisplay $ closeDisplay display
-        run display = restoreT $ runRecolorXT display tma
+        run display = restoreT $ runApplyValueXT display tma
 
 showDisplay :: ConfigX -> String
 showDisplay ConfigX { hostName, displayServer, screen } = T.unpack . T.concat $
@@ -84,13 +84,13 @@ showDisplay ConfigX { hostName, displayServer, screen } = T.unpack . T.concat $
   , maybe "" (("." <>) . T.pack . show) screen
   ]
 
-newtype RecolorXValue = RecolorXValue { unRecolorXValue :: XRRGamma }
+newtype ApplicableValueX = ApplicableValueX { unApplicableValueX :: XRRGamma }
   deriving (Eq, Generic, Ord, Read, Show)
 
-instance NFData RecolorXValue
+instance NFData ApplicableValueX
 
-instance CompatibleValues (RGB Word8) RecolorXValue where
-  convertValue RGB { red, green, blue } = RecolorXValue XRRGamma { xrr_gamma_red, xrr_gamma_green, xrr_gamma_blue }
+instance CompatibleValues (RGB Word8) ApplicableValueX where
+  convertValue RGB { red, green, blue } = ApplicableValueX XRRGamma { xrr_gamma_red, xrr_gamma_green, xrr_gamma_blue }
     where xrr_gamma_red = word8ToFloat red
           xrr_gamma_green = word8ToFloat green
           xrr_gamma_blue = word8ToFloat blue

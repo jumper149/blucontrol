@@ -1,6 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Blucontrol.Monad.Recolor.X.Internal (
+module Blucontrol.Monad.ApplyValue.X.Internal (
   XRRGamma (..)
 , xrrSetGamma
 ) where

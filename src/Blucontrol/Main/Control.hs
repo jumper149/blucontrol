@@ -7,16 +7,16 @@ import Control.Monad.Base
 import Control.Monad.Trans.Control
 import Unsafe.Coerce
 
+import Blucontrol.Monad.ApplyValue
 import Blucontrol.Monad.Control
 import Blucontrol.Monad.PrepareValue
-import Blucontrol.Monad.Recolor
 
 -- | Run the loop, using `prepareValue`, `recolor` and `doInbetween`.
-loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadPrepareValue g, MonadRecolor r)
+loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl IO r, MonadApplyValue r, MonadControl m, MonadPrepareValue g)
             => RunInBase m IO
             -> RunInBase g IO
             -> RunInBase r IO
-            -> (PreparedValue g -> RecolorValue r)
+            -> (PreparedValue g -> ApplicableValue r)
             -> IO ()
 loopRecolor runC runG runR coerceValue = do
 
@@ -32,7 +32,7 @@ loopRecolor runC runG runR coerceValue = do
               value <- coerceValue <$> preparedValue
               liftBase $ runR $ do
                 x3 <- restoreM x2
-                recolor value
+                applyValue value
                 pure x3
           let currentRecolorValue =
                 runG $ do
