@@ -27,7 +27,6 @@ jobs:
     - name: Run nix-build
       run: nix-build --argstr ghcVersion ${{ matrix.ghc }} --arg nixpkgs "import <nixpkgs>"
 
-jobs:
   default-build:
     name: Default Build
     runs-on: ubuntu-latest
