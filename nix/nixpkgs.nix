@@ -1,4 +1,3 @@
-nixpkgsArgs@{ overlaysArg ? [ ], ... }:
 let
   commit = "0b8b127125e5271f5c8636680b6fe274844aaa9d";
 
@@ -11,8 +10,4 @@ let
     sha256 = hash;
   };
 in
-  import nixpkgs nixpkgsArgs // {
-    overlays = [
-      (import ./overlay.nix)
-    ] ++ overlaysArg;
-  }
+  import nixpkgs
