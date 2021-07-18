@@ -67,18 +67,15 @@ git clone https://github.com/jumper149/blucontrol.git
 cd blucontrol
 nix-shell
 ```
-Use cabal to build
+In nix-shell use cabal to build, run tests and execute blucontrol.
 
 ```bash
 cabal build
-```
-, run tests
-
-```bash
 cabal run test
+cabal run blucontrol -- --ignore-config
 ```
-and execute the program.
+Build blucontrol with nix-build.
 
 ```bash
-cabal run blucontrol -- --ignore-config
+nix-build
 ```
