@@ -30,12 +30,15 @@ jobs:
   default-build:
     name: Default Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nixpkgs: [ nixpkgs-unstable, nixos-unstable ]
     steps:
     - name: Set up GitHub Actions
       uses: actions/checkout@v2.3.4
     - name: Set up nix
       uses: cachix/install-nix-action@v13
       with:
-        nix_path: nixpkgs=channel:nixpkgs-unstable
+        nix_path: nixpkgs=channel:${{ matrix.nixpkgs }}
     - name: Run nix-build
       run: nix-build --arg nixpkgs "import <nixpkgs>"
