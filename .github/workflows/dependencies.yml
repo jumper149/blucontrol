@@ -9,6 +9,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         nixpkgs: [ nixpkgs-unstable, nixos-unstable, nixos-21.05, nixos-20.09 ]
