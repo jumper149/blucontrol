@@ -12,7 +12,7 @@ module Blucontrol (
 , ConfigControl (..)
 
 -- * Control
--- | Modules with instances of 'MonadControl' can be found under @Blucontrol.Control.*@.
+-- | Modules with instances of 'MonadControl' can be found under @Blucontrol.Monad.Control.*@.
 , MonadControl (..)
 
 {- | To compose instances of 'MonadControl' avoid function composition, as it won't compose
@@ -22,11 +22,11 @@ module Blucontrol (
 , (!>)
 
 -- * Prepare value
--- | Modules with instances of 'MonadPrepareValue' can be found under @Blucontrol.PrepareValue.*@.
+-- | Modules with instances of 'MonadPrepareValue' can be found under @Blucontrol.Monad.PrepareValue.*@.
 , MonadPrepareValue (..)
 
 -- * ApplyValue
--- | Modules with instances of 'MonadApplyValue' can be found under @Blucontrol.ApplyValue.*@.
+-- | Modules with instances of 'MonadApplyValue' can be found under @Blucontrol.Monad.ApplyValue.*@.
 , MonadApplyValue (..)
 
 -- * other
