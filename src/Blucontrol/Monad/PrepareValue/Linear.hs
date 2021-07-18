@@ -1,8 +1,8 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Blucontrol.Monad.Gamma.Linear (
-  GammaLinearT
-, runGammaLinearT
+module Blucontrol.Monad.PrepareValue.Linear (
+  PrepareValueLinearT
+, runPrepareValueLinearT
 , Time (..)
 , Hour
 , Minute
@@ -25,34 +25,34 @@ import Data.Time
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.Monad.Gamma
+import Blucontrol.Monad.PrepareValue
 import Blucontrol.Value.Brightness
 import Blucontrol.Value.RGB
 import Blucontrol.Value.RGB.Temperature
 
-newtype GammaLinearT c m a = GammaLinearT { unGammaLinearT :: ReaderT (M.Map TimeOfDay c) m a }
+newtype PrepareValueLinearT c m a = PrepareValueLinearT { unPrepareValueLinearT :: ReaderT (M.Map TimeOfDay c) m a }
   deriving (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl)
 
-instance MonadBase IO m => MonadGamma (GammaLinearT (RGB Word8) m) where
-  type GammaValue (GammaLinearT (RGB Word8) m) = RGB Word8
-  gamma = calculateValue weightedAverageRGB . zonedTimeToLocalTime =<< liftBase getZonedTime
+instance MonadBase IO m => MonadPrepareValue (PrepareValueLinearT (RGB Word8) m) where
+  type PreparedValue (PrepareValueLinearT (RGB Word8) m) = RGB Word8
+  preparedValue = calculateValue weightedAverageRGB . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-instance MonadBase IO m => MonadGamma (GammaLinearT Temperature m) where
-  type GammaValue (GammaLinearT Temperature m) = Temperature
-  gamma = calculateValue weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
+instance MonadBase IO m => MonadPrepareValue (PrepareValueLinearT Temperature m) where
+  type PreparedValue (PrepareValueLinearT Temperature m) = Temperature
+  preparedValue = calculateValue weightedAverageTemperature . zonedTimeToLocalTime =<< liftBase getZonedTime
 
-instance (MonadBase IO m, MonadGamma (GammaLinearT c m)) => MonadGamma (GammaLinearT (WithBrightness c) m) where
-  type GammaValue (GammaLinearT (WithBrightness c) m) = WithBrightness (GammaValue (GammaLinearT c m))
+instance (MonadBase IO m, MonadPrepareValue (PrepareValueLinearT c m)) => MonadPrepareValue (PrepareValueLinearT (WithBrightness c) m) where
+  type PreparedValue (PrepareValueLinearT (WithBrightness c) m) = WithBrightness (PreparedValue (PrepareValueLinearT c m))
   -- TODO: It would be nice to use the same exact time for `color'` and `brightness'`.
-  gamma = do
-    color' <- withGammaLinearT color gamma
-    brightness' <- withGammaLinearT brightness $ calculateValue weightedAverageBrightness . zonedTimeToLocalTime =<< liftBase getZonedTime
+  preparedValue = do
+    color' <- withPrepareValueLinearT color preparedValue
+    brightness' <- withPrepareValueLinearT brightness $ calculateValue weightedAverageBrightness . zonedTimeToLocalTime =<< liftBase getZonedTime
     return WithBrightness { brightness = brightness'
                           , color = color'
                           }
 
-withGammaLinearT :: (c' -> c) -> GammaLinearT c m a -> GammaLinearT c' m a
-withGammaLinearT f m = GammaLinearT $ withReaderT (fmap f) $ unGammaLinearT m
+withPrepareValueLinearT :: (c' -> c) -> PrepareValueLinearT c m a -> PrepareValueLinearT c' m a
+withPrepareValueLinearT f m = PrepareValueLinearT $ withReaderT (fmap f) $ unPrepareValueLinearT m
 
 nextTimeValue :: M.Map TimeOfDay c -> LocalTime -> Maybe (LocalTime,c)
 nextTimeValue m time = catchError (toLocalTimeToday <$> M.lookupGT (localTimeOfDay time) m) $
@@ -78,9 +78,9 @@ prevTimeValue m time = catchError (toLocalTimeToday <$> M.lookupLE (localTimeOfD
 
 calculateValue :: Monad m
                => (Rational -> c -> c -> c)
-               -> LocalTime -> GammaLinearT c m c
+               -> LocalTime -> PrepareValueLinearT c m c
 calculateValue weightedAverage time = do
-  m <- GammaLinearT ask
+  m <- PrepareValueLinearT ask
   return . fromJust $ do
     (nextTime , nextValue) <- nextTimeValue m time
     (prevTime , prevValue) <- prevTimeValue m time
@@ -101,11 +101,11 @@ weightedAverageTemperature w t1 t2 = fromRational $ toRational t1 + w * (toRatio
 weightedAverageBrightness :: Rational -> Brightness -> Brightness -> Brightness
 weightedAverageBrightness w b1 b2 = fromRational $ toRational b1 + w * (toRational b2 - toRational b1)
 
-runGammaLinearT' :: M.Map TimeOfDay c -> GammaLinearT c m a -> m a
-runGammaLinearT' !rgbs tma = runReaderT (unGammaLinearT tma) rgbs
+runPrepareValueLinearT' :: M.Map TimeOfDay c -> PrepareValueLinearT c m a -> m a
+runPrepareValueLinearT' !rgbs tma = runReaderT (unPrepareValueLinearT tma) rgbs
 
-runGammaLinearT :: N.NonEmpty (TimeOfDay,c) -> GammaLinearT c m a -> m a
-runGammaLinearT rgbs = runGammaLinearT' $ M.fromList . N.toList $ rgbs
+runPrepareValueLinearT :: N.NonEmpty (TimeOfDay,c) -> PrepareValueLinearT c m a -> m a
+runPrepareValueLinearT rgbs = runPrepareValueLinearT' $ M.fromList . N.toList $ rgbs
 
 newtype Hour = Hour { unHour :: F.Finite 24 }
   deriving (Bounded, Enum, Eq, Generic, Integral, Num, Ord, Read, Real, Show)

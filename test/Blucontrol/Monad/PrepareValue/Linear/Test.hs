@@ -1,4 +1,4 @@
-module Blucontrol.Monad.Gamma.Linear.Test (
+module Blucontrol.Monad.PrepareValue.Linear.Test (
   test
 ) where
 
@@ -11,12 +11,12 @@ import Data.Time
 import Data.Word
 import GHC.Generics
 
-import Blucontrol.Monad.Gamma.Linear
+import Blucontrol.Monad.PrepareValue.Linear
 import Blucontrol.Value.RGB
 import Blucontrol.Value.RGB.Test (RGBWord8Arbitrary (..))
 
 test :: Spec
-test = describe "Blucontrol.Gamma.Linear" $ do
+test = describe "Blucontrol.PrepareValue.Linear" $ do
 
   it "convert Time to TimeOfDay" $
     property prop_timeToTimeOfDay
@@ -39,7 +39,7 @@ prop_timeToTimeOfDay (TimeArbitrary time) =
   && (fromIntegral m == todMin)
   && (0 == todSec)
   where h :. m = time
-        TimeOfDay { todHour, todMin, todSec } = fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
+        TimeOfDay { todHour, todMin, todSec } = fst $ time Blucontrol.Monad.PrepareValue.Linear.==> (undefined :: RGB Word8)
 
 prop_calculateRGB :: TimeArbitrary
                   -> (TimeArbitrary, RGBWord8Arbitrary)
@@ -47,11 +47,11 @@ prop_calculateRGB :: TimeArbitrary
                   -> Bool
 prop_calculateRGB (TimeArbitrary time) (TimeArbitrary xt , RGBWord8Arbitrary xtc) (TimeArbitrary yt , RGBWord8Arbitrary ytc) =
   rgb `prop_RGBBetween` (xtc , ytc)
-  where rgb = runIdentity . runGammaLinearT rgbMap $ calculateValue weightedAverageRGB tod
-        rgbMap = xt Blucontrol.Monad.Gamma.Linear.==> xtc
-            :| [ yt Blucontrol.Monad.Gamma.Linear.==> ytc
+  where rgb = runIdentity . runPrepareValueLinearT rgbMap $ calculateValue weightedAverageRGB tod
+        rgbMap = xt Blucontrol.Monad.PrepareValue.Linear.==> xtc
+            :| [ yt Blucontrol.Monad.PrepareValue.Linear.==> ytc
                ]
-        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blucontrol.Monad.Gamma.Linear.==> (undefined :: RGB Word8)
+        tod = LocalTime (ModifiedJulianDay 0) . fst $ time Blucontrol.Monad.PrepareValue.Linear.==> (undefined :: RGB Word8)
 
 prop_RGBBetween :: RGB Word8 -> (RGB Word8,RGB Word8) -> Bool
 prop_RGBBetween x (a,b) =

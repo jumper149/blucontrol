@@ -11,7 +11,7 @@ class MonadBaseControl IO m => MonadControl m where
 
   {- | Give a constraint to allow 'doInbetween' to handle a polymorphic argument.
     This is usfeul to allow arguments wrapped in monadic state 'StM' from running
-    'Blucontrol.Gamma.MonadGamma' and 'Blucontrol.Recolor.MonadRecolor'.
+    'Blucontrol.Gamma.MonadPrepareValue' and 'Blucontrol.Recolor.MonadRecolor'.
   -}
   type ControlConstraint m a :: Constraint
 

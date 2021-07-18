@@ -8,7 +8,7 @@ description:         This application is a blue light filter, with the main focu
                      <https://hackage.haskell.org/package/xmonad xmonad>.
                      .
                      Blucontrol makes use of monad transformers and allows monadic calculation of
-                     gamma values and recoloring.
+                     values and recoloring.
                      The user chooses, what will be captured in the monadic state.
                      .
                      To get started with configuring read "Blucontrol".
@@ -33,10 +33,10 @@ library
                        Blucontrol.Monad.Control.Count
                        Blucontrol.Monad.Control.Print
                        Blucontrol.Monad.Control.Wait
-                       Blucontrol.Monad.Gamma
-                       Blucontrol.Monad.Gamma.Const
-                       Blucontrol.Monad.Gamma.Linear
-                       Blucontrol.Monad.Gamma.Modifier
+                       Blucontrol.Monad.PrepareValue
+                       Blucontrol.Monad.PrepareValue.Const
+                       Blucontrol.Monad.PrepareValue.Linear
+                       Blucontrol.Monad.PrepareValue.Modifier
                        Blucontrol.Monad.Recolor
                        Blucontrol.Monad.Recolor.Print
                        Blucontrol.Monad.Recolor.X
@@ -106,7 +106,7 @@ test-suite test
   main-is:             Blucontrol.hs
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:       Blucontrol.Monad.Gamma.Linear.Test
+  other-modules:       Blucontrol.Monad.PrepareValue.Linear.Test
                        Blucontrol.Value.RGB.Test
   build-depends:       base
                      , blucontrol

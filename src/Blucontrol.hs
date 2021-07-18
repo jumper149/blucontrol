@@ -21,9 +21,9 @@ module Blucontrol (
 -}
 , (!>)
 
--- * Gamma
--- | Modules with instances of 'MonadGamma' can be found under @Blucontrol.Gamma.*@.
-, MonadGamma (..)
+-- * Prepare value
+-- | Modules with instances of 'MonadPrepareValue' can be found under @Blucontrol.PrepareValue.*@.
+, MonadPrepareValue (..)
 
 -- * Recolor
 -- | Modules with instances of 'MonadRecolor' can be found under @Blucontrol.Recolor.*@.
@@ -38,5 +38,5 @@ import Data.Default
 import Blucontrol.Main
 import Blucontrol.Monad.Control
 import Blucontrol.Monad.Control.Concat
-import Blucontrol.Monad.Gamma
+import Blucontrol.Monad.PrepareValue
 import Blucontrol.Monad.Recolor

@@ -8,19 +8,19 @@ import Control.Monad.Trans.Control
 import Unsafe.Coerce
 
 import Blucontrol.Monad.Control
-import Blucontrol.Monad.Gamma
+import Blucontrol.Monad.PrepareValue
 import Blucontrol.Monad.Recolor
 
--- | Run the loop, using `gamma`, `recolor` and `doInbetween`.
-loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadGamma g, MonadRecolor r)
+-- | Run the loop, using `prepareValue`, `recolor` and `doInbetween`.
+loopRecolor :: (ControlConstraint m (StM g (StM r ())), MonadBaseControl IO m, MonadBaseControl IO g, MonadBaseControl IO r, MonadControl m, MonadPrepareValue g, MonadRecolor r)
             => RunInBase m IO
             -> RunInBase g IO
             -> RunInBase r IO
-            -> (GammaValue g -> RecolorValue r)
+            -> (PreparedValue g -> RecolorValue r)
             -> IO ()
 loopRecolor runC runG runR coerceValue = do
 
-      -- Use `gamma` and give the result to `recolor`.
+      -- Use `preparedValue` and give the result to `recolor`.
       -- Then use the result of `recolor` and give it to `doInbetween` including the monadic state.
       -- The argument is an initial monadic state.
   let doRecolorGamma x =
@@ -29,7 +29,7 @@ loopRecolor runC runG runR coerceValue = do
           x4 <- liftBase $ do
             runG $ do
               x2 <- restoreM x1
-              value <- coerceValue <$> gamma
+              value <- coerceValue <$> preparedValue
               liftBase $ runR $ do
                 x3 <- restoreM x2
                 recolor value
