@@ -1,5 +1,12 @@
 # Revision history for blucontrol
 
+## 0.7.0.0 *19 Jul 2021*
+
+* `MonadGamma` has been renamed to `MonadPrepareValue`.
+* `MonadRecolor` has been renamed to `MonadApplyValue`.
+* Move modules from `Blucontrol.Monad.Gamma` to `Blucontrol.Monad.PrepareValue`.
+* Move modules from `Blucontrol.Monad.Recolor` to `Blucontrol.Monad.ApplyValue`.
+
 ## 0.6.0.0 *24 Jun 2021*
 
 * `runControl` is now a regular monad runner, that also returns the monadic state.
