@@ -13,8 +13,10 @@ jobs:
     strategy:
       matrix:
         nixpkgs: [ nixpkgs-unstable, nixos-unstable, nixos-21.05, nixos-20.09 ]
-        ghc: [ ghc901, ghc8104, ghc884 ]
+        ghc: [ ghc901, ghc8106, ghc884 ]
         exclude:
+        - nixpkgs: nixos-20.09
+          ghc: ghc8106
         - nixpkgs: nixos-20.09
           ghc: ghc901
     steps:
