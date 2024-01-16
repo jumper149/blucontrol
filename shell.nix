@@ -1,4 +1,4 @@
-{ ghcVersion ? "ghc8106"
+{ ghcVersion ? "ghc948"
 , nixpkgs ? import ./nix/nixpkgs.nix
 , simple ? false
 }:
