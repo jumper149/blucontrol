@@ -1,5 +1,9 @@
 # Revision history for blucontrol
 
+## 0.7.1.0 *16 Jan 2024*
+
+* Support GHC 9.6.
+
 ## 0.7.0.0 *19 Jul 2021*
 
 * `MonadGamma` has been renamed to `MonadPrepareValue`.
