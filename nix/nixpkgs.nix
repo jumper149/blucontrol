@@ -1,10 +1,10 @@
 let
-  commit = "08ef0f28e3a41424b92ba1d203de64257a9fca6a";
+  commit = "e0629618b4b419a47e2c8a3cab223e2a7f3a8f97";
 
 
   # !!! Requires change, when the commit is changed !!!
   # Hash obtained using `nix-prefetch-url --unpack <url>`
-  hash = "1mql1gp86bk6pfsrp0lcww6hw5civi6f8542d4nh356506jdxmcy";
+  hash = "sha256-loWkd7lUzSvGBU9xnva37iPB2rr5ulq1qBLT44KjzGA=";
 
   nixpkgs = builtins.fetchTarball {
     url = "https://github.com/nixos/nixpkgs/archive/${commit}.tar.gz";

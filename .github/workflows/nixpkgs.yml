@@ -12,13 +12,8 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        nixpkgs: [ nixpkgs-unstable, nixos-unstable, nixos-21.05, nixos-20.09 ]
-        ghc: [ ghc901, ghc8106, ghc884 ]
-        exclude:
-        - nixpkgs: nixos-20.09
-          ghc: ghc8106
-        - nixpkgs: nixos-20.09
-          ghc: ghc901
+        nixpkgs: [ nixpkgs-unstable, nixos-unstable ]
+        ghc: [ ghc948 ]
     steps:
     - name: Set up GitHub Actions
       uses: actions/checkout@v2.3.4
