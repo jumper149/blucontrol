@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         nixpkgs: [ nixpkgs-unstable, nixos-unstable ]
-        ghc: [ ghc948 ]
+        ghc: [ ghc948, ghc963 ]
     steps:
     - name: Set up GitHub Actions
       uses: actions/checkout@v2.3.4

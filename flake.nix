@@ -17,11 +17,11 @@
 
     packages.x86_64-linux.blucontrol =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).blucontrolWrapped { inherit stdenv lib makeWrapper nix-gitignore haskellPackages; };
+      (import ./nix/build.nix).blucontrolWrapped { inherit stdenv lib makeWrapper nix-gitignore; haskellPackages = haskell.packages.ghc963; };
 
     devShell.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).blucontrolShell { inherit rnix-lsp haskellPackages nix-gitignore; };
+      (import ./nix/build.nix).blucontrolShell { inherit rnix-lsp nix-gitignore; haskellPackages = haskell.packages.ghc963; };
 
   };
 }

@@ -8,6 +8,7 @@ module Blucontrol.Monad.Control.Count (
 ) where
 
 import Control.DeepSeq
+import Control.Monad
 import Control.Monad.Base
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Default
