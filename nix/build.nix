@@ -26,6 +26,7 @@ rec {
   blucontrolShell = { rnix-lsp, haskellPackages, nix-gitignore }:
     haskellPackages.shellFor {
       buildInputs = with haskellPackages; [
+        cabal-install
         haskell-language-server
         hlint
         hnix
